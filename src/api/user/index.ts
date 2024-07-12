@@ -7,7 +7,7 @@ import type { UserState } from '@/store/modules/user/types';
 
 enum URL {
   login = '/user/login',
-  loginByCode = '/user/loginByCode',
+  loginByCode = '/userByCode',
   logout = '/user/logout',
   profile = '/user/profile',
 }

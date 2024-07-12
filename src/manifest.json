@@ -55,7 +55,7 @@
   /* 小程序特有相关 */
   "mp-weixin":
   {
-    "appid": "",
+    "appid": "wx1d8f2d72653b67f2",
     "setting":
     {
       "urlCheck": false
@@ -84,7 +84,7 @@
     "router":
     {
       "mode": "hash",
-      "base": "/uniapp-vue3-template/"
+      "base": "/"
     }
   }
 }

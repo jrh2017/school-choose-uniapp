@@ -50,18 +50,24 @@
   },
   "tabBar": {
     "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
+    "selectedColor": "#E94650",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/tab/home/index",
-      "text": "首页"
+      "text": "首页",
+      "iconPath": "static/images/home.png",
+      "selectedIconPath": "static/images/home-active.png"
     }, {
       "pagePath": "pages/tab/list/index",
-      "text": "列表"
+      "text": "择校",
+      "iconPath": "static/images/zx.png",
+      "selectedIconPath": "static/images/zx-active.png"
     }, {
       "pagePath": "pages/tab/user/index",
-      "text": "我的"
+      "text": "我的",
+      "iconPath": "static/images/my.png",
+      "selectedIconPath": "static/images/my-active.png"
     }]
   },
   "globalStyle": {

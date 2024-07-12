@@ -8,13 +8,13 @@ declare global {
   declare type IntervalHandle = ReturnType<typeof setInterval>;
 
   interface ImportMetaEnv extends ViteEnv {
-    __: unknown;
+    __: unknown
   }
 
   declare interface ViteEnv {
-    VITE_APP_TITLE?: string;
-    VITE_APP_BASE_API: string;
-    VITE_DROP_CONSOLE: boolean;
+    VITE_APP_TITLE?: string
+    VITE_APP_BASE_API: string
+    VITE_DROP_CONSOLE: boolean
   }
 
   declare function parseInt(s: string | number, radix?: number): number;
@@ -27,7 +27,7 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      view: _View;
+      view: _View
     }
   }
 }

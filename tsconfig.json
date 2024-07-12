@@ -1,4 +1,5 @@
 {
+  "noImplicitAny": false,
   "compilerOptions": {
     "target": "es2016",
     "jsx": "preserve",

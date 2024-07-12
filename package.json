@@ -34,6 +34,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-4020220240624001",
     "@dcloudio/uni-mp-xhs": "3.0.0-alpha-4020220240624001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-4020220240624001",
+    "npx": "^10.2.2",
     "pinia": "2.0.36",
     "uview-plus": "^3.3.2",
     "vue": "3.4.21",
@@ -82,8 +83,9 @@
     "vue-tsc": "^2.0.22"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
-    "commit-msg": "node scripts/verifyCommit.js"
+    // "pre-commit": "npx lint-staged",
+    // "commit-msg": "node scripts/verifyCommit.js",
+    "commit-msg": "fabric verify-commit"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "eslint --fix",
