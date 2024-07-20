@@ -4,7 +4,7 @@ import { createSSRApp } from 'vue';
 import 'virtual:uno.css';
 
 // 引入uview-plus
-import uviewPlus from 'uview-plus';
+import uviewPlus, { setConfig } from 'uview-plus';
 import App from '@/App.vue';
 
 // 引入状态管理
@@ -20,6 +20,15 @@ import '@/permission';
 export function createApp() {
   const app = createSSRApp(App);
   app.use(uviewPlus);
+  setConfig({
+    // 修改$u.props对象的属性
+    props: {
+      // 修改radio组件的size参数的默认值，相当于执行 uni.$u.props.radio.size = 30
+      input: {
+        border: 'none',
+      },
+    },
+  });
   // 状态管理
   setupStore(app);
   // 网络请求

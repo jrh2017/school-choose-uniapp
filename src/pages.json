@@ -35,11 +35,24 @@
       "pages": [
         {
           "path": "login/index",
-          "navigationStyle": "custom"
+          "style": {
+            "navigationStyle": "custom"
+          }
         },
         {
           "path": "webview/index",
           "navigationBarTitleText": "网页"
+        }
+      ]
+    },
+    {
+      "root": "pages/intention",
+      "pages": [
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationStyle": "custom"
+          }
         }
       ]
     }

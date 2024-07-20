@@ -16,6 +16,7 @@ export default antfu(
           order: ['template', 'script', 'style'],
         },
       ],
+      'vue/attribute-hyphenation': 'naver',
     },
   },
   {
@@ -37,6 +38,7 @@ export default antfu(
       // 对所有控制语句强制实施一致的大括号样式
       // curly: ["error", "multi", "consistent"],
       'curly': 'off',
+      'vue/attribute-hyphenation': 'naver',
     },
   },
 );

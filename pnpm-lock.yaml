@@ -50,6 +50,9 @@ dependencies:
   '@dcloudio/uni-quickapp-webview':
     specifier: 3.0.0-alpha-4020220240624001
     version: 3.0.0-alpha-4020220240624001(postcss@8.4.39)(vue@3.4.21)
+  dayjs:
+    specifier: ^1.11.12
+    version: 1.11.12
   npx:
     specifier: ^10.2.2
     version: 10.2.2

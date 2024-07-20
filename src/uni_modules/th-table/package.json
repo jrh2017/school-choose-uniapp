@@ -1,0 +1,80 @@
+{
+	"id": "th-table",
+	"displayName": "th-table 表格",
+	"version": "1.0.3",
+	"description": "th-table表格组件，多用于展示多条结构类似的数据，基于uni-table二次封装",
+	"keywords": [
+        "table",
+        "表格"
+    ],
+	"repository": "",
+	"engines": {
+		"HBuilderX": "^3.96"
+	},
+	"directories": {
+		"example": ""
+	},
+	"dcloudext": {
+		"sale": {
+			"regular": {
+				"price": "0.00"
+			},
+			"sourcecode": {
+				"price": "0.00"
+			}
+		},
+		"contact": {
+			"qq": ""
+		},
+		"declaration": {
+			"ads": "无",
+			"data": "无",
+			"permissions": "无"
+		},
+		"type": "component-vue"
+	},
+	"uni_modules": {
+		"dependencies": ["uni-scss", "uni-datetime-picker","uni-table"],
+		"encrypt": [],
+		"platforms": {
+			"cloud": {
+				"tcb": "y",
+				"aliyun": "y"
+			},
+			"client": {
+				"App": {
+					"app-vue": "y",
+					"app-nvue": "n"
+				},
+				"H5-mobile": {
+					"Safari": "y",
+					"Android Browser": "y",
+					"微信浏览器(Android)": "y",
+					"QQ浏览器(Android)": "y"
+				},
+				"H5-pc": {
+					"Chrome": "y",
+					"IE": "y",
+					"Edge": "y",
+					"Firefox": "y",
+					"Safari": "y"
+				},
+				"小程序": {
+					"微信": "y",
+					"阿里": "y",
+					"百度": "y",
+					"字节跳动": "n",
+					"QQ": "y"
+				},
+				"快应用": {
+					"华为": "n",
+					"联盟": "n"
+				},
+				"Vue": {
+					"vue2": "n",
+					"vue3": "y"
+				}
+			}
+		}
+	}
+}
