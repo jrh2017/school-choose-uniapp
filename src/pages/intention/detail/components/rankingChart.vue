@@ -10,6 +10,7 @@
     <qiun-data-charts type="area" :opts="opts" :chart-data="chart" />
   </view>
 </template>
+
 <script setup lang="ts">
 const chart = ref();
 const chartData = reactive({
@@ -65,4 +66,5 @@ onMounted(() => {
   chart.value = chartData;
 });
 </script>
+
 <style scoped lang="scss"></style>

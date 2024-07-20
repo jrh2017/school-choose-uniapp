@@ -11,22 +11,30 @@
       <baseinfo />
     </view>
     <view class="main">
-      <view class="title">24届专业录取排名</view>
+      <view class="title">
+        24届专业录取排名
+      </view>
       <view class="content">
         <ranking />
       </view>
       <view class="title">
-        意向专业<text class="sub-title">录取该专业的所有排名</text>
+        意向专业<text class="sub-title">
+          录取该专业的所有排名
+        </text>
       </view>
       <view class="content">
         <ranking-table />
       </view>
-      <view class="title">24届院校录取排名</view>
+      <view class="title">
+        24届院校录取排名
+      </view>
       <view class="content">
         <ranking />
       </view>
       <view class="title">
-        意向院校<text class="sub-title">意向院校中该专业录取排名</text>
+        意向院校<text class="sub-title">
+          意向院校中该专业录取排名
+        </text>
       </view>
       <view class="content">
         <ranking-table />
@@ -34,11 +42,13 @@
     </view>
   </div>
 </template>
+
 <script setup lang="ts">
-import baseinfo from './baseinfo.vue'
-import ranking from './rankingChart.vue'
-import rankingTable from './rankingTable.vue'
+import baseinfo from './baseinfo.vue';
+import ranking from './rankingChart.vue';
+import rankingTable from './rankingTable.vue';
 </script>
+
 <style scoped lang="scss">
 .major {
   .top {

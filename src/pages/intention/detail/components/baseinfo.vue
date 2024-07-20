@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-07-20 20:50:37
+ * @LastEditTime : 2024-07-20 21:31:14
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -13,20 +13,61 @@
         <view class="school-name">
           <text>{{ schoolInfo.name }}</text>
           <view class="w-144rpx">
-            <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="schoolInfo.editAble"></up-button>
+            <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="schoolInfo.editAble" />
+          </view>
+        </view>
+        <view class="tags">
+          <view class="tag tag-1">
+            {{ schoolInfo.tag1 }}
+          </view>
+          <view v-for="(tag, index) in schoolInfo.tag2" :key="index" class="tag tag-2">
+            {{ tag }}
+          </view>
+          <view class="tag tag-3">
+            {{ schoolInfo.tag3 }}
           </view>
         </view>
       </view>
     </view>
-    <view class="bottom">123</view>
+    <view class="bottom">
+      <view class="detail-item flex justify-between">
+        <view class="item left">
+          <view class="label">
+            意向专业:
+          </view>
+          <text>{{ schoolInfo.major }}</text>
+        </view>
+        <view class="item right">
+          <view class="label">
+            专业代码:
+          </view>
+          <text>{{ schoolInfo.majorCode }}</text>
+        </view>
+      </view>
+      <view class="detail-item flex justify-between">
+        <view class="item left">
+          <view class="label">
+            学位类型:
+          </view>
+          <text>{{ schoolInfo.type }}</text>
+        </view>
+        <view class="item right">
+          <view class="label">
+            预估分数:
+          </view>
+          <text>{{ schoolInfo.score }}分</text>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
+
 <script setup lang="ts">
 const customStyle = {
   height: '44rpx',
   fontSize: '14rpx',
   border: 'none',
-}
+};
 const schoolInfo = reactive({
   name: '上海交通大学',
   logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
@@ -38,8 +79,9 @@ const schoolInfo = reactive({
   tag2: ['985', '211'],
   tag3: 'A+',
   editAble: true,
-})
+});
 </script>
+
 <style lang="scss" scoped>
 .school-info {
   padding: 32rpx;
@@ -55,10 +97,61 @@ const schoolInfo = reactive({
     .right {
       flex: 1;
       margin-left: 24rpx;
+      height: 96rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .school-name {
       display: flex;
       justify-content: space-between;
+    }
+    .tags {
+      display: flex;
+    }
+    .tag {
+      padding: 4rpx 8rpx;
+      border-radius: 4rpx;
+      font-size: 20rpx;
+      margin-right: 16rpx;
+    }
+    .tag-1 {
+      color: #E94650;
+      background-color: #FFECEB;
+    }
+    .tag-2 {
+      color: #4D59FF;
+      background-color: #EBEFFF;
+    }
+    .tag-3 {
+      color: #0EAEB4;
+      background-color: #E0F8F5;
+    }
+  }
+  .bottom {
+    margin-top: 24rpx;
+    background-color: #F9F9FA;
+    border-radius: 8rpx;
+    padding: 16rpx 24rpx;
+    font-size: 24rpx;
+    line-height: 36rpx;
+  }
+  .detail-item {
+    margin: 4rpx 0;
+    .left {
+      flex: 6;
+      flex-shrink: 0;
+    }
+    .right {
+      flex: 4;
+      flex-shrink: 0;
+    }
+    .item {
+      display: flex;
+    }
+    .label {
+      color: #898989;
+      margin-right: 10rpx;
     }
   }
 }

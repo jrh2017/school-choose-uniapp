@@ -72,7 +72,7 @@
                 required
                 @click="showSchool = true;"
               >
-                <up-input v-model="form.school" placeholder="请选择意向院校" border="none" disabled disabledColor="#ffffff"/>
+                <up-input v-model="form.school" placeholder="请选择意向院校" border="none" disabled disabledColor="#ffffff" />
                 <template #right>
                   <up-icon
                     name="arrow-down"
@@ -87,7 +87,7 @@
                 required
                 @click="showMajor = true;"
               >
-                <up-input v-model="form.major" placeholder="请选择意向专业" border="none" disabled disabledColor="#ffffff"/>
+                <up-input v-model="form.major" placeholder="请选择意向专业" border="none" disabled disabledColor="#ffffff" />
                 <template #right>
                   <up-icon
                     name="arrow-down"

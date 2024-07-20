@@ -9,22 +9,43 @@
   <view class="ranking-table">
     <view class="table">
       <view class="tr">
-        <view class="th">年份</view>
-        <view class="th">预估分/排名</view>
-        <view class="th">最高分/排名</view>
-        <view class="th">最低分/排名</view>
-        <view class="th">建议分/排名</view>
+        <view class="th">
+          年份
+        </view>
+        <view class="th">
+          预估分/排名
+        </view>
+        <view class="th">
+          最高分/排名
+        </view>
+        <view class="th">
+          最低分/排名
+        </view>
+        <view class="th">
+          建议分/排名
+        </view>
       </view>
       <view v-for="(item, index) in tableData" :key="index" class="tr" style="">
-        <view class="td">{{ item.year }}</view>
-        <view class="td">{{ item.estimateScore }}/{{ item.estimateRank }}</view>
-        <view class="td">{{ item.highScore }}/{{ item.highRank }}</view>
-        <view class="td">{{ item.lowScore }}/{{ item.lowRank }}</view>
-        <view class="td">{{ item.recommendScore }}/{{ item.recommendRank }}</view>
+        <view class="td">
+          {{ item.year }}
+        </view>
+        <view class="td">
+          {{ item.estimateScore }}/{{ item.estimateRank }}
+        </view>
+        <view class="td">
+          {{ item.highScore }}/{{ item.highRank }}
+        </view>
+        <view class="td">
+          {{ item.lowScore }}/{{ item.lowRank }}
+        </view>
+        <view class="td">
+          {{ item.recommendScore }}/{{ item.recommendRank }}
+        </view>
       </view>
     </view>
   </view>
 </template>
+
 <script setup lang="ts">
 const tableData = ref([{
   year: '2024',
@@ -35,7 +56,7 @@ const tableData = ref([{
   lowScore: 300,
   lowRank: 1923,
   recommendScore: 400,
-  recommendRank: 1234
+  recommendRank: 1234,
 }, {
   year: '2023',
   estimateScore: 456,
@@ -45,7 +66,7 @@ const tableData = ref([{
   lowScore: 300,
   lowRank: 1923,
   recommendScore: 400,
-  recommendRank: 1234
+  recommendRank: 1234,
 }, {
   year: '2022',
   estimateScore: 456,
@@ -55,9 +76,10 @@ const tableData = ref([{
   lowScore: 300,
   lowRank: 1923,
   recommendScore: 400,
-  recommendRank: 1234
-}])
+  recommendRank: 1234,
+}]);
 </script>
+
 <style scoped lang="scss">
 .table {
   width: 100%;
