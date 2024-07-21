@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 11:17:58
- * @LastEditTime : 2024-07-20 21:40:34
+ * @LastEditTime : 2024-07-21 10:14:02
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 const toSchoolLibrary = () => {
   uni.navigateTo({
-    url: '/pages/intention/detail/index',
+    url: '/pages/intention/collage/list',
   });
 };
 </script>

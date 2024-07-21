@@ -25,7 +25,7 @@
           />
         </view>
       </view>
-      <view v-else class="echart-container">
+      <view v-else class="echart-container" @click="toSchoolLibrary">
         <view class="title mb-10rpx">
           24届专业录取排名 <up-icon name="arrow-right" size="10" style="margin-left: 40rpx;" />
         </view>
@@ -193,9 +193,15 @@ const opts = reactive({
   },
 });
 
+const toSchoolLibrary = () => {
+  uni.navigateTo({
+    url: '/pages/intention/detail/index',
+  });
+};
+
 onShow(() => {
   chart.value = chartData;
-  showConfig.value = getToken();
+  showConfig.value = !getToken();
 });
 </script>
 

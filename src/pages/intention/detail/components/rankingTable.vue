@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:32:44
- * @LastEditTime : 2024-07-20 20:29:36
+ * @LastEditTime : 2024-07-21 10:09:17
  * @LastEditors  : jiangronghua
  * @Description  : 意向排名表格
 -->
@@ -25,7 +25,7 @@
           建议分/排名
         </view>
       </view>
-      <view v-for="(item, index) in tableData" :key="index" class="tr" style="">
+      <view v-for="(item, index) in tableData" :key="index" class="tr" style="" :class="{ active: index % 2 === 1 }">
         <view class="td">
           {{ item.year }}
         </view>
@@ -87,6 +87,11 @@ const tableData = ref([{
   display: table;
   border-collapse: collapse;
   font-size: 24rpx;
+
+  .active {
+    background: #F9F9FA;
+  }
+
   .th {
     text-align: center;
     color: #828282;
@@ -95,12 +100,14 @@ const tableData = ref([{
     display: table-cell;
     background: #F9F9FA;
   }
+
   .td {
     text-align: center;
     padding: 20rpx 0;
     display: table-cell;
     border-bottom: 1px solid #EFEFEF;
   }
+
   .tr {
     display: table-row;
   }

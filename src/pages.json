@@ -47,14 +47,17 @@
     },
     {
       "root": "pages/intention",
-      "pages": [
-        {
-          "path": "detail/index",
-          "style": {
-            "navigationStyle": "custom"
-          }
+      "pages": [{
+        "path": "detail/index",
+        "style": {
+          "navigationStyle": "custom"
         }
-      ]
+      }, {
+        "path": "collage/list",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }]
     }
   ],
   "preloadRule": {

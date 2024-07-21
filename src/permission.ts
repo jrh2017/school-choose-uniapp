@@ -3,7 +3,13 @@ import { getToken } from '@/utils/auth';
 // 登录页面
 const loginPage = '/pages/common/login/index';
 // 页面白名单
-const whiteList = ['/', '/pages/common/login/index', '/pages/tab/home/index', '/pages/intention/detail/index'];
+const whiteList = [
+  '/',
+  '/pages/common/login/index',
+  '/pages/tab/home/index',
+  '/pages/intention/detail/index',
+  '/pages/intention/collage/list',
+];
 
 // 检查地址白名单
 function checkWhite(url: string) {
