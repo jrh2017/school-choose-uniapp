@@ -35,8 +35,8 @@ export default antfu(
       // 禁止未使用的捕获组
       'regexp/no-unused-capturing-group': 'off',
       // 对所有控制语句强制实施一致的大括号样式
-      // curly: ["error", "multi", "consistent"],
-      'curly': 'off',
+      // 'curly': ['error', 'multi', 'consistent'],
+      'curly': ['off'],
       'vue/attribute-hyphenation': 0,
     },
   },

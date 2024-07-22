@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 11:17:58
- * @LastEditTime : 2024-07-21 10:14:02
+ * @LastEditTime : 2024-07-22 19:38:06
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -30,7 +30,7 @@
         </view>
         <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/home-icon-02.png" width="136rpx" height="124rpx" />
       </view>
-      <view class="item bg03 h-156rpx w-332rpx flex items-center justify-between">
+      <view class="item bg03 h-156rpx w-332rpx flex items-center justify-between" @click="toMajorLibrary">
         <view class="icon-text flex flex-col items-center justify-center">
           <text class="font-size-36rpx font-bold">
             专业库
@@ -49,6 +49,11 @@
 const toSchoolLibrary = () => {
   uni.navigateTo({
     url: '/pages/intention/collage/list',
+  });
+};
+const toMajorLibrary = () => {
+  uni.navigateTo({
+    url: '/pages/intention/major/list',
   });
 };
 </script>

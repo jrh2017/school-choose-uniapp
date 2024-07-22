@@ -9,6 +9,7 @@ const whiteList = [
   '/pages/tab/home/index',
   '/pages/intention/detail/index',
   '/pages/intention/collage/list',
+  '/pages/intention/collage/detail',
   '/pages/intention/major/list',
 ];
 

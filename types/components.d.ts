@@ -7,7 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AfterSelect: typeof import('./../src/components/lx-cascade-select/after-select.vue')['default']
     AgreePrivacy: typeof import('./../src/components/agree-privacy/index.vue')['default']
+    LxCascadeSelect: typeof import('./../src/components/lx-cascade-select/lx-cascade-select.vue')['default']
     PageNav: typeof import('./../src/components/page-nav/page-nav.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

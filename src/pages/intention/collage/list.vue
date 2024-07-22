@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-07-22 14:04:20
+ * @LastEditTime : 2024-07-22 20:03:25
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -82,6 +82,7 @@ const provincePopup = ref(false); // 省份筛选弹窗
 const levelPopup = ref(false); // 院校层次筛选弹窗
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
+const majorId = ref(''); // 专业id
 
 const columns = reactive([[
   {
@@ -137,9 +138,17 @@ const school: schoolVO = {
  */
 const toDetail = (item: schoolVO) => {
   const { id } = item;
-  uni.navigateTo({
-    url: `/pages/intention/major/list?id=${id}`,
-  });
+  console.log('[ toDetail ] >', majorId.value);
+  if (majorId.value) {
+    uni.navigateTo({
+      url: `/pages/intention/collage/detail?id=${id}`,
+    });
+  }
+  else {
+    uni.navigateTo({
+      url: `/pages/intention/major/list?id=${id}`,
+    });
+  }
 };
 
 /**
@@ -180,6 +189,12 @@ function queryList(pageNo: number, pageSize: number) {
     pagingRef.value?.complete(list);
   }, 1000);
 }
+
+onLoad((options: any) => {
+  if (options?.id) {
+    majorId.value = options.id;
+  }
+});
 </script>
 
 <style scoped lang="scss">
@@ -263,7 +278,7 @@ function queryList(pageNo: number, pageSize: number) {
       align-items: center;
       color: #8C8C8C;
       font-size: 20rpx;
-      flex-shrink: 0 ;
+      flex-shrink: 0;
     }
     .area {
       margin-left: 8rpx;

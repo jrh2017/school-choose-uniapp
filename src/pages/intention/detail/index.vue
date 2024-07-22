@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-07-22 08:50:55
+ * @LastEditTime : 2024-07-22 19:26:13
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import Major from './components/major.vue';
-import School from './components/school.vue';
+import Major from '../components/major.vue';
+import School from '../components/school.vue';
 
 const list = reactive(['意向专业排名', '意向院校分析']);
 const subIndex = ref(0); // 当前索引

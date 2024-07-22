@@ -58,6 +58,11 @@
           "navigationStyle": "custom"
         }
       }, {
+        "path": "collage/detail",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }, {
         "path": "major/list",
         "style": {
           "navigationStyle": "custom"
