@@ -57,6 +57,11 @@
         "style": {
           "navigationStyle": "custom"
         }
+      }, {
+        "path": "major/list",
+        "style": {
+          "navigationStyle": "custom"
+        }
       }]
     }
   ],

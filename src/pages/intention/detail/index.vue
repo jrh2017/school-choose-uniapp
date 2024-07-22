@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-07-21 10:06:38
+ * @LastEditTime : 2024-07-22 08:50:55
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -42,7 +42,7 @@ const changeIndex = (index: number) => {
 <style lang="scss" scoped>
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #F8EFF2 0%, #FFFFFF 100%);
+  background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
   flex: 1;
 }
 .content {
