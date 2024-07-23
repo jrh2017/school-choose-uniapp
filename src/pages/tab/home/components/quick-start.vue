@@ -1,13 +1,13 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 11:17:58
- * @LastEditTime : 2024-07-22 19:38:06
+ * @LastEditTime : 2024-07-23 08:19:29
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
   <view class="quick mt-40rpx w-100% flex items-center justify-between">
-    <view class="right bg01 h-332rpx w-332rpx flex flex-col items-center justify-center">
+    <view class="right bg01 h-332rpx w-332rpx flex flex-col items-center justify-center" @click="toCompare">
       <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/home-icon-01.png" width="204rpx" height="178rpx" />
       <view class="icon-text flex flex-col items-center justify-center">
         <text class="font-size-36rpx font-bold">
@@ -54,6 +54,11 @@ const toSchoolLibrary = () => {
 const toMajorLibrary = () => {
   uni.navigateTo({
     url: '/pages/intention/major/list',
+  });
+};
+const toCompare = () => {
+  uni.navigateTo({
+    url: '/pages/intention/compare/list',
   });
 };
 </script>

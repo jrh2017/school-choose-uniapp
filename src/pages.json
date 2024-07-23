@@ -67,6 +67,11 @@
         "style": {
           "navigationStyle": "custom"
         }
+      }, {
+        "path": "compare/list",
+        "style": {
+          "navigationStyle": "custom"
+        }
       }]
     }
   ],

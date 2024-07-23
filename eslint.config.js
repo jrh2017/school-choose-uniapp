@@ -38,6 +38,16 @@ export default antfu(
       // 'curly': ['error', 'multi', 'consistent'],
       'curly': ['off'],
       'vue/attribute-hyphenation': 0,
+      // 'vue/max-attributes-per-line': [
+      //   'error',
+      //   {
+      //     singleline: 10,
+      //     multiline: {
+      //       max: 1,
+      //       allowFirstLine: true,
+      //     },
+      //   },
+      // ],
     },
   },
 );

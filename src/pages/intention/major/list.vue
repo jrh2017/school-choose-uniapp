@@ -160,6 +160,7 @@ onLoad((options: any) => {
     }
     .right {
       flex: 1 1 auto;
+      background: #FFFFFF;
     }
     .major-level-2-item {
       padding: 32rpx;
