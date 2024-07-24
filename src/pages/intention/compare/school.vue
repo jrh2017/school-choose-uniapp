@@ -1,9 +1,9 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
- * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-07-23 17:05:48
+ * @Date         : 2024-07-23 16:42:34
+ * @LastEditTime : 2024-07-24 08:00:13
  * @LastEditors  : jiangronghua
- * @Description  : 院校库页面
+ * @Description  :
 -->
 <template>
   <view class="container">
@@ -13,7 +13,7 @@
           <up-navbar
             :placeholder="true"
             bg-color="#F8EFF2"
-            title="院校库"
+            title="添加对比"
             autoBack
           />
           <view class="search-wrapper">
@@ -21,6 +21,12 @@
               <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx" placeholder="请输入院校名称" />
             </view>
             <view class="condition">
+              <view class="condition-item" @click="provincePopup = true">
+                <text class="mr-10rpx">
+                  {{ currentMajor }}
+                </text>
+                <up-icon name="arrow-down-fill" />
+              </view>
               <view class="condition-item" @click="provincePopup = true">
                 <text class="mr-10rpx">
                   {{ currentProvince }}
@@ -37,29 +43,46 @@
           </view>
         </template>
         <view class="list-wrapper">
-          <view v-for="(item, index) in dataList" :key="index" class="school-item" @click="toDetail(item)">
-            <view class="left">
-              <up-image :src="item.logo" width="100rpx" height="100rpx" />
-              <view class="school-info">
-                <view class="school-name">
-                  <text>{{ item.name }}</text>
-                </view>
-                <view class="tags">
-                  <view class="tag tag-1">
-                    {{ item.tag1 }}
+          <view v-for="(item, index) in dataList" :key="index" class="school-item">
+            <view class="top">
+              <view class="top-left">
+                <up-image :src="item.logo" width="100rpx" height="100rpx" />
+                <view class="school-info">
+                  <view class="school-name">
+                    <text>{{ item.name }}</text>
                   </view>
-                  <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
-                    {{ tag }}
+                  <view class="tags">
+                    <view class="tag tag-1">
+                      {{ item.tag1 }}
+                    </view>
+                    <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
+                      {{ tag }}
+                    </view>
                   </view>
                 </view>
               </view>
+              <view v-if="item.isAdd" class="btn-right selected">
+                已添加
+              </view>
+              <view v-else class="btn-right unselected" @click="addSchool(item)">
+                <up-icon name="plus-circle" color="#E94650" labelColor="#E94650" label="对比" />
+              </view>
             </view>
-            <view class="right">
-              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/location.png" width="22rpx" height="22rpx" />
-              <text class="area">
-                {{ item.area }}({{ item.type }})
-              </text>
-              <up-icon name="arrow-right" :size="12" color="#000000" />
+            <view class="bottom">
+              <view class="detail-item flex justify-between">
+                <view class="item left">
+                  <view class="label">
+                    专业:
+                  </view>
+                  <text>{{ item.major }}</text>
+                </view>
+                <view class="item right">
+                  <view class="label">
+                    学位类型:
+                  </view>
+                  <text>{{ item.type }}</text>
+                </view>
+              </view>
             </view>
           </view>
         </view>
@@ -70,16 +93,18 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
+import { deepClone } from 'uview-plus';
 import type { schoolVO } from '@/api/school/types';
 
 const keyword = ref('');
 
 const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-paging组件的ref
-const dataList = ref<schoolVO[]>([]); // 存放请求回来的数据
+const dataList = ref<any[]>([]); // 存放请求回来的数据
 const provincePopup = ref(false); // 省份筛选弹窗
 const levelPopup = ref(false); // 院校层次筛选弹窗
+const currentMajor = ref('专业'); // 当前选择的专业
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
 const majorId = ref(''); // 专业id
@@ -122,33 +147,15 @@ const levels = reactive([[
   },
 ]]);
 
-const school: schoolVO = {
+const school = {
   name: '浙江工商大学',
   logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
   tag1: '综合类',
   tag2: ['985', '211'],
   area: '浙江',
-  type: 'A区',
+  major: '应用心理',
+  type: '学术学位',
   id: 1,
-};
-
-/**
- * 跳转到院校详情页面
- * @param item 院校信息
- */
-const toDetail = (item: schoolVO) => {
-  const { id } = item;
-  console.log('[ toDetail ] >', majorId.value);
-  if (majorId.value) {
-    uni.navigateTo({
-      url: `/pages/intention/collage/detail?id=${id}`,
-    });
-  }
-  else {
-    uni.navigateTo({
-      url: `/pages/intention/major/list?id=${id}`,
-    });
-  }
 };
 
 /**
@@ -183,12 +190,33 @@ function queryList(pageNo: number, pageSize: number) {
   setTimeout(() => {
     // 1秒之后停止刷新动画
     const list = [];
-    for (let i = 0; i < 30; i++)
-      list.push(school);
-
+    for (let i = 0; i < 30; i++) {
+      const copy = deepClone(school);
+      copy.isAdd = i % 2 === 0;
+      list.push(copy);
+    }
     pagingRef.value?.complete(list);
   }, 200);
 }
+
+/**
+ * 添加学校并返回
+ */
+const addSchool = (item: schoolVO) => {
+  uni.navigateBack({
+    success: () => {
+      uni.setStorageSync('intention', {
+        ...uni.getStorageSync('intention'),
+        school: item,
+      }); // 保存选择的院校信息 到本地缓存
+      uni.showToast({
+        title: '添加成功',
+        icon: 'none',
+        duration: 1000,
+      });
+    },
+  });
+};
 
 onLoad((options: any) => {
   if (options?.id) {
@@ -216,7 +244,7 @@ onLoad((options: any) => {
     align-items: center;
   }
   .condition-item {
-    width: 327rpx;
+    width: 220rpx;
     height: 60rpx;
     border-radius: 8rpx;
     background: #E8E1E4;
@@ -237,10 +265,33 @@ onLoad((options: any) => {
     background: #FFFFFF;
     margin-bottom: 24rpx;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    .left {
+    width: 100%;
+    box-sizing: border-box;
+    .top {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      ::v-deep .u-iconfont {
+        color: #E94650 !important;
+      }
+      .top-left {
+        display: flex;
+      }
+      .btn-right {
+        padding: 12rpx 16rpx;
+        border-radius: 8rpx;
+        font-weight: 600;
+        font-size: 24rpx;
+        color: rgba(0,0,0,0.25);
+      }
+      .selected {
+        background: #F2F2F7;
+      }
+      .unselected {
+        background: rgba(252,227,229,0.4);
+      }
       .school-info {
         display: flex;
         flex-direction: column;
@@ -272,17 +323,28 @@ onLoad((options: any) => {
         background-color: #EBEFFF;
       }
     }
-    .right {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      color: #8C8C8C;
-      font-size: 20rpx;
-      flex-shrink: 0;
+    .bottom {
+      margin-top: 24rpx;
+      font-size: 24rpx;
+      line-height: 36rpx;
     }
-    .area {
-      margin-left: 8rpx;
-      margin-right: 26rpx;
+    .detail-item {
+      margin: 4rpx 0;
+      .left {
+        flex: 6;
+        flex-shrink: 0;
+      }
+      .right {
+        flex: 4;
+        flex-shrink: 0;
+      }
+      .item {
+        display: flex;
+      }
+      .label {
+        color: #898989;
+        margin-right: 10rpx;
+      }
     }
   }
 }

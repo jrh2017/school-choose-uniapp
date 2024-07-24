@@ -11,6 +11,9 @@ const whiteList = [
   '/pages/intention/collage/list',
   '/pages/intention/collage/detail',
   '/pages/intention/major/list',
+  '/pages/intention/compare/list',
+  '/pages/intention/compare/school',
+  '/pages/intention/rank/index',
 ];
 
 // 检查地址白名单

@@ -34,7 +34,7 @@
       <view class="w-100%">
         <QuickStart />
       </view>
-      <view class="news mt-40rpx flex items-center justify-between">
+      <view class="news mt-40rpx flex items-center justify-between" @click="toSchoolRank">
         <view class="left flex items-center">
           <view class="tag">
             最新版
@@ -56,6 +56,7 @@
         :show-cancel-button="true"
         confirm-color="#FE6567"
         @cancel="show = false"
+        @confirm="confirmModal"
       >
         <view class="slot-content">
           <up-form
@@ -199,6 +200,34 @@ const toSchoolLibrary = () => {
   });
 };
 
+/**
+ * 跳转到学校排名
+ */
+const toSchoolRank = () => {
+  uni.navigateTo({
+    url: '/pages/intention/rank/index',
+  });
+};
+
+// 表单引用
+const uFormRef = ref<any>({});
+const confirmModal = () => {
+  uFormRef!.value.validate().then((valid: any) => {
+    if (valid) {
+      show.value = false;
+      showConfig.value = true;
+    }
+    else {
+      uni.$u.toast('请填写正确的信息');
+    }
+  }).catch(() => {
+    uni.showToast({
+      title: '请正确填写信息',
+      icon: 'none',
+    });
+  });
+};
+
 onShow(() => {
   chart.value = chartData;
   showConfig.value = !getToken();
@@ -230,7 +259,7 @@ onShow(() => {
   }
   .echart-container {
     width: 100%;
-    height: 400rpx;
+    height: 450rpx;
     box-sizing: border-box;
     padding: 32rpx 20rpx;
     background: #FFFFFF;

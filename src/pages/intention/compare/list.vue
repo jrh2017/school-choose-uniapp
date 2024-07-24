@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-07-23 16:09:23
+ * @LastEditTime : 2024-07-24 08:01:34
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -23,7 +23,7 @@
         </text>
       </view>
       <view v-else class="manage">
-        <view class="add-btn">
+        <view class="add-btn" @click="addSchool">
           <up-icon name="plus" space="20rpx" labelColor="#E94650" label="添加院校专业" />
         </view>
         <text class="btn-text" @click="openManage">
@@ -32,7 +32,7 @@
       </view>
     </view>
     <view class="content w-100%">
-      <view class="scrool-main">
+      <view v-if="schoolList.length > 0" class="scrool-main">
         <scroll-view style="height: 100%;" scroll-y="true" :scroll-top="scrollTop" @scroll="onScroll">
           <up-checkbox-group v-model="selectedSchools">
             <view v-for="(school, index) in schoolList" :key="index" class="school-info">
@@ -82,6 +82,14 @@
           </up-checkbox-group>
         </scroll-view>
       </view>
+      <up-empty
+        v-else
+        mode="search"
+        color="#ec8b89"
+        iconColor="#ec8b89"
+        marginTop="100rpx"
+        text="暂无数据,请先选择学校"
+      />
     </view>
     <view class="bottom-box">
       <button
@@ -187,6 +195,15 @@ const openConfirm = () => {
         deleteSchools();
       }
     },
+  });
+};
+
+/**
+ * 添加学校
+ */
+const addSchool = () => {
+  uni.navigateTo({
+    url: '/pages/intention/compare/school',
   });
 };
 
