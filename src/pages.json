@@ -17,7 +17,7 @@
       }
     },
     {
-      "path": "pages/tab/list/index",
+      "path": "pages/tab/choice/index",
       "style": {
         "navigationBarTitleText": "列表"
       }
@@ -83,6 +83,17 @@
           "navigationStyle": "custom"
         }
       }]
+    },
+    {
+      "root": "pages/user",
+      "pages": [
+        {
+          "path": "attention/index",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        }
+      ]
     }
   ],
   "preloadRule": {
@@ -102,7 +113,7 @@
       "iconPath": "static/images/home.png",
       "selectedIconPath": "static/images/home-active.png"
     }, {
-      "pagePath": "pages/tab/list/index",
+      "pagePath": "pages/tab/choice/index",
       "text": "择校",
       "iconPath": "static/images/zx.png",
       "selectedIconPath": "static/images/zx-active.png"

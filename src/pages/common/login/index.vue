@@ -1,154 +1,140 @@
 <template>
-  <view>
-    <view class="login-form-wrap">
-      <view class="title">
-        欢迎登录
-      </view>
-      <input v-model="tel" class="u-border-bottom" type="number" placeholder="请输入手机号">
-      <view class="u-border-bottom my-40rpx flex">
-        <input v-model="code" class="flex-1" type="number" placeholder="请输入验证码">
-        <view>
-          <u-code ref="uCodeRef" @change="codeChange" />
-          <u-button :text="tips" type="success" size="mini" @click="getCode" />
+  <view class="container">
+    <up-navbar
+      :placeholder="true"
+      bg-color="#F8EFF2"
+      title=""
+      left-icon=""
+    />
+    <view class="content">
+      <view class="top">
+        <up-image class="edit-icon" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/logo.png" width="184rpx" height="184rpx" />
+        <view class="info">
+          <text class="font-size-32rpx color-#000000 line-height-48rpx">
+            小程序申请获得以下权限：
+          </text>
+          <text class="mt-8rpx font-size-32rpx color-#BDB9BB line-height-40rpx">
+            获得您的手机号码
+          </text>
+        </view>
+        <view class="btn">
+          <!-- <button
+            size="default" type="default"
+            class="login-btn"
+            hover-class="is-hover"
+            open-type="getPhoneNumber"
+            @getphonenumber="getPhoneNumber"
+          >
+            手机号一键登录
+          </button> -->
+          <button
+            size="default" type="default"
+            class="login-btn"
+            hover-class="is-hover"
+            open-type="getPhoneNumber"
+            @click="getPhoneNumber"
+          >
+            手机号一键登录
+          </button>
+        </view>
+        <view class="agreement">
+          <up-checkbox-group v-model="checkbox" activeColor="#E94650">
+            <up-checkbox
+              :customStyle="{ marginBottom: '8px' }"
+              name="agree"
+            >
+              <template #label>
+                <text class="color-#BDB9BB line-height-32rpx">
+                  我已阅读并同意
+                  <text class="color-#E94650">
+                    《用户协议与隐私条款》
+                  </text>
+                </text>
+              </template>
+            </up-checkbox>
+          </up-checkbox-group>
         </view>
       </view>
-      <button class="login-btn" :style="[inputStyle]" @tap="submit">
-        登录 <text class="i-mdi-login" />
-      </button>
-
-      <view class="alternative">
-        <view class="password">
-          密码登录
-        </view>
-        <view class="issue flex items-center">
-          遇到问题 <text class="i-mdi-help" />
-        </view>
-      </view>
-    </view>
-    <view class="login-type-wrap">
-      <view class="item wechat">
-        <view class="icon">
-          <u-icon size="35" name="weixin-fill" color="rgb(83,194,64)" />
-        </view>
-        微信
-      </view>
-      <view class="item QQ">
-        <view class="icon">
-          <u-icon size="35" name="qq-fill" color="rgb(17,183,233)" />
-        </view>
-        QQ
-      </view>
-    </view>
-    <view class="hint">
-      登录代表同意
-      <text class="link">
-        用户协议、隐私政策，
+      <text class="contact">
+        联系客服
       </text>
-      并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import uCode from 'uview-plus/components/u-code/u-code.vue';
-import type { CSSProperties } from 'vue';
 import { setToken } from '@/utils/auth';
 
-const tel = ref<string>('18502811111');
-const code = ref<string>('1234');
-const tips = ref<string>();
-const uCodeRef = ref<InstanceType<typeof uCode> | null>(null);
+const checkbox = ref([]);
 
-const inputStyle = computed<CSSProperties>(() => {
-  const style = {} as CSSProperties;
-  if (tel.value && code.value) {
-    style.color = '#fff';
-    style.backgroundColor = uni.$u.color.warning;
-  }
-  return style;
-});
+const submit = () => {
+  setToken('1234567890');
+  uni.reLaunch({ url: '/pages/tab/home/index' });
+};
 
-function codeChange(text: string) {
-  tips.value = text;
-}
-
-function getCode() {
-  if (uCodeRef.value?.canGetCode) {
-    // 模拟向后端请求验证码
-    uni.showLoading({
-      title: '正在获取验证码',
-    });
-    setTimeout(() => {
-      uni.hideLoading();
-      uni.$u.toast('验证码已发送');
-      // 通知验证码组件内部开始倒计时
-      uCodeRef.value?.start();
-    }, 1000);
-  }
-  else {
-    uni.$u.toast('倒计时结束后再发送');
-  }
-}
-function submit() {
-  if (uni.$u.test.mobile(tel.value)) {
-    setToken('1234567890');
-    uni.reLaunch({ url: '/pages/tab/home/index' });
-  }
-}
+const getPhoneNumber = (e: any) => {
+  console.log(e);
+  submit();
+};
 </script>
 
 <style lang="scss" scoped>
-.login-form-wrap {
-  @apply mt-80rpx mx-auto mb-0 w-600rpx;
-
-  .title {
-    @apply mb-100rpx text-60rpx text-left font-500;
-  }
-
-  input {
-    @apply pb-6rpx mb-10rpx text-left;
-  }
-
-  .tips {
-    @apply mt-8rpx mb-60rpx;
-
-    color: $u-info;
-  }
-
-  .login-btn {
-    @apply flex items-center justify-center py-12rpx px-0 text-30rpx bg-#fdf3d0 border-none;
-
-    color: $u-tips-color;
-
-    &::after {
-      @apply border-none;
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.content {
+  box-sizing: border-box;
+  padding: 0 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  .top {
+    margin-top: 100rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .info {
+      margin-top: 64rpx;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn {
+      margin-top: 96rpx;
+      .login-btn {
+        color:#ffffff;
+        background-color:#E94650;
+        border-color: #E94650;
+        width: 558rpx;
+        height: 108rpx;
+        border-radius: 54rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+        font-size: 34rpx;
+        color: #FFFFFF;
+        line-height: 48rpx;
+      }
+    }
+    .agreement {
+      margin-top: 98rpx;
+      width: 100%;
     }
   }
-
-  .alternative {
-    @apply flex justify-between mt-30rpx;
-
-    color: $u-tips-color;
-  }
-}
-
-.login-type-wrap {
-  @apply flex justify-between pt-350rpx px-150rpx pb-150rpx;
-
-  .item {
-    @apply flex items-center flex-col text-28rpx;
-
-    color: $u-content-color;
-  }
-}
-
-.hint {
-  @apply px-40rpx py-20rpx text-20rpx;
-
-  color: $u-tips-color;
-
-  .link {
-    color: $u-warning;
+  .contact {
+    margin-bottom: 96rpx;
+    font-size: 28rpx;
+    color: #E94650;
+    line-height: 44rpx;
   }
 }
 </style>

@@ -28,7 +28,7 @@
 
       <view class="mt-20rpx border-rd-24rpx bg-white">
         <u-cell-group :border="false">
-          <u-cell icon="star" title="关注院校" is-link>
+          <u-cell icon="star" title="关注院校" is-link @click="toAttention">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-02.png" width="40rpx" height="40rpx" />
             </template>
@@ -69,6 +69,15 @@ const toCopy = async () => {
   await setClipboardData({ data: '1234567890' });
   const data = await getClipboardData();
   console.log('[ data ] >', data);
+};
+
+/**
+ * 跳转到关注院校页面
+ */
+const toAttention = () => {
+  uni.navigateTo({
+    url: '/pages/user/attention/index',
+  });
 };
 </script>
 
