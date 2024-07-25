@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-07-24 13:29:42
+ * @LastEditTime : 2024-07-24 20:35:45
  * @LastEditors  : jiangronghua
  * @Description  : 学校排行榜
 -->
@@ -25,10 +25,10 @@
         </view>
         <view class="table-box">
           <view class="left">
-            <SchoolRank />
+            <SchoolRank :list="shoolList" title="校友会" />
           </view>
           <view class="right">
-            <SchoolRank title="软科" />
+            <SchoolRank :list="softList" title="软科" />
           </view>
         </view>
       </view>
@@ -41,6 +41,21 @@ import SchoolRank from '../components/schoolRank.vue';
 
 const list = ref(['中国排名', '世界排名']); // subsection分段
 const currentIndex = ref(0); // 当前选择的分段
+const shoolList = ref<any>([]); // 院校列表(校友会)
+const softList = ref<any>([]); // 院校列表(软科)
+
+onLoad(() => {
+  for (let i = 1; i < 500; i++) {
+    shoolList.value.push({
+      name: '南京东南大学',
+      rank: i,
+    });
+    softList.value.push({
+      name: '南京东南大学南京东南大学',
+      rank: i * 2,
+    });
+  }
+});
 </script>
 
 <style scoped lang="scss">
@@ -74,6 +89,7 @@ const currentIndex = ref(0); // 当前选择的分段
     .left {
       flex:1;
       flex-shrink: 1;
+      border-right: 1px solid #F2F2F7;
     }
     .right {
       flex:1;

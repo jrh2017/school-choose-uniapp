@@ -1,45 +1,60 @@
 <template>
-  <view class="page-wrap">
-    <u-navbar title="" placeholder left-icon="" right-icon="camera-fill" />
-    <view class="flex items-center bg-white pb-30rpx pl-30rpx pr-20rpx">
-      <view class="mr-10rpx">
-        <u-avatar src="/static/images/logo.png" size="70" />
-      </view>
-      <view class="flex-1">
-        <view class="pb-20rpx font-size-36rpx">
-          uni-app
+  <view class="container">
+    <u-navbar title="" bg-color="#F8EFF2" placeholder left-icon="" />
+    <view class="content">
+      <view class="flex items-center">
+        <view class="mr-32rpx">
+          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/avatar.jpg" shape="circle" width="128rpx" height="128rpx" />
         </view>
-        <view class="u-tips-color font-size-28rpx" @click="toCopy">
-          微信号:uni-app
+        <view class="h-128rpx flex flex-1 flex-col flex-justify-between">
+          <view class="font-weight-bold pb-20rpx font-size-40rpx color-#252424">
+            用户昵称
+          </view>
+          <view class="font-size-28rpx color-#888486" @click="toCopy">
+            手机号:18530064223
+          </view>
         </view>
       </view>
-      <view class="ml-10rpx p-10rpx">
-        <u-icon name="scan" color="#969799" />
+
+      <view class="mt-44rpx border-rd-24rpx bg-white">
+        <u-cell-group :border="false">
+          <u-cell icon="rmb-circle" title="我的报告" is-link :border="false">
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-01.png" width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+        </u-cell-group>
       </view>
-      <view class="ml-10rpx p-10rpx">
-        <u-icon name="arrow-right" color="#969799" />
+
+      <view class="mt-20rpx border-rd-24rpx bg-white">
+        <u-cell-group :border="false">
+          <u-cell icon="star" title="关注院校" is-link>
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-02.png" width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+          <u-cell icon="photo" title="激活码" is-link>
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-03.png" width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+          <u-cell icon="heart" title="一起分销赚钱" is-link :border="false">
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-04.png" width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+        </u-cell-group>
       </view>
-    </view>
 
-    <view class="mt-20rpx bg-white">
-      <u-cell-group>
-        <u-cell icon="rmb-circle" title="支付" is-link />
-      </u-cell-group>
-    </view>
-
-    <view class="mt-20rpx bg-white">
-      <u-cell-group>
-        <u-cell icon="star" title="收藏" is-link />
-        <u-cell icon="photo" title="相册" is-link />
-        <u-cell icon="coupon" title="卡券" is-link />
-        <u-cell icon="heart" title="关注" is-link />
-      </u-cell-group>
-    </view>
-
-    <view class="mt-20rpx bg-white">
-      <u-cell-group>
-        <u-cell icon="setting" title="设置" is-link />
-      </u-cell-group>
+      <view class="mt-20rpx border-rd-24rpx bg-white">
+        <u-cell-group :border="false">
+          <u-cell icon="setting" title="设置" is-link :border="false">
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-05.png" width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+        </u-cell-group>
+      </view>
     </view>
   </view>
 </template>
@@ -56,3 +71,15 @@ const toCopy = async () => {
   console.log('[ data ] >', data);
 };
 </script>
+
+<style lang="scss" scoped>
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
+  flex: 1;
+}
+.content {
+  box-sizing: border-box;
+  padding: 32rpx;
+}
+</style>
