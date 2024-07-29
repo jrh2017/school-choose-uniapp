@@ -31,7 +31,6 @@
             size="default" type="default"
             class="login-btn"
             hover-class="is-hover"
-            open-type="getPhoneNumber"
             @click="getPhoneNumber"
           >
             手机号一键登录

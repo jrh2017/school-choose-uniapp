@@ -48,7 +48,7 @@
 
       <view class="mt-20rpx border-rd-24rpx bg-white">
         <u-cell-group :border="false">
-          <u-cell icon="setting" title="设置" is-link :border="false">
+          <u-cell icon="setting" title="设置" is-link :border="false" @click="toSetting">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-05.png" width="40rpx" height="40rpx" />
             </template>
@@ -77,6 +77,15 @@ const toCopy = async () => {
 const toAttention = () => {
   uni.navigateTo({
     url: '/pages/user/attention/index',
+  });
+};
+
+/**
+ * 跳转到设置页面
+ */
+const toSetting = () => {
+  uni.navigateTo({
+    url: '/pages/user/setting/index',
   });
 };
 </script>

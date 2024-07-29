@@ -19,7 +19,7 @@
     {
       "path": "pages/tab/choice/index",
       "style": {
-        "navigationBarTitleText": "列表"
+        "navigationStyle": "custom"
       }
     },
     {
@@ -86,14 +86,17 @@
     },
     {
       "root": "pages/user",
-      "pages": [
-        {
-          "path": "attention/index",
-          "style": {
-            "navigationStyle": "custom"
-          }
+      "pages": [{
+        "path": "attention/index",
+        "style": {
+          "navigationStyle": "custom"
         }
-      ]
+      }, {
+        "path": "setting/index",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }]
     }
   ],
   "preloadRule": {
