@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-07-23 17:05:48
+ * @LastEditTime : 2024-08-23 15:41:04
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -18,7 +18,7 @@
           />
           <view class="search-wrapper">
             <view class="search-box">
-              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx" placeholder="请输入院校名称" />
+              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx" placeholder="请输入院校名称" @search="searchSchool()" />
             </view>
             <view class="condition">
               <view class="condition-item" @click="provincePopup = true">
@@ -39,14 +39,14 @@
         <view class="list-wrapper">
           <view v-for="(item, index) in dataList" :key="index" class="school-item" @click="toDetail(item)">
             <view class="left">
-              <up-image :src="item.logo" width="100rpx" height="100rpx" />
+              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx" height="100rpx" />
               <view class="school-info">
                 <view class="school-name">
-                  <text>{{ item.name }}</text>
+                  <text>{{ item.schoolName }}</text>
                 </view>
                 <view class="tags">
                   <view class="tag tag-1">
-                    {{ item.tag1 }}
+                    {{ item.typeName }}
                   </view>
                   <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
                     {{ tag }}
@@ -57,14 +57,14 @@
             <view class="right">
               <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/location.png" width="22rpx" height="22rpx" />
               <text class="area">
-                {{ item.area }}({{ item.type }})
+                {{ item.provinceName }}({{ item.provinceArea }}区)
               </text>
               <up-icon name="arrow-right" :size="12" color="#000000" />
             </view>
           </view>
         </view>
       </z-paging>
-      <up-picker :show="provincePopup" :columns="columns" keyName="label" @confirm="confirmProvince" @cancel="provincePopup = false" />
+      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="provinces" @confirm="confirmProvince" @cancel="provincePopup = false" />
       <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel" @cancel="levelPopup = false" />
     </view>
   </view>
@@ -73,6 +73,10 @@
 <script setup lang="ts">
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
 import type { schoolVO } from '@/api/school/types';
+import {
+  provinceList,
+  schoolPage,
+} from '@/api/collage';
 
 const keyword = ref('');
 
@@ -83,53 +87,51 @@ const levelPopup = ref(false); // 院校层次筛选弹窗
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
 const majorId = ref(''); // 专业id
+const provincePickerRef = ref(null);
 
-const columns = reactive([[
-  {
-    label: '北京市',
-    id: 1,
-  },
-  {
-    label: '上海市',
-    id: 2,
-  },
-  {
-    label: '广东省',
-    id: 3,
-  },
-  {
-    label: '河南省',
-    id: 4,
-  },
-  {
-    label: '湖北省',
-    id: 5,
-  },
-]]);
+const provinces = reactive<any[]>([[]]);
 
 const levels = reactive([[
   {
-    label: '985',
-    id: 1,
+    label: '全部',
+    id: 0,
   },
   {
     label: '211',
+    id: 1,
+  },
+  {
+    label: '985',
     id: 2,
   },
   {
-    label: '普通高校',
+    label: '自划线',
     id: 3,
+  },
+  {
+    label: '双一流',
+    id: 4,
+  },
+  {
+    label: '高等院校',
+    id: 5,
+  },
+  {
+    label: '科研院所',
+    id: 6,
   },
 ]]);
 
-const school: schoolVO = {
-  name: '浙江工商大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  area: '浙江',
-  type: 'A区',
-  id: 1,
+/**
+ * 获取省份数据
+ */
+const getProvince = () => {
+  // 省份数据
+  provinceList().then((res: any) => {
+    const data = res && res[0] ? res[0] : [];
+    const provinceData = ['全部', ...data];
+    provincePickerRef.value.setColumnValues(0, provinceData);
+  });
 };
 
 /**
@@ -156,9 +158,9 @@ const toDetail = (item: schoolVO) => {
  * @param data
  */
 const confirmProvince = (data: any) => {
-  currentProvince.value = data.value[0].label;
+  currentProvince.value = data.value[0];
   provincePopup.value = false;
-  queryList(1, 10);
+  pagingRef.value.reload();
 };
 
 /**
@@ -168,7 +170,7 @@ const confirmProvince = (data: any) => {
 const confirmLevel = (data: any) => {
   currentLevel.value = data.value[0].label;
   levelPopup.value = false;
-  queryList(1, 10);
+  pagingRef.value.reload();
 };
 
 /**
@@ -178,22 +180,29 @@ const confirmLevel = (data: any) => {
  */
 function queryList(pageNo: number, pageSize: number) {
   console.log('[ pageNo ] >', pageNo, '[ pageSize ] >', pageSize);
-  // 这里的pageNo和pageSize会自动计算好，直接传给服务器即可
-  // 这里的请求只是演示，请替换成自己的项目的网络请求，并在网络请求回调中通过pagingRef.value.complete(请求回来的数组)将请求结果传给z-paging
-  setTimeout(() => {
-    // 1秒之后停止刷新动画
-    const list = [];
-    for (let i = 0; i < 30; i++)
-      list.push(school);
-
-    pagingRef.value?.complete(list);
-  }, 200);
+  const params = {
+    length: 10,
+    level: (currentLevel.value === '全部' || currentLevel.value === '院校水平') ? '' : levels[0].find(item => item.label === currentLevel.value)?.id,
+    province: (currentProvince.value === '全部' || currentProvince.value === '省份') ? '' : currentProvince.value,
+    schoolName: keyword.value,
+    start: (pageNo - 1) * 10,
+  };
+  schoolPage(params).then((res: any) => {
+    pagingRef.value?.complete(res.data);
+  }).catch(() => {
+    pagingRef.value.complete(false);
+  });
 }
+
+const searchSchool = () => {
+  pagingRef.value.reload();
+};
 
 onLoad((options: any) => {
   if (options?.id) {
     majorId.value = options.id;
   }
+  getProvince();
 });
 </script>
 
@@ -242,17 +251,22 @@ onLoad((options: any) => {
     .left {
       display: flex;
       .school-info {
+        flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         margin-left: 24rpx;
         height: 100rpx;
+        flex-shrink: 0;
       }
       .school-name{
         font-weight: 500;
         font-size: 32rpx;
         color: #000000;
         line-height: 48rpx;
+        overflow:hidden;/*内容超出后隐藏*/
+        text-overflow:ellipsis;/*超出内容显示为省略号*/
+        white-space:nowrap;/*文本不进行换行*/
       }
       .tags {
         display: flex;

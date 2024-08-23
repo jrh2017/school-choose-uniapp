@@ -1,16 +1,16 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 08:39:17
- * @LastEditTime : 2024-07-22 12:29:36
+ * @LastEditTime : 2024-08-14 17:08:39
  * @LastEditors  : jiangronghua
  * @Description  :
  */
 export interface schoolVO {
-  name: string
+  schoolName: string
   logo: string
-  tag1: string
+  typeName: string
   tag2: string[]
-  area: string
-  type: string
+  provinceName: string
+  provinceArea: string
   id: string | number | undefined
 }

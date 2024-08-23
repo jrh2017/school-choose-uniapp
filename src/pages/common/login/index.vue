@@ -63,16 +63,19 @@
 
 <script setup lang="ts">
 import { setToken } from '@/utils/auth';
+import { login } from '@/api/userinfo';
 
 const checkbox = ref([]);
 
 const submit = () => {
-  setToken('1234567890');
-  uni.reLaunch({ url: '/pages/tab/home/index' });
+  login({}).then((res: any) => {
+    const { Authorization } = res;
+    setToken(Authorization);
+    uni.reLaunch({ url: '/pages/tab/home/index' });
+  });
 };
 
 const getPhoneNumber = (e: any) => {
-  console.log(e);
   submit();
 };
 </script>

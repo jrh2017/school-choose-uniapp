@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { mpUpdate } from '@/utils/index';
 
-onLaunch(() => {
+onLaunch(async () => {
   console.log('App Launch');
+  await wx.cloud.init();
   // #ifdef MP-WEIXIN
   mpUpdate();
   // #endif
 });
 onShow(() => {
-  console.log('App Show');
+  console.log('App Show111');
 });
 onHide(() => {
   console.log('App Hide');

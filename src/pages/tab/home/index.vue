@@ -7,7 +7,7 @@
       left-icon=""
     />
     <view class="content w-100% flex flex-col items-start justify-start">
-      <view v-if="!showConfig" class="description">
+      <view v-if="showConfig" class="description">
         <view class="btn-wrapper">
           <up-button
             text="立即配置获取报告"
@@ -50,84 +50,128 @@
       <view class="steps-wrapper mt-40rpx w-100%">
         <steps />
       </view>
-      <up-modal
-        :show="show"
-        title="我的意向"
-        :show-cancel-button="true"
-        confirm-color="#FE6567"
-        @cancel="show = false"
-        @confirm="confirmModal"
-      >
-        <view class="slot-content">
-          <up-form
-            ref="uFormRef"
-            :model="form"
-            :rules="rules"
-            label-width="150rpx"
-            :border-bottom="true"
-          >
-            <view class="item-wrapper">
-              <up-form-item
-                label="意向院校:"
-                prop="school"
-                required
-                @click="showSchool = true;"
-              >
-                <up-input v-model="form.school" placeholder="请选择意向院校" border="none" disabled disabledColor="#ffffff" />
-                <template #right>
-                  <up-icon
-                    name="arrow-down"
-                  />
-                </template>
-              </up-form-item>
-            </view>
-            <view class="item-wrapper mt-20rpx">
-              <up-form-item
-                label="意向专业:"
-                prop="major"
-                required
-                @click="showMajor = true;"
-              >
-                <up-input v-model="form.major" placeholder="请选择意向专业" border="none" disabled disabledColor="#ffffff" />
-                <template #right>
-                  <up-icon
-                    name="arrow-down"
-                  />
-                </template>
-              </up-form-item>
-            </view>
-            <view class="item-wrapper mt-20rpx">
-              <up-form-item label="预估分数:" prop="score" required>
-                <up-input v-model="form.score" type="number" placeholder="请选输入预估分数">
-                  <template #suffix>
-                    <text>分</text>
-                  </template>
-                </up-input>
-              </up-form-item>
-            </view>
-            <up-popup :show="showSchool" closeable @close="showSchool = false">
-              <view class="h-600rpx">
-                <text>出淤泥而不染，濯清涟而不妖</text>
-              </view>
-            </up-popup>
-            <up-popup :show="showMajor" closeable @close="showMajor = false">
-              <view class="h-600rpx">
-                <view class="subsection mt-80rpx">
-                  <up-subsection :list="list" mode="subsection" :current="0" activeColor="#e94650" />
-                </view>
-              </view>
-            </up-popup>
-          </up-form>
-        </view>
-      </up-modal>
     </view>
   </view>
+  <up-modal
+    :show="show"
+    title="我的意向"
+    :show-cancel-button="true"
+    confirm-color="#FE6567"
+    @cancel="show = false"
+    @confirm="confirmModal"
+  >
+    <view class="slot-content">
+      <up-form
+        ref="uFormRef"
+        :model="form"
+        :rules="rules"
+        label-width="150rpx"
+        :border-bottom="true"
+      >
+        <view class="item-wrapper">
+          <up-form-item
+            label="意向院校:"
+            prop="school"
+            required
+            @click="showSchool = true;"
+          >
+            <up-input v-model="form.school" placeholder="请选择意向院校" border="none" disabled disabledColor="#ffffff" />
+            <template #right>
+              <up-icon
+                name="arrow-down"
+              />
+            </template>
+          </up-form-item>
+        </view>
+        <view class="item-wrapper mt-20rpx">
+          <up-form-item
+            label="意向专业:"
+            prop="major"
+            required
+            @click="openMajorModal"
+          >
+            <up-input v-model="form.major" placeholder="请选择意向专业" border="none" disabled disabledColor="#ffffff" />
+            <template #right>
+              <up-icon
+                name="arrow-down"
+              />
+            </template>
+          </up-form-item>
+        </view>
+        <view class="item-wrapper mt-20rpx">
+          <up-form-item label="预估分数:" prop="score" required>
+            <up-input v-model="form.score" type="number" placeholder="请选输入预估分数">
+              <template #suffix>
+                <text>分</text>
+              </template>
+            </up-input>
+          </up-form-item>
+        </view>
+      </up-form>
+    </view>
+  </up-modal>
+  <up-popup :show="showSchool" closeable :safeAreaInsetBottom="false" @close="showSchool = false">
+    <view class="schools-popup h-600rpx">
+      <view class="search-wrapper">
+        <up-search v-model="keyword" placeholder="请输入学校名称" :show-action="false" @search="getSchoolList" />
+      </view>
+      <view class="schools-wrapper">
+        <view v-if="schoolList.length > 0" class="scrool-main">
+          <scroll-view style="height: 100%;" scroll-y="true" @scrolltolower="loadmore">
+            <view v-for="(item, index) in schoolList" :key="index" class="school-item" @click="setSelectSchool(item)">
+              {{ item.schoolName }}
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
+  </up-popup>
+  <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
+    <view class="major-popup h-700rpx">
+      <view class="subsection mt-80rpx">
+        <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650" @change="changeMajorType" />
+      </view>
+      <view class="major-wrapper">
+        <view class="major-main">
+          <view class="level1">
+            <scroll-view style="height: 100%;" scroll-y="true">
+              <view v-for="(item, index) in (searchMajorList[0] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level1Code === item.level1Code }" @click="setSelectMajorLevel1(item)">
+                {{ item.level1Name }}({{ item.level1Code }})
+              </view>
+            </scroll-view>
+          </view>
+          <view class="level2">
+            <scroll-view style="height: 100%;" scroll-y="true">
+              <view v-for="(item, index) in (searchMajorList[1] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level2Code === item.level2Code }" @click="setSelectMajorLevel2(item)">
+                {{ item.level2Name }}({{ item.level2Code }})
+              </view>
+            </scroll-view>
+          </view>
+          <view class="level3">
+            <scroll-view style="height: 100%;" scroll-y="true">
+              <view v-for="(item, index) in (searchMajorList[2] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level3Code === item.level3Code }" @click="setSelectMajorLevel3(item)">
+                {{ item.level3Name }}({{ item.level3Code }})
+              </view>
+            </scroll-view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </up-popup>
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue';
 import QuickStart from './components/quick-start.vue';
 import steps from './components/steps.vue';
-import { getToken } from '@/utils/auth';
+import {
+  chartIntention,
+  intentionInformationListlevel1,
+  intentionInformationListlevel2,
+  intentionInformationListlevel3,
+  intentionInformationSubmit,
+  pageSchool,
+} from '@/api/userinfo';
 
 const chart = ref();
 const showConfig = ref(false); // 是否显示配置面板
@@ -135,15 +179,36 @@ const show = ref(false); // 是否显示模态框
 const showSchool = ref(false); // 是否显示院校选择弹窗
 const showMajor = ref(false); // 是否显示专业选择弹窗
 const list = reactive(['专业学位', '学术学位']); // 专业列表
+const currentSubIndex = ref(0); // 当前选择的子项
+const selectSchool = ref({
+  id: null,
+  schoolName: null,
+}); // 选择的院校
+const searchMajorList = ref<any>([]);
+const selectMajorObj = reactive({
+  level1Code: null,
+  level1Name: null,
+  level2Code: null,
+  level2Name: null,
+  level3Code: null,
+  level3Name: null,
+});
+const showSelectMajor = ref({});
 const rules = reactive({
   school: [
-    { required: true, message: '请选择院校', trigger: 'blur' },
+    { required: true, message: '请选择院校', trigger: 'change' },
+  ],
+  major: [
+    { required: true, message: '请选择专业', trigger: 'change' },
+  ],
+  score: [
+    { required: true, message: '请填写预估分数', trigger: 'blur' },
   ],
 });
 const form = ref({
-  school: '123',
+  school: '',
   major: '',
-  score: 0,
+  score: null,
 });
 const chartData = reactive({
   categories: ['2018', '2019', '2020', '2021', '2022', '202'],
@@ -194,6 +259,19 @@ const opts = reactive({
   },
 });
 
+/**
+ * 获取图表信息
+ */
+const getChatData = () => {
+  // chartIntention().then((res: any) => {
+  //   chart.value = chartData;
+  // }).catch(() => {
+  //   // 没有配置的情况下显示输入配置的按钮
+  //   showConfig.value = true;
+  // });
+  showConfig.value = true;
+};
+
 const toSchoolLibrary = () => {
   uni.navigateTo({
     url: '/pages/intention/detail/index',
@@ -214,8 +292,23 @@ const uFormRef = ref<any>({});
 const confirmModal = () => {
   uFormRef!.value.validate().then((valid: any) => {
     if (valid) {
-      show.value = false;
-      showConfig.value = true;
+      const params = {
+        assessScore: Number(form.value.score),
+        schoolId: selectSchool.value.id,
+        schoolName: selectSchool.value.schoolName,
+        level3Code: selectMajorObj.level3Code,
+        level3Name: selectMajorObj.level3Name,
+      };
+      intentionInformationSubmit(params).then(() => {
+        uni.$u.toast('提交成功');
+        show.value = false;
+        showConfig.value = true;
+        setTimeout(() => {
+          getChatData();
+        }, 1000);
+      }).catch(() => {
+        uni.$u.toast('提交失败');
+      });
     }
     else {
       uni.$u.toast('请填写正确的信息');
@@ -228,9 +321,182 @@ const confirmModal = () => {
   });
 };
 
-onShow(() => {
-  chart.value = chartData;
-  showConfig.value = !getToken();
+const keyword = ref(''); // 搜索关键字
+const schoolList = ref<any>([]); // 查询到学校列表
+const schoolPage = ref(1); // 学校列表页码
+const schoolTotal = ref(0); // 学校列表总数
+
+const querySchoolList = () => {
+  uni.showLoading({
+    title: '加载中',
+  });
+  const params = {
+    length: 10,
+    schoolName: keyword.value,
+    start: (schoolPage.value - 1) * 10,
+  };
+  pageSchool(params).then((res: any) => {
+    schoolList.value = [...schoolList.value, ...res.data];
+    schoolTotal.value = res.recordsTotal;
+  }).finally(() => {
+    uni.hideLoading();
+  });
+};
+
+const getSchoolList = () => {
+  schoolList.value = [];
+  querySchoolList();
+  schoolPage.value = 1;
+};
+
+const loadmore = () => {
+  if (schoolList.value.length < schoolTotal.value) {
+    schoolPage.value++;
+    querySchoolList();
+  }
+};
+
+/**
+ * 当选择的院校发生变化时，重置选中的专业
+ */
+const resetSelectMajor = () => {
+  form.value.major = '';
+  selectMajorObj.level1Code = null;
+  selectMajorObj.level1Name = null;
+  selectMajorObj.level2Code = null;
+  selectMajorObj.level2Name = null;
+  selectMajorObj.level3Code = null;
+  selectMajorObj.level3Name = null;
+  showSelectMajor.value = selectMajorObj;
+  currentSubIndex.value = 0;
+  searchMajorList.value = [];
+};
+
+/**
+ * 设置选中的院校
+ * @param item
+ */
+const setSelectSchool = (item: any) => {
+  selectSchool.value = item;
+  form.value.school = item.schoolName;
+  // 重置选中的专业
+  resetSelectMajor();
+  showSchool.value = false;
+};
+
+/**
+ * 以下接口写的太挫了，三级专业分三个接口查，以下代码不知道怎么写
+ */
+const getInitMajorList = async () => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  const schoolId = selectSchool.value.id;
+  await intentionInformationListlevel1({ degreeType, schoolId }).then((res: any) => {
+    searchMajorList.value[0] = res;
+    selectMajorObj.level1Code = res[0].level1Code;
+    selectMajorObj.level1Name = res[0].level1Name;
+  });
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[0].length) {
+    const { level1Code } = searchMajorList.value[0][0];
+    await intentionInformationListlevel2({ degreeType, schoolId, level1Code }).then((res: any) => {
+      searchMajorList.value[1] = res;
+      selectMajorObj.level2Code = res[0].level2Code;
+      selectMajorObj.level2Name = res[0].level2Name;
+    });
+  }
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[1].length) {
+    const { level2Code } = searchMajorList.value[1][0];
+    await intentionInformationListlevel3({ degreeType, schoolId, level2Code }).then((res: any) => {
+      searchMajorList.value[2] = res;
+      selectMajorObj.level3Code = res[0].level3Code;
+      selectMajorObj.level3Name = res[0].level3Name;
+    });
+  }
+};
+
+/**
+ * 选择一级目录
+ */
+const setSelectMajorLevel1 = async (item: any) => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  const schoolId = selectSchool.value.id;
+  selectMajorObj.level1Code = item.level1Code;
+  selectMajorObj.level1Name = item.level1Name;
+  searchMajorList.value[1] = [];
+  searchMajorList.value[2] = [];
+  await intentionInformationListlevel2({ degreeType, schoolId, level1Code: item.level1Code }).then((res: any) => {
+    searchMajorList.value[1] = res;
+    selectMajorObj.level2Code = res[0].level2Code;
+    selectMajorObj.level2Name = res[0].level2Name;
+  });
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[1].length) {
+    const { level2Code } = searchMajorList.value[1][0];
+    await intentionInformationListlevel3({ degreeType, schoolId, level2Code }).then((res: any) => {
+      searchMajorList.value[2] = res;
+      selectMajorObj.level3Code = res[0].level3Code;
+      selectMajorObj.level3Name = res[0].level3Name;
+    });
+  }
+};
+
+/**
+ * 选择二级目录
+ */
+const setSelectMajorLevel2 = async (item: any) => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  const schoolId = selectSchool.value.id;
+  selectMajorObj.level2Code = item.level2Code;
+  selectMajorObj.level2Name = item.level2Name;
+  searchMajorList.value[2] = [];
+  await intentionInformationListlevel3({ degreeType, schoolId, level2Code: item.level2Code }).then((res: any) => {
+    searchMajorList.value[2] = res;
+    selectMajorObj.level3Code = res[0].level3Code;
+    selectMajorObj.level3Name = res[0].level3Name;
+  });
+};
+
+/**
+ * 选择三级目录
+ */
+const setSelectMajorLevel3 = (item: any) => {
+  selectMajorObj.level3Code = item.level3Code;
+  selectMajorObj.level3Name = item.level3Name;
+  showSelectMajor.value = selectMajorObj;
+  form.value.major = `${item.level3Name}(${item.level3Code})`;
+  showMajor.value = false;
+};
+
+/**
+ * 打开选专业弹窗
+ */
+const openMajorModal = () => {
+  if (form.value.school === '') {
+    uni.$u.toast('请先选择院校');
+    return;
+  }
+  showMajor.value = true;
+};
+
+watch(showMajor, (newVal) => {
+  if (newVal) {
+    if (searchMajorList.value && searchMajorList.value.length === 0) {
+      getInitMajorList();
+    }
+  }
+});
+
+const changeMajorType = (index: number) => {
+  currentSubIndex.value = index;
+};
+
+watch(currentSubIndex, () => {
+  getInitMajorList();
+});
+
+onShow(async () => {
+  getChatData();
 });
 </script>
 
@@ -311,5 +577,72 @@ onShow(() => {
 }
 ::v-deep .u-modal__content {
   padding: 12rpx 20rpx 25rpx 30rpx !important;
+}
+.schools-popup {
+  padding: 70rpx 16rpx 0 16rpx;
+  display: flex;
+  flex-direction: column;
+  .schools-wrapper {
+    flex: 1;
+    position: relative;
+  }
+  .scrool-main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .school-item {
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 28rpx;
+    color: #333;
+    border-bottom: 1rpx solid #E7E7E7;
+  }
+}
+.major-popup {
+  display: flex;
+  flex-direction: column;
+  .major-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    .level1 {
+      flex: 3;
+      flex-shrink: 0;
+      background-color: #F2F2F7;
+    }
+    .level2 {
+      flex: 4;
+      flex-shrink: 0;
+      border-right: 2rpx solid #F2F2F7;
+    }
+    .level3 {
+      flex: 6;
+      flex-shrink: 0;
+    }
+  }
+  .major-main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+  }
+  .major-item {
+    padding: 14rpx;
+    font-size: 24rpx;
+    line-height: 36rpx;
+    min-height: 100rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+  .active {
+    font-weight: 500;
+    color: #E94650;
+  }
 }
 </style>
