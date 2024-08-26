@@ -1,7 +1,7 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-08-26 16:47:02
+ * @LastEditTime : 2024-08-26 18:24:07
  * @LastEditors  : jiangronghua
  * @Description  : 用户相关请求
  */
@@ -19,13 +19,18 @@ enum URL {
   level1List = '/school/list-level1', // 查询学校专业列表-1级
   level2List = '/school/list-level2', // 查询学校专业列表-2级
   level3List = '/school/list-level3', // 查询学校专业列表-3级
+  getSchoolInfo = '/school-major/get-school', // 查询院校详情
+  getSchoolPost = '/school-major/get-school-post', // 查询院校详情
   schoolMajorDetail = '/school-major/get-school-major', // 查询院校专业详情
   schoolScoreStatis = '/school-major/list-school-score-statis', // 一志愿录取信息 / 成绩统计
   matriculationRecord = '/school-major/list-matriculation-record', // 一志愿录取名单
   interviewLine = '/school-major/list-score-line-school', // 复试线
   nationalLine = '/school-major/list-score-line-country', // 国家线
+  enrollPlan = '/school-major/list-enroll-plan', // 考试科目 / 院校专业基础信息
 }
 
+export const getSchoolInfo = (params: any) => request({ url: URL.getSchoolInfo, method: 'GET', params });
+export const getSchoolPost = (params: any) => request({ url: URL.getSchoolPost, method: 'GET', params });
 export const schoolPage = (params: any) => request({ url: URL.schoolPage, method: 'GET', params });
 export const majorSchoolList = (params: any) => request({ url: URL.majorSchoolList, method: 'GET', params });
 export const provinceList = () => request({ url: URL.provinceList, method: 'GET' });
@@ -42,3 +47,4 @@ export const schoolScoreStatis = (params: any) => request({ url: URL.schoolScore
 export const matriculationRecord = (params: any) => request({ url: URL.matriculationRecord, method: 'GET', params });
 export const interviewLine = (params: any) => request({ url: URL.interviewLine, method: 'GET', params });
 export const nationalLine = (params: any) => request({ url: URL.nationalLine, method: 'GET', params });
+export const enrollPlan = (params: any) => request({ url: URL.enrollPlan, method: 'GET', params });

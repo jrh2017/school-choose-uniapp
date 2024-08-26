@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-08-26 16:51:34
+ * @LastEditTime : 2024-08-26 20:24:33
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -48,8 +48,14 @@
                   <view class="tag tag-1">
                     {{ item.typeName }}
                   </view>
-                  <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
-                    {{ tag }}
+                  <view v-if="item.is985 === 1" class="tag tag-2">
+                    985
+                  </view>
+                  <view v-if="item.is211 === 1" class="tag tag-2">
+                    211
+                  </view>
+                  <view v-if="item.isZihuaxian === 1" class="tag tag-3">
+                    A+
                   </view>
                 </view>
               </view>
@@ -304,6 +310,10 @@ onLoad((options: any) => {
       .tag-2 {
         color: #4D59FF;
         background-color: #EBEFFF;
+      }
+      .tag-3 {
+        color: #0EAEB4;
+        background-color: #E0F8F5;
       }
     }
     .right {

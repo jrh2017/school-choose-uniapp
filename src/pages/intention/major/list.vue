@@ -1,7 +1,7 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-23 18:11:31
- * @LastEditTime : 2024-08-26 16:38:57
+ * @LastEditTime : 2024-08-26 20:27:01
  * @LastEditors  : jiangronghua
  * @Description  : 专业选择列表页面
  * @Remark       :
@@ -128,7 +128,7 @@ const schoolId = ref('');
 // 查询学校专业列表-3级
 const getLevel3Fn = async () => {
   const params = {
-    degreeType: subIndex.value + 1,
+    degreeType: currentDegreeType.value,
     level2Code: level2Code.value,
   };
   if (schoolId.value) {

@@ -1,14 +1,14 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-08-26 15:19:43
+ * @LastEditTime : 2024-08-26 17:35:46
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
   <view class="school-info">
     <view class="top">
-      <up-image class="logo" :src="schoolInfo.logo" width="96rpx" height="96rpx" />
+      <up-image class="logo" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${schoolInfo.schoolId}.jpg`" width="96rpx" height="96rpx" />
       <view class="right">
         <view class="school-name">
           <text>{{ schoolInfo.schoolName }}</text>

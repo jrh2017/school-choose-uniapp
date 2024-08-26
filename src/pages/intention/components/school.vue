@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 21:42:19
- * @LastEditTime : 2024-08-26 15:19:32
+ * @LastEditTime : 2024-08-26 20:17:08
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校组件
 -->
@@ -16,6 +16,18 @@
       <view v-if="currentIndex === 0">
         <analysis :scoreStatisDetail="scoreStatisDetail" :collegeList="collegeList" @get-matriculation-record-fn="getMatriculationRecordFn" />
       </view>
+      <view v-if="currentIndex === 1">
+        <scoreLine :level3Code="level3Code" :schoolId="schoolId" />
+      </view>
+      <view v-if="currentIndex === 2">
+        <subject :level3Code="level3Code" :schoolId="schoolId" />
+      </view>
+      <view v-if="currentIndex === 3">
+        <post :schoolId="schoolId" />
+      </view>
+      <view v-if="currentIndex === 4">
+        <collageInfo :schoolId="schoolId" />
+      </view>
     </view>
   </div>
 </template>
@@ -24,10 +36,12 @@
 import { storeToRefs } from 'pinia';
 import schoolInfo from './schoolInfo.vue';
 import analysis from './analysis.vue';
+import scoreLine from './scoreLine.vue';
+import post from './post.vue';
+import subject from './subject.vue';
+import collageInfo from './collageInfo.vue';
 import {
-  interviewLine,
   matriculationRecord,
-  nationalLine,
   schoolScoreStatis,
 } from '@/api/collage';
 import { useCollege } from '@/store/index';
@@ -82,27 +96,11 @@ const getMatriculationRecordFn = () => {
     console.log(res, '一志愿录取名单');
   });
 };
-// 复试线,国家线
-const getCurveFn = () => {
-  interviewLine({
-    level3Code: level3Code.value,
-    schoolId: schoolId.value,
-  }).then((res: any) => { // 复试线
-    console.log(res, '复试线');
-  });
-  nationalLine({
-    level3Code: level3Code.value,
-  }).then((res: any) => { // 国家线
-    console.log(res, '国家线');
-  });
-};
+
 const tabsClickFn = (item: any, index: number) => {
   currentIndex.value = index;
   if (index === 0) {
     getMatriculationRecordFn();
-  }
-  if (index === 1) {
-    getCurveFn();
   }
 };
 onMounted(() => {

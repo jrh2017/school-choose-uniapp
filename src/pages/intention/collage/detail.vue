@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 19:23:54
- * @LastEditTime : 2024-08-26 15:18:37
- * @LastEditors  : jiangronghua
+ * @LastEditTime : 2024-08-24 15:58:11
+ * @LastEditors  : chenyuchao
  * @Description  : 院校详情页面
 -->
 <template>
