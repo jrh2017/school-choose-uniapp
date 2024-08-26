@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 13:18:42
- * @LastEditTime : 2024-07-20 14:14:42
+ * @LastEditTime : 2024-08-26 20:32:26
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -33,29 +33,49 @@ const today = dayjs('2024-10-01');
 const activeIndex = ref(0);
 const process = reactive([
   {
-    name: '填写报名',
-    startDate: '2024-07-10',
-    endDate: '2024-09-27',
+    name: '报名信息填写',
+    startDate: '2024-09-20',
+    endDate: '2024-10-25',
   },
   {
     name: '预报名',
-    startDate: '2024-09-28',
-    endDate: '2024-10-08',
+    startDate: '2024-09-24',
+    endDate: '2024-09-27',
   },
   {
     name: '正式报名',
-    startDate: '2024-10-09',
+    startDate: '2024-10-08',
     endDate: '2024-10-25',
   },
   {
     name: '确认报名',
-    startDate: '2024-10-25',
+    startDate: '2024-10-29',
     endDate: '2024-11-05',
   },
   {
     name: '准考证打印',
-    startDate: '2024-11-06',
-    endDate: '2024-12-05',
+    startDate: '2024-12-13',
+    endDate: '2024-12-25',
+  },
+  {
+    name: '初试',
+    startDate: '2024-12-24',
+    endDate: '2024-12-25',
+  },
+  {
+    name: '成绩查询',
+    startDate: '2025-02-01',
+    endDate: '2025-02-08',
+  },
+  {
+    name: '国家线公告',
+    startDate: '2025-03-10',
+    endDate: '2025-03-15',
+  },
+  {
+    name: '复试&调剂',
+    startDate: '2025-02-28',
+    endDate: '2025-05-31',
   },
 ]);
 

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-08-26 20:24:33
+ * @LastEditTime : 2024-08-26 20:38:52
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -151,7 +151,7 @@ const toDetail = (item: schoolVO) => {
   console.log('[ toDetail ] >', majorId.value);
   if (majorId.value) {
     uni.navigateTo({
-      url: `/pages/intention/collage/detail?id=${id}`,
+      url: `/pages/intention/collage/detail?level3Code=${majorId.value}&schoolId=${id}`,
     });
   }
   else {

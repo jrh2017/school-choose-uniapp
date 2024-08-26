@@ -1,7 +1,7 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-23 18:11:31
- * @LastEditTime : 2024-08-26 20:27:01
+ * @LastEditTime : 2024-08-26 20:35:26
  * @LastEditors  : jiangronghua
  * @Description  : 专业选择列表页面
  * @Remark       :
@@ -219,6 +219,7 @@ const selectThirdIndex = (item: any, index: number) => {
 // 专业学位和学术学位切换
 const changeMajorType = (index: number) => {
   subIndex.value = index;
+  currentDegreeType.value = list[index].value;
   firstIndex.value = 0;
   secondIndex.value = 0;
   thirdIndex.value = 0;
