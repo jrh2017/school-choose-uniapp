@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-07-22 19:26:13
+ * @LastEditTime : 2024-08-26 15:26:59
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -30,13 +30,39 @@
 <script setup lang="ts">
 import Major from '../components/major.vue';
 import School from '../components/school.vue';
+import {
+  intentionRanking,
+  intentionSchool,
+} from '@/api/collage';
 
 const list = reactive(['意向专业排名', '意向院校分析']);
 const subIndex = ref(0); // 当前索引
-
+// 意向专业/意向院校排名
+const getIntentionRanking = async () => {
+  const params = {
+    type: subIndex.value,
+  };
+  intentionRanking(params).then((res: any) => {
+    console.log(res, 'res');
+  });
+};
 const changeIndex = (index: number) => {
   subIndex.value = index;
+  getIntentionRanking();
 };
+// 获取意向学校详情
+const getIntentionSchool = async () => {
+  const params = {
+    start: 1,
+    length: 10,
+  };
+  intentionSchool(params).then((res: any) => {
+    console.log(res, '获取意向学校详情');
+  });
+};
+onLoad((options: any) => {
+  getIntentionSchool();
+});
 </script>
 
 <style lang="scss" scoped>

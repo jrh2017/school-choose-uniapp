@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-07-20 21:52:32
+ * @LastEditTime : 2024-08-26 15:19:43
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -11,18 +11,24 @@
       <up-image class="logo" :src="schoolInfo.logo" width="96rpx" height="96rpx" />
       <view class="right">
         <view class="school-name">
-          <text>{{ schoolInfo.name }}</text>
+          <text>{{ schoolInfo.schoolName }}</text>
           <up-image class="edit-icon" :src="schoolInfo.star ? star : unstar" width="40rpx" height="40rpx" @click="schoolInfo.star = !schoolInfo.star" />
         </view>
         <view class="tags">
           <view class="tag tag-1">
-            {{ schoolInfo.tag1 }}
+            {{ schoolInfo.typeName }}
           </view>
           <view v-for="(tag, index) in schoolInfo.tag2" :key="index" class="tag tag-2">
             {{ tag }}
           </view>
-          <view class="tag tag-3">
-            {{ schoolInfo.tag3 }}
+          <view v-if="schoolInfo.is985 === 1" class="tag tag-2">
+            985
+          </view>
+          <view v-if="schoolInfo.is211 === 1" class="tag tag-2">
+            211
+          </view>
+          <view v-if="schoolInfo.isZihuaxian === 1" class="tag tag-3">
+            A+
           </view>
         </view>
       </view>
@@ -33,13 +39,13 @@
           <view class="label">
             专业:
           </view>
-          <text>{{ schoolInfo.major }}({{ schoolInfo.majorCode }})</text>
+          <text>{{ schoolInfo.level3Name }}({{ schoolInfo.level3Code }})</text>
         </view>
         <view class="item right">
           <view class="label">
             学位类型:
           </view>
-          <text>{{ schoolInfo.type }}</text>
+          <text>{{ schoolInfo.degreeType }}</text>
         </view>
       </view>
     </view>
@@ -47,22 +53,36 @@
 </template>
 
 <script setup lang="ts">
-const schoolInfo = reactive({
-  name: '上海交通大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  major: '应用心理',
-  majorCode: '025872',
-  type: '学术学位',
-  score: 400,
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  tag3: 'A+',
-  editAble: true,
-  star: false,
+const props = defineProps({
+  magorDetail: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
+const data = reactive({
+  schoolInfo: {
+    schoolName: '',
+    logo: '',
+    typeName: '',
+    tag2: [],
+    tag3: '',
+    is985: 0,
+    is211: 0,
+    level3Name: '',
+    level3Code: '',
+    degreeType: '',
+    isZihuaxian: 1,
+    star: true,
+  },
+});
+const { schoolInfo } = toRefs(data);
 const star = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/star.png');
 const unstar = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/unstar.png');
+const { magorDetail } = toRefs(props);
+watchEffect(() => {
+  schoolInfo.value = magorDetail.value;
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-08-23 15:41:04
+ * @LastEditTime : 2024-08-26 16:51:34
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -13,7 +13,7 @@
           <up-navbar
             :placeholder="true"
             bg-color="#F8EFF2"
-            title="院校库"
+            :title="majorName"
             autoBack
           />
           <view class="search-wrapper">
@@ -74,6 +74,7 @@
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
 import type { schoolVO } from '@/api/school/types';
 import {
+  majorSchoolList,
   provinceList,
   schoolPage,
 } from '@/api/collage';
@@ -87,6 +88,7 @@ const levelPopup = ref(false); // 院校层次筛选弹窗
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
 const majorId = ref(''); // 专业id
+const majorName = ref('院校库'); // 专业名称
 const provincePickerRef = ref(null);
 
 const provinces = reactive<any[]>([[]]);
@@ -139,7 +141,7 @@ const getProvince = () => {
  * @param item 院校信息
  */
 const toDetail = (item: schoolVO) => {
-  const { id } = item;
+  const { id, schoolName } = item;
   console.log('[ toDetail ] >', majorId.value);
   if (majorId.value) {
     uni.navigateTo({
@@ -148,7 +150,7 @@ const toDetail = (item: schoolVO) => {
   }
   else {
     uni.navigateTo({
-      url: `/pages/intention/major/list?id=${id}`,
+      url: `/pages/intention/major/list?id=${id}&schoolName=${schoolName}`,
     });
   }
 };
@@ -187,11 +189,25 @@ function queryList(pageNo: number, pageSize: number) {
     schoolName: keyword.value,
     start: (pageNo - 1) * 10,
   };
-  schoolPage(params).then((res: any) => {
-    pagingRef.value?.complete(res.data);
-  }).catch(() => {
-    pagingRef.value.complete(false);
-  });
+  if (majorId.value) {
+    params.level3Code = majorId.value;
+    params.level3Name = majorName.value;
+  }
+
+  if (majorId.value) {
+    majorSchoolList(params).then((res: any) => {
+      pagingRef.value?.complete(res.data);
+    }).catch(() => {
+      pagingRef.value.complete(false);
+    });
+  }
+  else {
+    schoolPage(params).then((res: any) => {
+      pagingRef.value?.complete(res.data);
+    }).catch(() => {
+      pagingRef.value.complete(false);
+    });
+  }
 }
 
 const searchSchool = () => {
@@ -199,8 +215,11 @@ const searchSchool = () => {
 };
 
 onLoad((options: any) => {
-  if (options?.id) {
-    majorId.value = options.id;
+  if (options?.level3Code) {
+    majorId.value = options.level3Code;
+  }
+  if (options?.level3Name) {
+    majorName.value = options.level3Name;
   }
   getProvince();
 });
@@ -260,6 +279,7 @@ onLoad((options: any) => {
         flex-shrink: 0;
       }
       .school-name{
+        width: 335rpx;
         font-weight: 500;
         font-size: 32rpx;
         color: #000000;

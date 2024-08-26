@@ -4,6 +4,7 @@ import { createPinia } from 'pinia';
 // 导入子模块
 import useAppStore from './modules/app';
 import useUserStore from './modules/user';
+import { useCollege } from './modules/app/college';
 
 // import piniaPersist from 'pinia-plugin-persist-uni';
 
@@ -16,5 +17,5 @@ function setupStore(app: App) {
 }
 
 // 导出模块
-export { useAppStore, useUserStore };
+export { useAppStore, useUserStore, useCollege };
 export default setupStore;

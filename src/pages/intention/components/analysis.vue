@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-07-21 10:09:03
+ * @LastEditTime : 2024-08-26 15:35:49
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -9,12 +9,12 @@
   <view class="analysis">
     <view class="analysis-select">
       <view class="analysis-select-item-left">
-        <view v-for="(item, index) in itemList" :key="index" class="item" :class="{ active: currentIndex === index }" @click="currentIndex = index">
-          {{ item }}
+        <view v-for="(item, index) in itemList" :key="index" class="item" :class="{ active: currentIndex === index }" @click="recruitTypeChange(index, item.recruitType)">
+          {{ item.name }}
         </view>
       </view>
-      <view class="analysis-select-item-right">
-        <text>所有学院</text>
+      <view class="analysis-select-item-right" @click="collegeShow = true">
+        <text>{{ collegeItem.collegeName }}</text>
         <up-icon name="arrow-down" />
       </view>
     </view>
@@ -119,11 +119,32 @@
         </view>
       </view>
     </view>
+    <up-picker :show="collegeShow" :columns="collegeColumns" keyName="collegeName" @confirm="confirmCollege" @cancel="collegeCancel" />
   </view>
 </template>
 
 <script setup lang="ts">
-const itemList = ['全日制', '非全日制'];
+import { useCollege } from '@/store/index';
+
+const props = defineProps({
+  scoreStatisDetail: {
+    type: Object,
+    default: () => ({}),
+  },
+  collegeList: {
+    type: Array,
+    default: () => ([]),
+  },
+});
+const emit = defineEmits(['getMatriculationRecordFn']);
+const collegeStore = useCollege();
+const itemList = [{
+  name: '全日制',
+  recruitType: '1',
+}, {
+  name: '非全日制',
+  recruitType: '2',
+}];
 const currentIndex = ref(0);
 const chart = ref();
 const yearList = reactive(['2024', '2023', '2022']); // 2024, 2023, 2022
@@ -215,9 +236,33 @@ const tableData2 = ref([{
   firstScore: 360,
   secondScore: 365,
 }]);
-
+const { scoreStatisDetail, collegeList } = toRefs(props);
+const collegeShow = ref(false);
+const collegeColumns = ref([]);
+const collegeItem = ref({
+  collegeName: '所有学院',
+});
+// 学院选择确认
+const confirmCollege = (item: any) => {
+  collegeStore.setCollegeItem(item);
+  collegeItem.value = item;
+  collegeShow.value = false;
+};
+// 学院选择取消
+const collegeCancel = () => {
+  collegeShow.value = false;
+};
+// 切换全日制和非全日制
+const recruitTypeChange = (index: number, recruitType: string) => {
+  currentIndex.value = index;
+  collegeStore.setRecruitType(recruitType);
+  emit('getMatriculationRecordFn');
+};
 onMounted(() => {
   chart.value = chartData;
+});
+watchEffect(() => {
+  collegeColumns.value = [[{ collegeName: '所有学院' }, ...collegeList.value]];
 });
 </script>
 

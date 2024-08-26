@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 19:23:54
- * @LastEditTime : 2024-07-22 19:31:22
+ * @LastEditTime : 2024-08-26 15:18:37
  * @LastEditors  : jiangronghua
  * @Description  : 院校详情页面
 -->
@@ -13,12 +13,35 @@
       title="院校专业详情"
       autoBack
     />
-    <School />
+    <School :magorDetail="magorDetail" :level3Code="level3Code" :schoolId="schoolId" />
   </view>
 </template>
 
 <script lang="ts" setup>
 import School from '../components/school.vue';
+import {
+  schoolMajorDetail,
+} from '@/api/collage';
+
+const level3Code = ref(''); // 第三级code
+const schoolId = ref('');
+const magorDetail = ref({});
+const getScoolDetailFn = () => {
+  schoolMajorDetail({
+    level3Code: level3Code.value,
+    schoolId: schoolId.value,
+  }).then((res: any) => {
+    console.log(res, 'res');
+    magorDetail.value = res || {};
+  });
+};
+onLoad((options: any) => {
+  if (options?.level3Code) { // 学校库-专业-院校详情页面
+    level3Code.value = options.level3Code;
+    schoolId.value = options.schoolId;
+    getScoolDetailFn();
+  }
+});
 </script>
 
 <style scoped lang="scss">
