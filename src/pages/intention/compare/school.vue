@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-07-24 08:00:13
+ * @LastEditTime : 2024-08-26 21:20:35
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -46,17 +46,23 @@
           <view v-for="(item, index) in dataList" :key="index" class="school-item">
             <view class="top">
               <view class="top-left">
-                <up-image :src="item.logo" width="100rpx" height="100rpx" />
+                <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx" height="100rpx" />
                 <view class="school-info">
                   <view class="school-name">
-                    <text>{{ item.name }}</text>
+                    <text>{{ item.schoolName }}</text>
                   </view>
                   <view class="tags">
                     <view class="tag tag-1">
-                      {{ item.tag1 }}
+                      {{ item.typeName }}
                     </view>
-                    <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
-                      {{ tag }}
+                    <view v-if="item.is985 === 1" class="tag tag-2">
+                      985
+                    </view>
+                    <view v-if="item.is211 === 1" class="tag tag-2">
+                      211
+                    </view>
+                    <view v-if="item.isZihuaxian === 1" class="tag tag-3">
+                      A+
                     </view>
                   </view>
                 </view>
@@ -74,20 +80,20 @@
                   <view class="label">
                     专业:
                   </view>
-                  <text>{{ item.major }}</text>
+                  <text>{{ item.level3Name }}</text>
                 </view>
                 <view class="item right">
                   <view class="label">
                     学位类型:
                   </view>
-                  <text>{{ item.type }}</text>
+                  <text>{{ item.degreeType }}</text>
                 </view>
               </view>
             </view>
           </view>
         </view>
       </z-paging>
-      <up-picker :show="provincePopup" :columns="columns" keyName="label" @confirm="confirmProvince" @cancel="provincePopup = false" />
+      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="columns" keyName="label" @confirm="confirmProvince" @cancel="provincePopup = false" />
       <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel" @cancel="levelPopup = false" />
     </view>
   </view>
@@ -95,8 +101,8 @@
 
 <script lang="ts" setup>
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
-import { deepClone } from 'uview-plus';
 import type { schoolVO } from '@/api/school/types';
+import { insertSchoolMajor, listProvince, pageSchoolMajor } from '@/api/compare';
 
 const keyword = ref('');
 
@@ -107,43 +113,38 @@ const levelPopup = ref(false); // 院校层次筛选弹窗
 const currentMajor = ref('专业'); // 当前选择的专业
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
-const majorId = ref(''); // 专业id
+const provincePickerRef = ref(null);
 
-const columns = reactive([[
-  {
-    label: '北京市',
-    id: 1,
-  },
-  {
-    label: '上海市',
-    id: 2,
-  },
-  {
-    label: '广东省',
-    id: 3,
-  },
-  {
-    label: '河南省',
-    id: 4,
-  },
-  {
-    label: '湖北省',
-    id: 5,
-  },
-]]);
+const columns = reactive([[]]);
 
 const levels = reactive([[
   {
-    label: '985',
-    id: 1,
+    label: '全部',
+    id: 0,
   },
   {
     label: '211',
+    id: 1,
+  },
+  {
+    label: '985',
     id: 2,
   },
   {
-    label: '普通高校',
+    label: '自划线',
     id: 3,
+  },
+  {
+    label: '双一流',
+    id: 4,
+  },
+  {
+    label: '高等院校',
+    id: 5,
+  },
+  {
+    label: '科研院所',
+    id: 6,
   },
 ]]);
 
@@ -163,9 +164,9 @@ const school = {
  * @param data
  */
 const confirmProvince = (data: any) => {
-  currentProvince.value = data.value[0].label;
+  currentProvince.value = data.value[0];
   provincePopup.value = false;
-  queryList(1, 10);
+  pagingRef.value.reload();
 };
 
 /**
@@ -185,43 +186,58 @@ const confirmLevel = (data: any) => {
  */
 function queryList(pageNo: number, pageSize: number) {
   console.log('[ pageNo ] >', pageNo, '[ pageSize ] >', pageSize);
-  // 这里的pageNo和pageSize会自动计算好，直接传给服务器即可
-  // 这里的请求只是演示，请替换成自己的项目的网络请求，并在网络请求回调中通过pagingRef.value.complete(请求回来的数组)将请求结果传给z-paging
-  setTimeout(() => {
-    // 1秒之后停止刷新动画
-    const list = [];
-    for (let i = 0; i < 30; i++) {
-      const copy = deepClone(school);
-      copy.isAdd = i % 2 === 0;
-      list.push(copy);
-    }
-    pagingRef.value?.complete(list);
-  }, 200);
+  const params = {
+    length: 10,
+    level: (currentLevel.value === '全部' || currentLevel.value === '院校水平') ? '' : levels[0].find(item => item.label === currentLevel.value)?.id,
+    province: (currentProvince.value === '全部' || currentProvince.value === '省份') ? '' : currentProvince.value,
+    schoolName: keyword.value,
+    start: (pageNo - 1) * 10,
+    level3Code: '015100',
+    level3Name: '应用伦理',
+  };
+  pageSchoolMajor(params).then((res: any) => {
+    pagingRef.value?.complete(res.data);
+  }).catch(() => {
+    pagingRef.value.complete(false);
+  });
 }
 
 /**
  * 添加学校并返回
  */
 const addSchool = (item: schoolVO) => {
-  uni.navigateBack({
-    success: () => {
-      uni.setStorageSync('intention', {
-        ...uni.getStorageSync('intention'),
-        school: item,
-      }); // 保存选择的院校信息 到本地缓存
-      uni.showToast({
-        title: '添加成功',
-        icon: 'none',
-        duration: 1000,
-      });
-    },
+  insertSchoolMajor(item).then(() => {
+    uni.navigateBack();
+  });
+  // uni.navigateBack({
+  //   success: () => {
+  //     uni.setStorageSync('intention', {
+  //       ...uni.getStorageSync('intention'),
+  //       school: item,
+  //     }); // 保存选择的院校信息 到本地缓存
+  //     uni.showToast({
+  //       title: '添加成功',
+  //       icon: 'none',
+  //       duration: 1000,
+  //     });
+  //   },
+  // });
+};
+
+/**
+ * 获取省份数据
+ */
+const getProvince = () => {
+  // 省份数据
+  listProvince().then((res: any) => {
+    const data = res && res[0] ? res[0] : [];
+    const provinceData = ['全部', ...data];
+    provincePickerRef.value.setColumnValues(0, provinceData);
   });
 };
 
-onLoad((options: any) => {
-  if (options?.id) {
-    majorId.value = options.id;
-  }
+onLoad(() => {
+  getProvince();
 });
 </script>
 
@@ -321,6 +337,10 @@ onLoad((options: any) => {
       .tag-2 {
         color: #4D59FF;
         background-color: #EBEFFF;
+      }
+      .tag-3 {
+        color: #0EAEB4;
+        background-color: #E0F8F5;
       }
     }
     .bottom {

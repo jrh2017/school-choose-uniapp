@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-07-29 17:38:40
+ * @LastEditTime : 2024-08-26 21:27:36
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -41,21 +41,27 @@
               </view>
               <view class="right-info">
                 <view class="top">
-                  <up-image class="logo" :src="school.logo" width="96rpx" height="96rpx" />
+                  <up-image class="logo" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${school.schoolId}.jpg`" width="96rpx" height="96rpx" />
                   <view class="right">
                     <view class="school-name">
-                      <text>{{ school.name }}</text>
+                      <text>{{ school.schoolName }}</text>
                       <up-image class="edit-icon" :src="school.star ? star : unstar" width="40rpx" height="40rpx" @click="school.star = !school.star" />
                     </view>
                     <view class="tags">
                       <view class="tag tag-1">
-                        {{ school.tag1 }}
+                        {{ school.typeName }}
                       </view>
                       <view v-for="(tag, tindex) in school.tag2" :key="tindex" class="tag tag-2">
                         {{ tag }}
                       </view>
-                      <view class="tag tag-3">
-                        {{ school.tag3 }}
+                      <view v-if="school.is985 === 1" class="tag tag-2">
+                        985
+                      </view>
+                      <view v-if="school.is211 === 1" class="tag tag-2">
+                        211
+                      </view>
+                      <view v-if="school.isZihuaxian === 1" class="tag tag-3">
+                        A+
                       </view>
                     </view>
                   </view>
@@ -66,13 +72,13 @@
                       <view class="label">
                         专业:
                       </view>
-                      <text>{{ school.major }}({{ school.majorCode }})</text>
+                      <text>{{ school.level3Name }}({{ school.level3Code }})</text>
                     </view>
                     <view class="item right">
                       <view class="label">
                         学位类型:
                       </view>
-                      <text>{{ school.type }}</text>
+                      <text>{{ school.degreeType }}</text>
                     </view>
                   </view>
                 </view>
@@ -111,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { deepClone } from 'uview-plus';
+import { listSchoolMajor } from '@/api/compare';
 
 const isEdit = ref(false);
 const star = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/star.png');
@@ -123,20 +129,6 @@ const oldScrollTop = ref(0);
 
 const onScroll = (e: any) => {
   oldScrollTop.value = e.detail.scrollTop;
-};
-const schoolInfo = {
-  name: '上海交通大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  major: '应用心理',
-  majorCode: '025872',
-  type: '学术学位',
-  score: 400,
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  tag3: 'A+',
-  editAble: true,
-  star: false,
-  id: 0,
 };
 
 /**
@@ -207,12 +199,18 @@ const addSchool = () => {
   });
 };
 
-onLoad(() => {
-  for (let i = 0; i < 10; i++) {
-    const copy = deepClone(schoolInfo);
-    copy.id = i;
-    schoolList.value.push(copy);
-  }
+/**
+ * 获取对比列表
+ */
+const getCompareList = () => {
+  listSchoolMajor().then((res) => {
+    console.log(res);
+    schoolList.value = res;
+  });
+};
+
+onShow(() => {
+  getCompareList();
 });
 </script>
 
@@ -345,7 +343,7 @@ onLoad(() => {
       flex-shrink: 0;
     }
     .right {
-      flex: 4;
+      flex: 5;
       flex-shrink: 0;
     }
     .item {
