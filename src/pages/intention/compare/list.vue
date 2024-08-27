@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-08-26 21:27:36
+ * @LastEditTime : 2024-08-27 09:27:48
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -37,7 +37,7 @@
           <up-checkbox-group v-model="selectedSchools">
             <view v-for="(school, index) in schoolList" :key="index" class="school-info">
               <view class="checkbox">
-                <up-checkbox activeColor="red" :name="school.id" />
+                <up-checkbox activeColor="red" :name="school.schoolId" />
               </view>
               <view class="right-info">
                 <view class="top">
@@ -108,7 +108,7 @@
       >
         删除
       </button>
-      <button v-else size="default" type="warn" class="btn-start" :disabled="selectedSchools.length === 0">
+      <button v-else size="default" type="warn" class="btn-start" :disabled="selectedSchools.length < 2" @click="openCompare">
         开始对比({{ selectedSchools.length }}/{{ schoolList.length }})
       </button>
     </view>
@@ -135,7 +135,7 @@ const onScroll = (e: any) => {
  * 删除学校
  */
 const deleteSchools = () => {
-  const newList = schoolList.value.filter((item: any) => !selectedSchools.value.includes(item.id));
+  const newList = schoolList.value.filter((item: any) => !selectedSchools.value.includes(item.schoolId));
   schoolList.value = newList;
   selectedSchools.value = [];
 };
@@ -172,7 +172,7 @@ const closeManage = () => {
  * 全选所有学校
  */
 const selectAllItem = () => {
-  selectedSchools.value = schoolList.value.map((item: any) => item.id);
+  selectedSchools.value = schoolList.value.map((item: any) => item.schoolId);
 };
 
 /**
@@ -206,6 +206,15 @@ const getCompareList = () => {
   listSchoolMajor().then((res) => {
     console.log(res);
     schoolList.value = res;
+  });
+};
+
+/**
+ * 跳转到对比页面
+ */
+const openCompare = () => {
+  uni.navigateTo({
+    url: `/pages/intention/compare/detail?schoolIds=${selectedSchools.value.join(',')}`,
   });
 };
 

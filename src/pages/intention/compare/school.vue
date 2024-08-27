@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-27 07:49:03
+ * @LastEditTime : 2024-08-27 09:36:17
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -181,8 +181,8 @@ function queryList(pageNo: number, pageSize: number) {
     province: (currentProvince.value === '全部' || currentProvince.value === '省份') ? '' : currentProvince.value,
     schoolName: keyword.value,
     start: (pageNo - 1) * 10,
-    level3Code: '015100',
-    level3Name: '应用伦理',
+    level3Code: '025100',
+    level3Name: '金融',
   };
   pageSchoolMajor(params).then((res: any) => {
     pagingRef.value?.complete(res.data);

@@ -78,6 +78,11 @@
           "navigationStyle": "custom"
         }
       }, {
+        "path": "compare/detail",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }, {
         "path": "rank/index",
         "style": {
           "navigationStyle": "custom"
