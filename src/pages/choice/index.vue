@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 08:02:58
- * @LastEditTime : 2024-08-27 09:16:19
+ * @LastEditTime : 2024-08-27 11:41:44
  * @LastEditors  : jiangronghua
  * @Description  : 择校录入页面
 -->
@@ -35,11 +35,10 @@
           label-width="150rpx"
           :border-bottom="true"
         >
-          <view class="item-wrapper mt-20rpx">
+          <view class="item-wrapper">
             <up-form-item
               label="目标专业:"
               prop="major"
-              :borderBottom="true"
               required
               @click="openMajorModal"
             >
@@ -51,7 +50,7 @@
               </template>
             </up-form-item>
           </view>
-          <view class="item-wrapper mt-20rpx">
+          <view class="item-wrapper">
             <up-form-item label="预估分数:" prop="score" required>
               <up-input v-model="form.score" type="number" placeholder="请选输入预估分数">
                 <template #suffix>
@@ -60,8 +59,70 @@
               </up-input>
             </up-form-item>
           </view>
+          <view class="item-wrapper">
+            <up-form-item label="学习方式:" labelPosition="top" required>
+              <view class="select-wrapper">
+                <view class="select-item" :class="{ active: recruitType.includes('0') }" @click="selectRecruitType('0')">
+                  不限
+                </view>
+                <view class="select-item" :class="{ active: recruitType.includes('1') }" @click="selectRecruitType('1')">
+                  全日制
+                </view>
+                <view class="select-item" :class="{ active: recruitType.includes('2') }" @click="selectRecruitType('2')">
+                  非全日制
+                </view>
+              </view>
+            </up-form-item>
+          </view>
+          <view class="item-wrapper">
+            <up-form-item label="院校水平:" labelPosition="top" required>
+              <view class="select-wrapper">
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('0') }" @click="selectSchoolLevel('0')">
+                  不限
+                </view>
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('1') }" @click="selectSchoolLevel('1')">
+                  985
+                </view>
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('2') }" @click="selectSchoolLevel('2')">
+                  211
+                </view>
+                <view class="select-item" :class="{ active: schoolLevel.includes('3') }" @click="selectSchoolLevel('3')">
+                  双一流
+                </view>
+                <view class="select-item" :class="{ active: schoolLevel.includes('4') }" @click="selectSchoolLevel('4')">
+                  普通院校
+                </view>
+                <view class="select-item b-unset!" />
+              </view>
+            </up-form-item>
+          </view>
+          <view class="item-wrapper">
+            <up-form-item
+              label="报考省份:"
+              prop="provinces"
+              required
+              @click="openMajorModal"
+            >
+              <up-input v-model="form.major" placeholder="至少选择三个省份" border="none" disabled disabledColor="#ffffff" />
+              <template #right>
+                <up-icon
+                  name="arrow-right"
+                />
+              </template>
+            </up-form-item>
+          </view>
         </up-form>
       </view>
+    </view>
+    <view class="bottom-box">
+      <button
+        size="default"
+        type="warn"
+        class="btn-start"
+      >
+        立即生成报告
+      </button>
+      <up-safe-bottom />
     </view>
   </view>
   <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
@@ -99,6 +160,7 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue';
 import { reportListLevel1, reportListLevel2, reportListLevel3 } from '@/api/choice';
 
 const showMajor = ref(false); // 是否显示专业选择弹窗
@@ -130,10 +192,6 @@ const form = ref({
   major: '',
   score: null,
 });
-
-const changeMajorType = (index: number) => {
-  currentSubIndex.value = index;
-};
 
 /**
  * 以下接口写的太挫了，三级专业分三个接口查，以下代码不知道怎么写
@@ -223,6 +281,15 @@ const openMajorModal = () => {
   showMajor.value = true;
 };
 
+// 切换专业类型
+const changeMajorType = (index: number) => {
+  currentSubIndex.value = index;
+};
+
+watch(currentSubIndex, () => {
+  getInitMajorList();
+});
+
 watch(showMajor, (newVal) => {
   if (newVal) {
     if (searchMajorList.value && searchMajorList.value.length === 0) {
@@ -230,6 +297,26 @@ watch(showMajor, (newVal) => {
     }
   }
 });
+
+const recruitType = ref<string[]>([]); // 选中的学习方式
+const selectRecruitType = (type: string) => {
+  if (recruitType.value.includes(type)) {
+    recruitType.value = recruitType.value.filter(item => item !== type);
+  }
+  else {
+    recruitType.value.push(type);
+  }
+};
+
+const schoolLevel = ref<string[]>([]); // 院校水平
+const selectSchoolLevel = (type: string) => {
+  if (schoolLevel.value.includes(type)) {
+    schoolLevel.value = schoolLevel.value.filter(item => item !== type);
+  }
+  else {
+    schoolLevel.value.push(type);
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -249,6 +336,23 @@ watch(showMajor, (newVal) => {
   box-sizing: border-box;
   .item-wrapper {
     border-bottom: 2rpx solid #F2F2F7;
+    padding: 16rpx 0;
+  }
+  .active {
+    border-color: #E94650 !important;
+    font-weight: 500;
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      content: '';
+      left: -16rpx;
+      top: -4rpx;
+      border-top: 24rpx solid #E94650;
+      border-left: 24rpx solid transparent;
+      border-right: 24rpx solid transparent;
+      transform: rotate(135deg);
+    }
   }
 }
 .major-popup {
@@ -296,6 +400,44 @@ watch(showMajor, (newVal) => {
   .active {
     font-weight: 500;
     color: #E94650;
+  }
+}
+.select-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 16rpx;
+  .select-item {
+    width: 212rpx;
+    height: 112rpx;
+    border-radius: 8rpx;
+    border: 2rpx solid #E7E7E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32rpx;
+    color: rgba(0,0,0,0.85);
+  }
+}
+.bottom-box {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 24rpx 64rpx;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  z-index: 1000;
+  box-shadow: -10px 0 rgba(0,0,0,0.1);
+  .btn-start {
+    border-radius: 40rpx;
+    color:#ffffff;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-08-27 09:27:48
+ * @LastEditTime : 2024-08-27 13:03:21
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -37,7 +37,7 @@
           <up-checkbox-group v-model="selectedSchools">
             <view v-for="(school, index) in schoolList" :key="index" class="school-info">
               <view class="checkbox">
-                <up-checkbox activeColor="red" :name="school.schoolId" />
+                <up-checkbox activeColor="red" :name="school.id" />
               </view>
               <view class="right-info">
                 <view class="top">
@@ -135,7 +135,7 @@ const onScroll = (e: any) => {
  * 删除学校
  */
 const deleteSchools = () => {
-  const newList = schoolList.value.filter((item: any) => !selectedSchools.value.includes(item.schoolId));
+  const newList = schoolList.value.filter((item: any) => !selectedSchools.value.includes(item.id));
   schoolList.value = newList;
   selectedSchools.value = [];
 };
@@ -172,7 +172,7 @@ const closeManage = () => {
  * 全选所有学校
  */
 const selectAllItem = () => {
-  selectedSchools.value = schoolList.value.map((item: any) => item.schoolId);
+  selectedSchools.value = schoolList.value.map((item: any) => item.id);
 };
 
 /**
@@ -214,7 +214,7 @@ const getCompareList = () => {
  */
 const openCompare = () => {
   uni.navigateTo({
-    url: `/pages/intention/compare/detail?schoolIds=${selectedSchools.value.join(',')}`,
+    url: `/pages/intention/compare/detail?ids=${selectedSchools.value.join(',')}`,
   });
 };
 

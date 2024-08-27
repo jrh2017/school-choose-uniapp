@@ -450,7 +450,7 @@ watchEffect(() => { //
     collegeMaxLength.value = Math.max(...list)
 })
 onLoad((options) => {
-  ids.value = options!.schoolIds;
+  ids.value = options!.ids;
   getCompareData();
 });
 </script>
