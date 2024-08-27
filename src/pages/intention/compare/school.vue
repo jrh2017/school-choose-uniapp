@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-26 21:20:35
+ * @LastEditTime : 2024-08-27 07:49:03
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -147,17 +147,6 @@ const levels = reactive([[
     id: 6,
   },
 ]]);
-
-const school = {
-  name: '浙江工商大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  area: '浙江',
-  major: '应用心理',
-  type: '学术学位',
-  id: 1,
-};
 
 /**
  * 省份数据选中事件

@@ -85,6 +85,15 @@
       }]
     },
     {
+      "root": "pages/choice",
+      "pages": [{
+        "path": "index",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }]
+    },
+    {
       "root": "pages/user",
       "pages": [{
         "path": "attention/index",

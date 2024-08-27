@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-07-27 14:35:04
+ * @LastEditTime : 2024-08-27 08:03:58
  * @LastEditors  : jiangronghua
  * @Description  : 择校页面
 -->
@@ -39,6 +39,7 @@
           size="default"
           type="default"
           class="create-btn"
+          @click="toAddChoice"
         >
           无限次生成
         </button>
@@ -70,6 +71,10 @@
 import { getToken } from '@/utils/auth';
 
 const show = ref(false);
+
+const toAddChoice = () => {
+  uni.navigateTo({ url: '/pages/choice/index' });
+};
 
 onShow(() => {
   if (!getToken()) {

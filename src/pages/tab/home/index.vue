@@ -263,13 +263,12 @@ const opts = reactive({
  * 获取图表信息
  */
 const getChatData = () => {
-  // chartIntention().then((res: any) => {
-  //   chart.value = chartData;
-  // }).catch(() => {
-  //   // 没有配置的情况下显示输入配置的按钮
-  //   showConfig.value = true;
-  // });
-  showConfig.value = true;
+  chartIntention().then((res: any) => {
+    chart.value = chartData;
+  }).catch(() => {
+    // 没有配置的情况下显示输入配置的按钮
+    showConfig.value = true;
+  });
 };
 
 const toSchoolLibrary = () => {
