@@ -17,7 +17,7 @@
               <view class="flex-left de-td width-200 height-188">共3所院校</view>
               <view class="de-td pd-right-2 height-188" v-for="(item, index) in schoolList" :key="index">
                 <div class="connect-flex-box">
-                  <img class="img-icon" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/2.jpg" alt="">
+                  <img class="img-icon" :src="logo || 'https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/2.jpg'" alt="">
                   <div>{{  item.schoolName  }}</div>
                 </div>
               </view>
@@ -41,8 +41,8 @@
             <view class="de-th position-box">
               <view class="flex-left de-td width-200 height-138">专业</view>
               <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
-                <view>{{ item.level }}</view>
-                <view>{{ item.level }}</view>
+                <view>{{ item.level3Name }}</view>
+                <view>{{ item.level3Code }}</view>
               </view>
             </view>
             <view class="de-th position-box">
@@ -52,8 +52,7 @@
             <view class="de-th position-box">
               <view class="flex-left de-td width-200 height-138">所有学院</view>
               <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
-                <view>{{ item.level }}</view>
-                <view>{{ item.level }}</view>
+                <view v-for="(code, codeIndex) in item.collegeMajorList" :key="codeIndex">{{ code.collegeName }}</view>
               </view>
             </view>
           </view>
@@ -297,8 +296,8 @@ const schoolList = ref([{
   level: '985',
   type: '理工类',
   degree: '本科',
-  specialityName: '应用心理',
-  specialityId: '045400',
+  level3Name: '应用心理',
+  level3Code: '045400',
   ranking: '1',
   collegeNameList: ['信息科学与工程学院', '计算机科学与技术学院', '生命科学学院'],
   Year2024: 100,
