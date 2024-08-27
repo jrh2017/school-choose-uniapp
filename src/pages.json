@@ -110,6 +110,11 @@
         "style": {
           "navigationStyle": "custom"
         }
+      }, {
+        "path": "report/index",
+        "style": {
+          "navigationStyle": "custom"
+        }
       }]
     }
   ],

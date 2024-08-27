@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 08:02:58
- * @LastEditTime : 2024-08-27 11:41:44
+ * @LastEditTime : 2024-08-27 16:20:52
  * @LastEditors  : jiangronghua
  * @Description  : 择校录入页面
 -->
@@ -101,9 +101,9 @@
               label="报考省份:"
               prop="provinces"
               required
-              @click="openMajorModal"
+              @click="openProvincesModal"
             >
-              <up-input v-model="form.major" placeholder="至少选择三个省份" border="none" disabled disabledColor="#ffffff" />
+              <up-input v-model="form.provinces" placeholder="至少选择三个省份" border="none" disabled disabledColor="#ffffff" />
               <template #right>
                 <up-icon
                   name="arrow-right"
@@ -119,6 +119,7 @@
         size="default"
         type="warn"
         class="btn-start"
+        @click="submitForm"
       >
         立即生成报告
       </button>
@@ -157,17 +158,22 @@
       </view>
     </view>
   </up-popup>
+  <MultiplePicker :show="showMultiplePicker" :defaultIndex="selectProvincesData" :columns="columns" @confirm="confirmProvince" @cancel="showMultiplePicker = false" />
 </template>
 
 <script setup lang="ts">
 import { watch } from 'vue';
-import { reportListLevel1, reportListLevel2, reportListLevel3 } from '@/api/choice';
+import { reportCreate, reportListLevel1, reportListLevel2, reportListLevel3, reportProvinceList } from '@/api/choice';
+import MultiplePicker from '@/components/multiple-picker/multiple-picker.vue';
 
 const showMajor = ref(false); // 是否显示专业选择弹窗
 const list = reactive(['专业学位', '学术学位']); // 专业列表
 const currentSubIndex = ref(0); // 当前选择的子项
 const searchMajorList = ref<any>([]);
 const showSelectMajor = ref({});
+const showMultiplePicker = ref(false); // 是否显示省份选择弹窗
+const columns = ref([]); // 省份数据
+const selectProvincesData = ref([]); // 选中的省份
 const selectMajorObj = reactive({
   level1Code: null,
   level1Name: null,
@@ -177,8 +183,8 @@ const selectMajorObj = reactive({
   level3Name: null,
 });
 const rules = reactive({
-  school: [
-    { required: true, message: '请选择院校', trigger: 'change' },
+  provinces: [
+    { required: true, message: '请选择省份', trigger: 'change' },
   ],
   major: [
     { required: true, message: '请选择专业', trigger: 'change' },
@@ -188,9 +194,9 @@ const rules = reactive({
   ],
 });
 const form = ref({
-  school: '',
   major: '',
   score: null,
+  provinces: '',
 });
 
 /**
@@ -298,14 +304,9 @@ watch(showMajor, (newVal) => {
   }
 });
 
-const recruitType = ref<string[]>([]); // 选中的学习方式
+const recruitType = ref<string>(''); // 选中的学习方式
 const selectRecruitType = (type: string) => {
-  if (recruitType.value.includes(type)) {
-    recruitType.value = recruitType.value.filter(item => item !== type);
-  }
-  else {
-    recruitType.value.push(type);
-  }
+  recruitType.value = type;
 };
 
 const schoolLevel = ref<string[]>([]); // 院校水平
@@ -317,6 +318,100 @@ const selectSchoolLevel = (type: string) => {
     schoolLevel.value.push(type);
   }
 };
+
+/**
+ * 查询省份数据
+ */
+const getProvincesList = async () => {
+  reportProvinceList().then((res: any) => {
+    if (res && res[0]) {
+      columns.value = res[0].map((item: any) => ({
+        label: item,
+        value: item,
+      }));
+    }
+  });
+};
+
+/**
+ * 打开省份选择弹窗
+ */
+const openProvincesModal = () => {
+  showMultiplePicker.value = true;
+};
+
+/**
+ * 确认省份选择
+ */
+const confirmProvince = (selectProvinces: any) => {
+  const select = selectProvinces.value;
+  if (select.length < 3) {
+    uni.showToast({
+      title: '请至少选择三个省份',
+      icon: 'none',
+      duration: 2000,
+    });
+    return;
+  }
+  selectProvincesData.value = selectProvinces.value;
+  form.value.provinces = selectProvinces.value.join(',');
+  showMultiplePicker.value = false;
+};
+
+// 表单引用
+const uFormRef = ref<any>({});
+/**
+ * 提交表单信息
+ */
+const submitForm = () => {
+  if (recruitType.value.length === 0) {
+    uni.$u.toast('请先选择学习方式');
+    return;
+  }
+  if (schoolLevel.value.length === 0) {
+    uni.$u.toast('请先选择院校水平');
+    return;
+  }
+  uFormRef!.value.validate().then((valid: any) => {
+    console.log(valid);
+    if (valid) {
+      const params = {
+        assessScore: Number(form.value.score),
+        level3Code: selectMajorObj.level3Code,
+        level3Name: selectMajorObj.level3Name,
+        provinces: form.value.provinces,
+        recruitType: recruitType.value,
+        schoolLevel: schoolLevel.value.join(','),
+      };
+      reportCreate(params).then((res) => {
+        uni.showToast({
+          title: '生成报告成功',
+          icon: 'none',
+          duration: 2000,
+          success: () => {
+            setTimeout(() => {
+              uni.navigateTo({
+                url: '/pages/user/report/index',
+              });
+            }, 2000);
+          },
+        });
+      });
+    }
+    else {
+      uni.$u.toast('请填写正确的信息');
+    }
+  }).catch(() => {
+    uni.showToast({
+      title: '请正确填写信息',
+      icon: 'none',
+    });
+  });
+};
+
+onLoad(() => {
+  getProvincesList();
+});
 </script>
 
 <style scoped lang="scss">
@@ -334,6 +429,7 @@ const selectSchoolLevel = (type: string) => {
   border-radius: 24rpx 24rpx 0rpx 0rpx;
   padding: 32rpx;
   box-sizing: border-box;
+  margin-bottom: 160rpx;
   .item-wrapper {
     border-bottom: 2rpx solid #F2F2F7;
     padding: 16rpx 0;

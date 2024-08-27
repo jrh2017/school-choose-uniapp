@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AgreePrivacy: typeof import('./../src/components/agree-privacy/index.vue')['default']
+    MultiplePicker: typeof import('./../src/components/multiple-picker/multiple-picker.vue')['default']
     PageNav: typeof import('./../src/components/page-nav/page-nav.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
