@@ -20,8 +20,8 @@ const getCompareData = () => {
   });
 };
 onLoad((options) => {
-  ids.value = options!.schoolIds;
-  // getCompareData();
+  ids.value = options!.ids;
+  getCompareData();
 });
 </script>
 
