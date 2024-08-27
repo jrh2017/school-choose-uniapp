@@ -21,7 +21,7 @@ const getCompareData = () => {
 };
 onLoad((options) => {
   ids.value = options!.schoolIds;
-  getCompareData();
+  // getCompareData();
 });
 </script>
 
