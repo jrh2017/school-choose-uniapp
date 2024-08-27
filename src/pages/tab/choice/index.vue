@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-08-27 08:03:58
+ * @LastEditTime : 2024-08-27 14:24:50
  * @LastEditors  : jiangronghua
  * @Description  : 择校页面
 -->
@@ -54,7 +54,7 @@
     <up-popup :show="show" mode="center" :closeable="true" round="24rpx" @close="show = false">
       <view class="popup-box">
         <view class="popup-title">
-          出淤泥而不染，濯清涟而不妖
+          深度择校
         </view>
         <view class="popup-content">
           <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/qrcode.png" mode="aspectFit" width="436rpx" height="436rpx" />

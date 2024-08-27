@@ -18,7 +18,7 @@
 
       <view class="mt-44rpx border-rd-24rpx bg-white">
         <u-cell-group :border="false">
-          <u-cell icon="rmb-circle" title="我的报告" is-link :border="false">
+          <u-cell icon="rmb-circle" title="我的报告" is-link :border="false" @click="toReport">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-01.png" width="40rpx" height="40rpx" />
             </template>
@@ -86,6 +86,15 @@ const toAttention = () => {
 const toSetting = () => {
   uni.navigateTo({
     url: '/pages/user/setting/index',
+  });
+};
+
+/**
+ * 跳转到我的报告页面
+ */
+const toReport = () => {
+  uni.navigateTo({
+    url: '/pages/user/report/index',
   });
 };
 </script>
