@@ -1,14 +1,14 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 21:42:19
- * @LastEditTime : 2024-08-26 20:17:08
+ * @LastEditTime : 2024-08-28 09:14:29
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校组件
 -->
 <template>
   <div class="school">
     <view class="top">
-      <schoolInfo :magorDetail="magorDetail" />
+      <schoolInfo :majorDetail="majorDetail" />
     </view>
     <view class="main">
       <up-tabs :list="list1" :current="currentIndex" lineColor="#E94650" :activeStyle="{ color: '#E94650' }" :inactiveStyle="{ color: '#8C8C8C' }" @click="tabsClickFn" />
@@ -47,7 +47,7 @@ import {
 import { useCollege } from '@/store/index';
 
 const props = defineProps({
-  magorDetail: {
+  majorDetail: {
     type: Object,
     default: () => ({}),
   },
@@ -61,7 +61,7 @@ const props = defineProps({
   },
 });
 const collegeStore = useCollege();
-const { magorDetail, level3Code, schoolId } = toRefs(props);
+const { majorDetail, level3Code, schoolId } = toRefs(props);
 const {
   collegeItem,
   recruitType,
@@ -108,7 +108,7 @@ onMounted(() => {
   getMatriculationRecordFn();
 });
 watchEffect(() => {
-  collegeList.value = magorDetail.value.collegeList || [];
+  collegeList.value = majorDetail.value.collegeList || [];
 });
 </script>
 

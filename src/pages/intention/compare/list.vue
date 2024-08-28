@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-08-27 13:03:21
+ * @LastEditTime : 2024-08-28 17:03:07
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -45,14 +45,11 @@
                   <view class="right">
                     <view class="school-name">
                       <text>{{ school.schoolName }}</text>
-                      <up-image class="edit-icon" :src="school.star ? star : unstar" width="40rpx" height="40rpx" @click="school.star = !school.star" />
+                      <up-image class="edit-icon" :src="school.collected === 1 ? star : unstar" width="40rpx" height="40rpx" @click="changeCollecte(school)" />
                     </view>
                     <view class="tags">
                       <view class="tag tag-1">
                         {{ school.typeName }}
-                      </view>
-                      <view v-for="(tag, tindex) in school.tag2" :key="tindex" class="tag tag-2">
-                        {{ tag }}
                       </view>
                       <view v-if="school.is985 === 1" class="tag tag-2">
                         985
@@ -117,6 +114,7 @@
 </template>
 
 <script setup lang="ts">
+import { majorCollegeSave } from '@/api/userinfo';
 import { listSchoolMajor } from '@/api/compare';
 
 const isEdit = ref(false);
@@ -215,6 +213,21 @@ const getCompareList = () => {
 const openCompare = () => {
   uni.navigateTo({
     url: `/pages/intention/compare/detail?ids=${selectedSchools.value.join(',')}`,
+  });
+};
+
+/**
+ * 切换收藏状态
+ */
+const changeCollecte = (school: any) => {
+  const action = school.collected === 1 ? 2 : 1;
+  const params = {
+    action,
+    schoolId: school.schoolId,
+    level3Code: school.level3Code,
+  };
+  majorCollegeSave(params).then(() => {
+    school.collected = action;
   });
 };
 

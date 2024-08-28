@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-08-26 17:35:46
+ * @LastEditTime : 2024-08-28 09:24:22
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -12,7 +12,7 @@
       <view class="right">
         <view class="school-name">
           <text>{{ schoolInfo.schoolName }}</text>
-          <up-image class="edit-icon" :src="schoolInfo.star ? star : unstar" width="40rpx" height="40rpx" @click="schoolInfo.star = !schoolInfo.star" />
+          <up-image class="edit-icon" :src="schoolInfo.collected === 1 ? star : unstar" width="40rpx" height="40rpx" @click="changeCollecte" />
         </view>
         <view class="tags">
           <view class="tag tag-1">
@@ -53,8 +53,10 @@
 </template>
 
 <script setup lang="ts">
+import { majorCollegeSave } from '@/api/userinfo';
+
 const props = defineProps({
-  magorDetail: {
+  majorDetail: {
     type: Object,
     default: () => ({}),
   },
@@ -73,15 +75,31 @@ const data = reactive({
     level3Code: '',
     degreeType: '',
     isZihuaxian: 1,
-    star: true,
+    collected: 0,
   },
 });
 const { schoolInfo } = toRefs(data);
 const star = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/star.png');
 const unstar = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/unstar.png');
-const { magorDetail } = toRefs(props);
+const { majorDetail } = toRefs(props);
+
+/**
+ * 切换收藏状态
+ */
+const changeCollecte = () => {
+  const action = schoolInfo.value.collected === 1 ? 2 : 1;
+  const params = {
+    action,
+    schoolId: majorDetail.value.schoolId,
+    level3Code: majorDetail.value.level3Code,
+  };
+  majorCollegeSave(params).then(() => {
+    schoolInfo.value.collected = action;
+  });
+};
+
 watchEffect(() => {
-  schoolInfo.value = magorDetail.value;
+  schoolInfo.value = majorDetail.value;
 });
 </script>
 

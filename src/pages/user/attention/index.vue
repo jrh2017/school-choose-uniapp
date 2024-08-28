@@ -1,114 +1,103 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-07-25 15:06:24
+ * @LastEditTime : 2024-08-28 17:05:40
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
 <template>
   <view class="container">
+    <up-navbar
+      :placeholder="true"
+      bg-color="#F8EFF2"
+      title="关注院校"
+      autoBack
+    />
     <view class="content">
-      <z-paging ref="pagingRef" v-model="dataList" @query="queryList">
-        <template #top>
-          <up-navbar
-            :placeholder="true"
-            bg-color="#F8EFF2"
-            title="关注院校"
-            autoBack
-          />
-        </template>
-        <view class="list-wrapper">
-          <view v-for="(item, index) in dataList" :key="index" class="school-item">
-            <view class="top">
-              <view class="top-left">
-                <up-image :src="item.logo" width="100rpx" height="100rpx" />
-                <view class="school-info">
-                  <view class="school-name">
-                    <text>{{ item.name }}</text>
+      <view class="list-wrapper">
+        <view v-for="(item, index) in dataList" :key="index" class="school-item">
+          <view class="top">
+            <view class="top-left">
+              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.schoolId}.jpg`" width="100rpx" height="100rpx" />
+              <view class="school-info">
+                <view class="school-name">
+                  <text>{{ item.schoolName }}</text>
+                </view>
+                <view class="tags">
+                  <view class="tag tag-1">
+                    {{ item.typeName }}
                   </view>
-                  <view class="tags">
-                    <view class="tag tag-1">
-                      {{ item.tag1 }}
-                    </view>
-                    <view v-for="(tag, tindex) in item.tag2" :key="tindex" class="tag tag-2">
-                      {{ tag }}
-                    </view>
+                  <view v-if="item.is985 === 1" class="tag tag-2">
+                    985
+                  </view>
+                  <view v-if="item.is211 === 1" class="tag tag-2">
+                    211
+                  </view>
+                  <view v-if="item.isZihuaxian === 1" class="tag tag-3">
+                    A+
                   </view>
                 </view>
               </view>
-              <up-image class="edit-icon" :src="item.star ? star : unstar" width="40rpx" height="40rpx" @click="item.star = !item.star" />
             </view>
-            <view class="bottom">
-              <view class="detail-item flex justify-between">
-                <view class="item left">
-                  <view class="label">
-                    专业:
-                  </view>
-                  <text>{{ item.major }}({{ item.magorCode }})</text>
+            <up-image class="edit-icon" :src="item.collected === 1 ? star : unstar" width="40rpx" height="40rpx" @click="changeCollecte(item)" />
+          </view>
+          <view class="bottom">
+            <view class="detail-item flex justify-between">
+              <view class="item left">
+                <view class="label">
+                  专业:
                 </view>
-                <view class="item right">
-                  <view class="label">
-                    学位类型:
-                  </view>
-                  <text>{{ item.type }}</text>
+                <text>{{ item.level3Name }}({{ item.level3Code }})</text>
+              </view>
+              <view class="item right">
+                <view class="label">
+                  学位类型:
                 </view>
+                <text>{{ item.degreeType }}</text>
               </view>
             </view>
           </view>
         </view>
-      </z-paging>
+      </view>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
-import { deepClone } from 'uview-plus';
+import { listMajorCollege, majorCollegeSave } from '@/api/userinfo';
 
-const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-paging组件的ref
 const dataList = ref<any[]>([]); // 存放请求回来的数据
-const majorId = ref(''); // 专业id
 const star = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/star.png');
 const unstar = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/unstar.png');
-const school = {
-  name: '浙江工商大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  area: '浙江',
-  major: '应用心理',
-  type: '学术学位',
-  magorCode: '01010101',
-  star: false,
-  id: 1,
-};
 
 /**
  * 请求院校信息
  * @param pageNo
  * @param pageSize
  */
-function queryList(pageNo: number, pageSize: number) {
-  console.log('[ pageNo ] >', pageNo, '[ pageSize ] >', pageSize);
-  // 这里的pageNo和pageSize会自动计算好，直接传给服务器即可
-  // 这里的请求只是演示，请替换成自己的项目的网络请求，并在网络请求回调中通过pagingRef.value.complete(请求回来的数组)将请求结果传给z-paging
-  setTimeout(() => {
-    // 1秒之后停止刷新动画
-    const list = [];
-    for (let i = 0; i < 30; i++) {
-      const copy = deepClone(school);
-      copy.id = i + 1;
-      list.push(copy);
-    }
-    console.log('[ list ] >', list);
-    pagingRef.value?.complete(list);
-  }, 200);
+function queryList() {
+  listMajorCollege().then((res) => {
+    dataList.value = res;
+  });
 }
 
-onLoad((options: any) => {
-  if (options?.id) {
-    majorId.value = options.id;
-  }
+/**
+ * 切换收藏状态
+ */
+const changeCollecte = (school: any) => {
+  const action = school.collected === 1 ? 2 : 1;
+  const params = {
+    action,
+    schoolId: school.schoolId,
+    level3Code: school.level3Code,
+  };
+  majorCollegeSave(params).then(() => {
+    school.collected = action;
+  });
+};
+
+onLoad(() => {
+  queryList();
 });
 </script>
 

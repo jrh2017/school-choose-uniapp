@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 19:23:54
- * @LastEditTime : 2024-08-24 15:58:11
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-08-28 09:13:59
+ * @LastEditors  : jiangronghua
  * @Description  : 院校详情页面
 -->
 <template>
@@ -13,7 +13,7 @@
       title="院校专业详情"
       autoBack
     />
-    <School :magorDetail="magorDetail" :level3Code="level3Code" :schoolId="schoolId" />
+    <School :majorDetail="majorDetail" :level3Code="level3Code" :schoolId="schoolId" />
   </view>
 </template>
 
@@ -25,14 +25,14 @@ import {
 
 const level3Code = ref(''); // 第三级code
 const schoolId = ref('');
-const magorDetail = ref({});
+const majorDetail = ref({});
 const getScoolDetailFn = () => {
   schoolMajorDetail({
     level3Code: level3Code.value,
     schoolId: schoolId.value,
   }).then((res: any) => {
     console.log(res, 'res');
-    magorDetail.value = res || {};
+    majorDetail.value = res || {};
   });
 };
 onLoad((options: any) => {

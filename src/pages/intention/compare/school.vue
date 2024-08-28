@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-27 09:36:17
+ * @LastEditTime : 2024-08-28 09:03:46
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -67,7 +67,7 @@
                   </view>
                 </view>
               </view>
-              <view v-if="item.isAdd" class="btn-right selected">
+              <view v-if="item.joined === 1" class="btn-right selected">
                 已添加
               </view>
               <view v-else class="btn-right unselected" @click="addSchool(item)">
