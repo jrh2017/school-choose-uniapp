@@ -1,20 +1,31 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 15:08:43
- * @LastEditTime : 2024-07-27 11:12:51
+ * @LastEditTime : 2024-08-28 21:23:01
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#F8EFF2"
-      title="设置"
-      autoBack
-    />
+    <up-navbar :placeholder="true" bg-color="#F8EFF2" title="设置" autoBack />
     <view class="content">
-      <up-button type="error" shape="circle" text="退出" class="mt-20rpx" @click="logout" />
+      <view class="m-y-20rpx border-rd-24rpx bg-white">
+        <u-cell-group :border="false">
+          <u-cell icon="star" title="商务合作" is-link>
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-06.png"
+                width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+          <u-cell icon="heart" title="隐私政策" is-link :border="false">
+            <template #icon>
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-07.png"
+                width="40rpx" height="40rpx" />
+            </template>
+          </u-cell>
+        </u-cell-group>
+      </view>
+      <up-button type="error" shape="circle" text="退出登录" class="mt-20rpx" @click="logout" />
     </view>
   </view>
 </template>
@@ -42,6 +53,7 @@ const logout = () => {
 .container {
   flex: 1;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;

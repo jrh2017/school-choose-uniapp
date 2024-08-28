@@ -1,24 +1,20 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-08-28 17:05:40
+ * @LastEditTime : 2024-08-28 17:08:21
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#F8EFF2"
-      title="关注院校"
-      autoBack
-    />
+    <up-navbar :placeholder="true" bg-color="#F8EFF2" title="关注院校" autoBack />
     <view class="content">
       <view class="list-wrapper">
         <view v-for="(item, index) in dataList" :key="index" class="school-item">
           <view class="top">
             <view class="top-left">
-              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.schoolId}.jpg`" width="100rpx" height="100rpx" />
+              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.schoolId}.jpg`" width="100rpx"
+                height="100rpx" />
               <view class="school-info">
                 <view class="school-name">
                   <text>{{ item.schoolName }}</text>
@@ -39,7 +35,8 @@
                 </view>
               </view>
             </view>
-            <up-image class="edit-icon" :src="item.collected === 1 ? star : unstar" width="40rpx" height="40rpx" @click="changeCollecte(item)" />
+            <up-image class="edit-icon" :src="item.collected === 1 ? star : unstar" width="40rpx" height="40rpx"
+              @click="changeCollecte(item)" />
           </view>
           <view class="bottom">
             <view class="detail-item flex justify-between">
@@ -105,14 +102,17 @@ onLoad(() => {
 .container {
   flex: 1;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
 }
+
 .list-wrapper {
   padding: 0 32rpx;
+
   .school-item {
     padding: 32rpx;
     border-radius: 16rpx;
@@ -123,29 +123,36 @@ onLoad(() => {
     justify-content: space-between;
     width: 100%;
     box-sizing: border-box;
+
     .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       ::v-deep .u-iconfont {
         color: #E94650 !important;
       }
+
       .top-left {
         display: flex;
       }
+
       .btn-right {
         padding: 12rpx 16rpx;
         border-radius: 8rpx;
         font-weight: 600;
         font-size: 24rpx;
-        color: rgba(0,0,0,0.25);
+        color: rgba(0, 0, 0, 0.25);
       }
+
       .selected {
         background: #F2F2F7;
       }
+
       .unselected {
-        background: rgba(252,227,229,0.4);
+        background: rgba(252, 227, 229, 0.4);
       }
+
       .school-info {
         display: flex;
         flex-direction: column;
@@ -153,48 +160,64 @@ onLoad(() => {
         margin-left: 24rpx;
         height: 100rpx;
       }
-      .school-name{
+
+      .school-name {
         font-weight: 500;
         font-size: 32rpx;
         color: #000000;
         line-height: 48rpx;
       }
+
       .tags {
         display: flex;
       }
+
       .tag {
         padding: 4rpx 8rpx;
         border-radius: 4rpx;
         font-size: 20rpx;
         margin-right: 16rpx;
       }
+
       .tag-1 {
         color: #E94650;
         background-color: #FFECEB;
       }
+
       .tag-2 {
         color: #4D59FF;
         background-color: #EBEFFF;
       }
+
+      .tag-3 {
+        color: #0EAEB4;
+        background-color: #E0F8F5;
+      }
     }
+
     .bottom {
       margin-top: 24rpx;
       font-size: 24rpx;
       line-height: 36rpx;
     }
+
     .detail-item {
       margin: 4rpx 0;
+
       .left {
         flex: 6;
         flex-shrink: 0;
       }
+
       .right {
         flex: 4;
         flex-shrink: 0;
       }
+
       .item {
         display: flex;
       }
+
       .label {
         color: #898989;
         margin-right: 10rpx;

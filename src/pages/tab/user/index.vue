@@ -4,7 +4,8 @@
     <view class="content">
       <view class="flex items-center">
         <view class="mr-32rpx">
-          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/avatar.jpg" shape="circle" width="128rpx" height="128rpx" />
+          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/avatar.jpg" shape="circle" width="128rpx"
+            height="128rpx" />
         </view>
         <view class="h-128rpx flex flex-1 flex-col flex-justify-between">
           <view class="font-weight-bold pb-20rpx font-size-40rpx color-#252424">
@@ -20,7 +21,8 @@
         <u-cell-group :border="false">
           <u-cell icon="rmb-circle" title="我的报告" is-link :border="false" @click="toReport">
             <template #icon>
-              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-01.png" width="40rpx" height="40rpx" />
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-01.png"
+                width="40rpx" height="40rpx" />
             </template>
           </u-cell>
         </u-cell-group>
@@ -30,17 +32,20 @@
         <u-cell-group :border="false">
           <u-cell icon="star" title="关注院校" is-link @click="toAttention">
             <template #icon>
-              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-02.png" width="40rpx" height="40rpx" />
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-02.png"
+                width="40rpx" height="40rpx" />
             </template>
           </u-cell>
-          <u-cell icon="photo" title="激活码" is-link>
+          <u-cell icon="photo" title="激活码" is-link @click="toCode">
             <template #icon>
-              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-03.png" width="40rpx" height="40rpx" />
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-03.png"
+                width="40rpx" height="40rpx" />
             </template>
           </u-cell>
           <u-cell icon="heart" title="一起分销赚钱" is-link :border="false">
             <template #icon>
-              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-04.png" width="40rpx" height="40rpx" />
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-04.png"
+                width="40rpx" height="40rpx" />
             </template>
           </u-cell>
         </u-cell-group>
@@ -50,7 +55,8 @@
         <u-cell-group :border="false">
           <u-cell icon="setting" title="设置" is-link :border="false" @click="toSetting">
             <template #icon>
-              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-05.png" width="40rpx" height="40rpx" />
+              <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-05.png"
+                width="40rpx" height="40rpx" />
             </template>
           </u-cell>
         </u-cell-group>
@@ -97,6 +103,15 @@ const toReport = () => {
     url: '/pages/user/report/index',
   });
 };
+
+/**
+ * 跳转到激活码页面
+ */
+const toCode = () => {
+  uni.navigateTo({
+    url: '/pages/code/index',
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,6 +120,7 @@ const toReport = () => {
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
   flex: 1;
 }
+
 .content {
   box-sizing: border-box;
   padding: 32rpx;

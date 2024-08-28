@@ -90,6 +90,15 @@
       }]
     },
     {
+      "root": "pages/code",
+      "pages": [{
+        "path": "index",
+        "style": {
+          "navigationStyle": "custom"
+        }
+      }]
+    },
+    {
       "root": "pages/choice",
       "pages": [{
         "path": "index",

@@ -1,7 +1,7 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-08-28 16:58:38
+ * @LastEditTime : 2024-08-28 21:13:06
  * @LastEditors  : jiangronghua
  * @Description  : 用户相关请求
  */
@@ -11,6 +11,8 @@ enum URL {
   login = '/member/login',
   majorCollegeSave = '/member/save-school-major',
   listMajorCollege = '/member/list-school-major',
+  activeCode = '/member/list-active-code',
+  enableActiveCode = '/member/enable-active-code',
   chartIntention = '/intention-information/chart-intention',
   pageSchool = '/intention-information/page-school',
   intentionInformationListlevel1 = '/intention-information/list-level1',
@@ -28,3 +30,5 @@ export const intentionInformationListlevel3 = (params: any) => request({ url: UR
 export const intentionInformationSubmit = (data: any) => request({ url: URL.intentionInformationSubmit, method: 'POST', data });
 export const majorCollegeSave = (data: any) => request({ url: URL.majorCollegeSave, method: 'POST', data });
 export const listMajorCollege = () => request({ url: URL.listMajorCollege, method: 'GET' });
+export const activeCode = () => request({ url: URL.activeCode, method: 'GET' });
+export const enableActiveCode = (params: any) => request({ url: URL.enableActiveCode, method: 'GET', params });
