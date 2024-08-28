@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-08-26 20:15:36
- * @LastEditors  : jiangronghua
+ * @LastEditTime : 2024-08-28 18:35:50
+ * @LastEditors  : chenyuchao
  * @Description  : 国家线
 -->
 <template>
@@ -11,36 +11,39 @@
       <view class="title">
         复试线
       </view>
-      <view class="table">
-        <view class="tr">
-          <view class="th" style="width: 25%;">
-            科目/年份
+      <maskLayer :isShowMask="true">
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width: 25%;">
+              科目/年份
+            </view>
+            <view class="th">
+              2024
+            </view>
+            <view class="th">
+              2023
+            </view>
+            <view class="th">
+              2022
+            </view>
           </view>
-          <view class="th">
-            2024
-          </view>
-          <view class="th">
-            2023
-          </view>
-          <view class="th">
-            2022
+          <view v-for="(item, index) in tableSchoolData" :key="index" class="tr" style=""
+            :class="{ active: index % 2 === 1 }">
+            <view class="td">
+              {{ item.name }}
+            </view>
+            <view class="td">
+              {{ item[2024] }}
+            </view>
+            <view class="td">
+              {{ item[2023] }}
+            </view>
+            <view class="td">
+              {{ item[2022] }}
+            </view>
           </view>
         </view>
-        <view v-for="(item, index) in tableSchoolData" :key="index" class="tr" style="" :class="{ active: index % 2 === 1 }">
-          <view class="td">
-            {{ item.name }}
-          </view>
-          <view class="td">
-            {{ item[2024] }}
-          </view>
-          <view class="td">
-            {{ item[2023] }}
-          </view>
-          <view class="td">
-            {{ item[2022] }}
-          </view>
-        </view>
-      </view>
+      </maskLayer>
     </view>
     <view class="ranking-table">
       <view class="title">
@@ -65,7 +68,8 @@
             2022
           </view>
         </view>
-        <view v-for="(item, index) in tableCountryData" :key="index" class="tr" style="" :class="{ active: index % 2 === 1 }">
+        <view v-for="(item, index) in tableCountryData" :key="index" class="tr" style=""
+          :class="{ active: index % 2 === 1 }">
           <view class="td">
             {{ item.name }}
           </view>
@@ -89,7 +93,7 @@ import {
   interviewLine,
   nationalLine,
 } from '@/api/collage';
-
+import maskLayer from '@/components/mask-layer/mask-layer.vue'
 const props = defineProps({
   level3Code: {
     type: String,
@@ -144,13 +148,15 @@ onMounted(() => {
 <style lang="scss" scoped>
 .ranking-table {
   margin-bottom: 16rpx;
+
   .title {
     font-weight: 500;
     font-size: 32rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 48rpx;
     margin-bottom: 16rpx;
   }
+
   .tips {
     background: #F2F2F7;
     border-radius: 16rpx;
@@ -158,11 +164,12 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     font-size: 24rpx;
-    color: rgba(0,0,0,0.65);
+    color: rgba(0, 0, 0, 0.65);
     line-height: 40rpx;
     margin-bottom: 16rpx;
   }
 }
+
 .table {
   width: 100%;
   border-radius: 8rpx;
