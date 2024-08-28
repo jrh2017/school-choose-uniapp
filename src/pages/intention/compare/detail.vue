@@ -5,18 +5,23 @@
       <view class="de-table">
         <view class="model-box">
           <view class="de-th height-98">
-            <view class="model-title flex-left max-model-title">院校对比信息</view>
+            <view class="model-title flex-left max-model-title">
+              <view class="title-icon-box">
+                <view class="pd-right-20">院校对比信息</view>
+                <up-icon v-if="schoolFold" name="arrow-up-fill"></up-icon>
+                <up-icon v-else name="arrow-down-fill"></up-icon>
+              </view>
+            </view>
           </view>
           <view class="list-box">
             <view class="de-th position-box">
               <view class="flex-left de-td width-200 height-188">共3所院校</view>
               <view class="de-td pd-right-2 height-188" v-for="(item, index) in schoolList" :key="index">
-                <view class="add-box" v-if="item.id === 0">
+                <view class="add-box" v-if="item.id === 0" @click="goBackFn">
                   +
                 </view>
                 <view class="connect-flex-box" v-else>
-                  <img class="img-icon" :src="item.logo || 'https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/2.jpg'"
-                    alt="">
+                  <img class="img-icon" :src="item.logo" alt="">
                   <view>{{ item.schoolName }}</view>
                 </view>
               </view>
@@ -149,15 +154,27 @@
           <view class="segmentation-item" v-for="(item, index) in schoolList" :key="index"></view>
         </view>
         <view class="de-th height-98">
-          <view class="model-title flex-left max-model-title">学院对比信息</view>
+          <view class="model-title flex-left max-model-title">
+            <view class="title-icon-box">
+              <view class="pd-right-20">学院对比信息</view>
+              <up-icon v-if="collegeFold" name="arrow-up-fill"></up-icon>
+              <up-icon v-else name="arrow-down-fill"></up-icon>
+            </view>
+          </view>
         </view>
         <view class="college-item" v-for="(collegeItem, collegeIndex) in collegeList" :key="collegeIndex">
           <view class="model-box">
             <view class="list-box">
               <view class="de-th position-box">
                 <view class="flex-left de-td width-200 height-154"></view>
-                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">{{
-                  value.collegeName }}</view>
+                <view class="de-td pd-right-2 height-154 icon-tips-box" v-for="(value, index) in collegeItem"
+                  :key="index">
+                  <view v-if="value.id" :class="[{ 'is-active': value.isActive }, 'icon-tips']"
+                    @click="topUpFn(collegeIndex, index)"><up-icon name="arrow-upward"
+                      :color="value.isActive ? '#E94650' : '#000000'" size="10"></up-icon>{{ value.isActive ? '已置顶' :
+                    '未置顶' }}</view>
+                  {{ value.collegeName }}
+                </view>
               </view>
               <view class="de-th position-box">
                 <view class="flex-left de-td width-200">学习方式</view>
@@ -275,6 +292,8 @@ interface schoolItem {
   collegeMajorList: collegeItem[],
   schoolScoreStatisVOList: yearItem[]
 }
+const schoolFold = ref(false);// 学校的折叠
+const collegeFold = ref(false);// 学院的折叠
 const ids = ref('');
 const collegeList = ref<Array<any>>([])
 const collegeYearList = ref<Array<any>>([])
@@ -340,10 +359,10 @@ const getCompareData = () => {
       }
     })
     let newYearList = yearlist.filter((item: any, index: number) => yearlist.indexOf(item) === index);
-    newCyl.forEach((item: object, index: number) => {
+    newCyl.forEach((item: any, index: number) => {
       newYearList.forEach((year: any) => {
         item[year] = []
-        let itemYearList = []
+        let itemYearList: any = []
         listRes.forEach((item2: schoolItem, index2: number) => { // 学校循环
           if (item2.collegeMajorList && item2.collegeMajorList.length && item2.collegeMajorList[index] && item2.collegeMajorList[index].collegeScoreStatisVOList) {
             item2.collegeMajorList[index].collegeScoreStatisVOList.forEach(item3 => {
@@ -363,6 +382,28 @@ const getCompareData = () => {
     console.log(newCyl, 'newCyl')
   });
 };
+// 置顶
+const topUpFn = (collegeIndex: number, index: number) => {
+  collegeList.value.forEach((itemList: any, index2: number) => {
+    itemList.forEach((item: any, index3: number) => {
+      if (index === index3) {
+        item.isActive = false
+      }
+    })
+  })
+  let firstItemList = collegeList.value[0] // 第一行
+  let firstItem = firstItemList[index] // 待替换项
+  let clickItemList = collegeList.value[collegeIndex] // 目标行
+  let clickItem = { ...clickItemList[index], isActive: true } // 待置顶项
+  firstItemList.splice(index, 1, clickItem)
+  clickItemList.splice(index, 1, firstItem)
+  collegeList.value[0] = firstItemList
+  collegeList.value[collegeIndex] = clickItemList
+}
+// 返回上一页
+const goBackFn = () => {
+  uni.navigateBack();
+}
 onLoad((options) => {
   ids.value = options!.ids;
   schoolList.value = [templateItem.value]
@@ -515,6 +556,39 @@ onLoad((options) => {
 .height-auto-box {
   .height-auto-item {
     opacity: 0;
+  }
+}
+
+.title-icon-box {
+  display: flex;
+  align-items: center;
+
+  .pd-right-20 {
+    padding-right: 20rpx;
+  }
+}
+
+.icon-tips-box {
+  position: relative;
+
+  .icon-tips {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 400;
+    font-size: 20rpx;
+    line-height: 24rpx;
+    padding: 6rpx 24rpx;
+    border-bottom-right-radius: 20rpx;
+    overflow: hidden;
+    background-color: #F2F2F7;
+  }
+
+  .is-active {
+    color: #E94650;
+    background-color: #FCE3E5;
   }
 }
 </style>
