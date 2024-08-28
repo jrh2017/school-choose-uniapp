@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 15:28:59
- * @LastEditTime : 2024-08-27 16:05:35
+ * @LastEditTime : 2024-08-28 08:48:31
  * @LastEditors  : jiangronghua
  * @Description  : 我的报告列表页面
 -->
@@ -18,50 +18,60 @@
           />
         </template>
         <view class="list-wrapper">
-          <view v-for="(item, index) in dataList" :key="index" class="school-item">
-            <view class="top">
-              <view class="top-left">
-                <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx" height="100rpx" />
-                <view class="school-info">
-                  <view class="school-name">
-                    <text>{{ item.schoolName }}</text>
-                  </view>
-                  <view class="tags">
-                    <view class="tag tag-1">
-                      {{ item.typeName }}
-                    </view>
-                    <view v-if="item.is985 === 1" class="tag tag-2">
-                      985
-                    </view>
-                    <view v-if="item.is211 === 1" class="tag tag-2">
-                      211
-                    </view>
-                    <view v-if="item.isZihuaxian === 1" class="tag tag-3">
-                      A+
-                    </view>
-                  </view>
-                </view>
-              </view>
-              <view v-if="item.isAdd" class="btn-right selected">
-                已添加
-              </view>
-              <view v-else class="btn-right unselected" @click="addSchool(item)">
-                <up-icon name="plus-circle" color="#E94650" labelColor="#E94650" label="对比" />
+          <view v-for="(item, index) in dataList" :key="index" class="report-item">
+            <view v-if="item.status === 2" class="report-status">
+              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/icon-warning.png" class="icon" width="44rpx" height="44rpx" />
+              <view class="report-status-text">
+                生成失败：{{ item.failedReason }}
               </view>
             </view>
-            <view class="bottom">
-              <view class="detail-item flex justify-between">
-                <view class="item left">
-                  <view class="label">
-                    专业:
-                  </view>
-                  <text>{{ item.level3Name }}</text>
+            <view class="report-conteng p-32rpx">
+              <view class="report-title">
+                个人择校报告
+                <view class="report-date">
+                  {{ dayjs(item.createTime).format('YYYY-MM-DD') }}
                 </view>
-                <view class="item right">
+              </view>
+              <view class="report-cell">
+                <view class="report-cell-line">
                   <view class="label">
-                    学位类型:
+                    目标专业：
                   </view>
-                  <text>{{ item.degreeType }}</text>
+                  <view class="value">
+                    {{ item.level3Name }}({{ item.level3Code }})
+                  </view>
+                </view>
+                <view class="report-cell-line">
+                  <view class="label">
+                    预估分数：
+                  </view>
+                  <view class="value">
+                    {{ item.assessScore }}
+                  </view>
+                </view>
+                <view class="report-cell-line">
+                  <view class="label">
+                    学习方式：
+                  </view>
+                  <view class="value">
+                    {{ recruitTypeList[item.recruitTypeIndex] }}
+                  </view>
+                </view>
+                <view class="report-cell-line">
+                  <view class="label">
+                    院校水平：
+                  </view>
+                  <view class="value">
+                    {{ item.schoolLevelStr }}
+                  </view>
+                </view>
+                <view class="report-cell-line">
+                  <view class="label">
+                    报考省份：
+                  </view>
+                  <view class="value">
+                    {{ item.provinces }}
+                  </view>
                 </view>
               </view>
             </view>
@@ -73,11 +83,15 @@
 </template>
 
 <script lang="ts" setup>
+import dayjs from 'dayjs';
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
 import { reportList } from '@/api/choice';
 
 const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-paging组件的ref
 const dataList = ref<any[]>([]); // 存放请求回来的数据
+
+const recruitTypeList = ['不限', '全日制', '非全日制']; // 存放报考类型列表
+const schoolLevelList = ['不限', '985', '211', '双一流', '普通院校']; // 存放院校层次列表
 
 /**
  * 请求院校信息
@@ -91,7 +105,27 @@ function queryList(pageNo: number, pageSize: number) {
     start: (pageNo - 1) * 10,
   };
   reportList(params).then((res: any) => {
-    pagingRef.value?.complete(res.data);
+    const list = res.data;
+    list?.forEach((item: any) => {
+      const schoolLevel = item.schoolLevel.split(',');
+      let schoolLevelIndexList: number[] = [];
+      const schoolLevelStrList: string[] = [];
+      schoolLevel.forEach((item: string) => {
+        schoolLevelIndexList.push(Number(item));
+      });
+      schoolLevelIndexList = schoolLevelIndexList.sort((a: number, b: number) => a - b);
+      // 0表示不限,只要包含不限，显示的时候只显示不限
+      if (schoolLevelIndexList.includes(0)) {
+        schoolLevelIndexList = [0];
+      }
+      schoolLevelIndexList?.forEach((item: number) => {
+        schoolLevelStrList.push(schoolLevelList[item].toString());
+      });
+      item.recruitTypeIndex = Number(item.recruitType);
+      item.schoolLevelStr = schoolLevelStrList.join(',');
+    });
+    console.log('[ dataList ] >', list);
+    pagingRef.value?.complete(list);
   }).catch(() => {
     pagingRef.value.complete(false);
   });
@@ -107,121 +141,82 @@ function queryList(pageNo: number, pageSize: number) {
   box-sizing: border-box;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
-  .search-wrapper {
-    padding: 32rpx 32rpx 0 32rpx;
-  }
-  .condition {
-    margin: 24rpx 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .condition-item {
-    width: 220rpx;
-    height: 60rpx;
-    border-radius: 8rpx;
-    background: #E8E1E4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 500;
-    font-size: 28rpx;
-    color: #232222;
-    line-height: 44rpx;
-  }
 }
 .list-wrapper {
   padding: 0 32rpx;
-  .school-item {
-    padding: 32rpx;
-    border-radius: 16rpx;
+  .report-item {
     background: #FFFFFF;
+    border-radius: 24rpx;
     margin-bottom: 24rpx;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
+    overflow: hidden;
+  }
+  .report-status {
+    height: 96rpx;
+    padding: 0 32rpx;
     box-sizing: border-box;
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      ::v-deep .u-iconfont {
-        color: #E94650 !important;
-      }
-      .top-left {
-        display: flex;
-      }
-      .btn-right {
-        padding: 12rpx 16rpx;
-        border-radius: 8rpx;
-        font-weight: 600;
-        font-size: 24rpx;
-        color: rgba(0,0,0,0.25);
-      }
-      .selected {
-        background: #F2F2F7;
-      }
-      .unselected {
-        background: rgba(252,227,229,0.4);
-      }
-      .school-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin-left: 24rpx;
-        height: 100rpx;
-      }
-      .school-name{
-        font-weight: 500;
-        font-size: 32rpx;
-        color: #000000;
-        line-height: 48rpx;
-      }
-      .tags {
-        display: flex;
-      }
-      .tag {
-        padding: 4rpx 8rpx;
-        border-radius: 4rpx;
-        font-size: 20rpx;
-        margin-right: 16rpx;
-      }
-      .tag-1 {
-        color: #E94650;
-        background-color: #FFECEB;
-      }
-      .tag-2 {
-        color: #4D59FF;
-        background-color: #EBEFFF;
-      }
-      .tag-3 {
-        color: #0EAEB4;
-        background-color: #E0F8F5;
-      }
+    display: flex;
+    align-items: center;
+    background: #FFC9C7;
+    .report-status-text {
+      font-size: 28rpx;
+      color: rgba(0,0,0,0.9);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-left: 16rpx;
     }
-    .bottom {
-      margin-top: 24rpx;
+    .icon {
+      flex-shrink: 0;
+    }
+  }
+  .report-date {
+    width: 128rpx;
+    height: 32rpx;
+    background: #FFECEB;
+    border-radius: 4rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 20rpx;
+    color: #E94650;
+    line-height: 24rpx;
+    margin-left: 20rpx;
+  }
+  .report-title {
+    font-weight: 500;
+    font-size: 32rpx;
+    color: #333333;
+    line-height: 38rpx;
+    display: flex;
+    align-items: center;
+  }
+  .report-cell {
+    background: rgba(246,245,248,0.65);
+    border-radius: 16rpx;
+    margin-top: 20rpx;
+    padding: 16px;
+  }
+  .report-cell-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24rpx;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .label {
       font-size: 24rpx;
-      line-height: 36rpx;
+      color: #BDBDBD;
+      line-height: 28rpx;
+      flex-shrink: 0;
     }
-    .detail-item {
-      margin: 4rpx 0;
-      .left {
-        flex: 6;
-        flex-shrink: 0;
-      }
-      .right {
-        flex: 4;
-        flex-shrink: 0;
-      }
-      .item {
-        display: flex;
-      }
-      .label {
-        color: #898989;
-        margin-right: 10rpx;
-      }
+    .value {
+      font-size: 24rpx;
+      color: #4F4F4F;
+      line-height: 28rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

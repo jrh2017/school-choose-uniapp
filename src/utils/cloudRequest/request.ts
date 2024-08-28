@@ -53,6 +53,10 @@ function request({ url, method, params, data, headers, contenType }: RequestDO) 
           });
         }
         else {
+          uni.showToast({
+            title: data.msg,
+            icon: 'none',
+          });
           reject(data);
         }
       },
