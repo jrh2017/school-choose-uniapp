@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-29 13:10:55
+ * @LastEditTime : 2024-08-29 13:36:33
  * @LastEditors  : jiangronghua
  * @Description  : 添加院校对比页面
 -->
@@ -91,9 +91,9 @@
         </view>
       </z-paging>
       <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
-        <up-button text="重置"></up-button>
+        <view class="reset-btn" @click="resetMajor">重置</view>
         <view class="major-popup h-700rpx">
-          <view class="subsection mt-80rpx">
+          <view class="subsection">
             <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650"
               @change="changeMajorType" />
           </view>
@@ -149,11 +149,13 @@ const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-
 const dataList = ref<any[]>([]); // 存放请求回来的数据
 const showMajor = ref(false); // 是否显示专业选择弹窗
 const list = reactive(['专业学位', '学术学位']); // 专业列表
-const showSelectMajor = ref({});
+const showSelectMajor = ref({
+  level3Code: '',
+  level3Name: '专业',
+});
 const currentSubIndex = ref(0); // 当前选择的子项
 const provincePopup = ref(false); // 省份筛选弹窗
 const levelPopup = ref(false); // 院校层次筛选弹窗
-const currentMajor = ref('专业'); // 当前选择的专业
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
 const provincePickerRef = ref(null);
@@ -285,6 +287,7 @@ const setSelectMajorLevel3 = (item: any) => {
   selectMajorObj.level3Name = item.level3Name;
   showSelectMajor.value = selectMajorObj;
   showMajor.value = false;
+  pagingRef.value.reload();
 };
 
 /**
@@ -320,8 +323,8 @@ function queryList(pageNo: number, pageSize: number) {
     province: (currentProvince.value === '全部' || currentProvince.value === '省份') ? '' : currentProvince.value,
     schoolName: keyword.value,
     start: (pageNo - 1) * 10,
-    level3Code: '025100',
-    level3Name: '金融',
+    level3Code: showSelectMajor.value.level3Name === '专业' ? '' : showSelectMajor.value.level3Code,
+    level3Name: showSelectMajor.value.level3Name === '专业' ? '' : showSelectMajor.value.level3Name,
   };
   pageSchoolMajor(params).then((res: any) => {
     pagingRef.value?.complete(res.data);
@@ -361,6 +364,26 @@ const getProvince = () => {
  */
 const openMajorModal = () => {
   showMajor.value = true;
+};
+
+/**
+ * 重置选中的专业
+ */
+const resetMajor = () => {
+  showMajor.value = false;
+  currentSubIndex.value = 0
+  selectMajorObj.level1Code = null;
+  selectMajorObj.level1Name = null;
+  selectMajorObj.level2Code = null;
+  selectMajorObj.level2Name = null;
+  selectMajorObj.level3Code = null;
+  selectMajorObj.level3Name = null;
+  searchMajorList.value = [];
+  showSelectMajor.value = {
+    level3Code: '',
+    level3Name: '专业',
+  };
+  pagingRef.value.reload();
 };
 
 watch(currentSubIndex, () => {
@@ -593,5 +616,14 @@ onLoad(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.reset-btn {
+  height: 80rpx;
+  width: 100rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #0597f9;
 }
 </style>
