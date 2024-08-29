@@ -1,29 +1,25 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-28 09:03:46
+ * @LastEditTime : 2024-08-29 13:10:55
  * @LastEditors  : jiangronghua
- * @Description  :
+ * @Description  : 添加院校对比页面
 -->
 <template>
   <view class="container">
     <view class="content">
       <z-paging ref="pagingRef" v-model="dataList" @query="queryList">
         <template #top>
-          <up-navbar
-            :placeholder="true"
-            bg-color="#F8EFF2"
-            title="添加对比"
-            autoBack
-          />
+          <up-navbar :placeholder="true" bg-color="#F8EFF2" title="添加对比" autoBack />
           <view class="search-wrapper">
             <view class="search-box">
-              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx" placeholder="请输入院校名称" />
+              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx"
+                placeholder="请输入院校名称" />
             </view>
             <view class="condition">
-              <view class="condition-item" @click="provincePopup = true">
-                <text class="mr-10rpx">
-                  {{ currentMajor }}
+              <view class="condition-item" @click="openMajorModal">
+                <text class="mr-10rpx major-text">
+                  {{ showSelectMajor.level3Name || '专业' }}
                 </text>
                 <up-icon name="arrow-down-fill" />
               </view>
@@ -46,7 +42,8 @@
           <view v-for="(item, index) in dataList" :key="index" class="school-item">
             <view class="top">
               <view class="top-left">
-                <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx" height="100rpx" />
+                <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx"
+                  height="100rpx" />
                 <view class="school-info">
                   <view class="school-name">
                     <text>{{ item.schoolName }}</text>
@@ -93,8 +90,50 @@
           </view>
         </view>
       </z-paging>
-      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="columns" keyName="label" @confirm="confirmProvince" @cancel="provincePopup = false" />
-      <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel" @cancel="levelPopup = false" />
+      <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
+        <up-button text="重置"></up-button>
+        <view class="major-popup h-700rpx">
+          <view class="subsection mt-80rpx">
+            <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650"
+              @change="changeMajorType" />
+          </view>
+          <view class="major-wrapper">
+            <view class="major-main">
+              <view class="level1">
+                <scroll-view style="height: 100%;" scroll-y="true">
+                  <view v-for="(item, index) in (searchMajorList[0] || [])" :key="index" class="major-item"
+                    :class="{ active: selectMajorObj.level1Code === item.level1Code }"
+                    @click="setSelectMajorLevel1(item)">
+                    {{ item.level1Name }}({{ item.level1Code }})
+                  </view>
+                </scroll-view>
+              </view>
+              <view class="level2">
+                <scroll-view style="height: 100%;" scroll-y="true">
+                  <view v-for="(item, index) in (searchMajorList[1] || [])" :key="index" class="major-item"
+                    :class="{ active: selectMajorObj.level2Code === item.level2Code }"
+                    @click="setSelectMajorLevel2(item)">
+                    {{ item.level2Name }}({{ item.level2Code }})
+                  </view>
+                </scroll-view>
+              </view>
+              <view class="level3">
+                <scroll-view style="height: 100%;" scroll-y="true">
+                  <view v-for="(item, index) in (searchMajorList[2] || [])" :key="index" class="major-item"
+                    :class="{ active: selectMajorObj.level3Code === item.level3Code }"
+                    @click="setSelectMajorLevel3(item)">
+                    {{ item.level3Name }}({{ item.level3Code }})
+                  </view>
+                </scroll-view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </up-popup>
+      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="columns" keyName="label"
+        @confirm="confirmProvince" @cancel="provincePopup = false" />
+      <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel"
+        @cancel="levelPopup = false" />
     </view>
   </view>
 </template>
@@ -102,20 +141,39 @@
 <script lang="ts" setup>
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
 import type { schoolVO } from '@/api/school/types';
-import { insertSchoolMajor, listProvince, pageSchoolMajor } from '@/api/compare';
+import { insertSchoolMajor, listProvince, pageSchoolMajor, majorCompareLevel1, majorCompareLevel2, majorCompareLevel3 } from '@/api/compare';
 
 const keyword = ref('');
 
 const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-paging组件的ref
 const dataList = ref<any[]>([]); // 存放请求回来的数据
+const showMajor = ref(false); // 是否显示专业选择弹窗
+const list = reactive(['专业学位', '学术学位']); // 专业列表
+const showSelectMajor = ref({});
+const currentSubIndex = ref(0); // 当前选择的子项
 const provincePopup = ref(false); // 省份筛选弹窗
 const levelPopup = ref(false); // 院校层次筛选弹窗
 const currentMajor = ref('专业'); // 当前选择的专业
 const currentProvince = ref('省份'); // 当前选择的省份
 const currentLevel = ref('院校水平'); // 当前选择的院校层次
 const provincePickerRef = ref(null);
+const searchMajorList = ref<any>([]);
 
 const columns = reactive([[]]);
+
+const selectMajorObj = reactive({
+  level1Code: null,
+  level1Name: null,
+  level2Code: null,
+  level2Name: null,
+  level3Code: null,
+  level3Name: null,
+});
+
+// 切换专业类型
+const changeMajorType = (index: number) => {
+  currentSubIndex.value = index;
+};
 
 const levels = reactive([[
   {
@@ -147,6 +205,87 @@ const levels = reactive([[
     id: 6,
   },
 ]]);
+
+
+/**
+ * 以下接口写的太挫了，三级专业分三个接口查，以下代码不知道怎么写
+ */
+const getInitMajorList = async () => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  await majorCompareLevel1({ degreeType }).then((res: any) => {
+    searchMajorList.value[0] = res;
+    selectMajorObj.level1Code = res[0].level1Code;
+    selectMajorObj.level1Name = res[0].level1Name;
+  });
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[0].length) {
+    const { level1Code } = searchMajorList.value[0][0];
+    await majorCompareLevel2({ degreeType, level1Code }).then((res: any) => {
+      searchMajorList.value[1] = res;
+      selectMajorObj.level2Code = res[0].level2Code;
+      selectMajorObj.level2Name = res[0].level2Name;
+    });
+  }
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[1].length) {
+    const { level2Code } = searchMajorList.value[1][0];
+    await majorCompareLevel3({ degreeType, level2Code }).then((res: any) => {
+      searchMajorList.value[2] = res;
+      selectMajorObj.level3Code = res[0].level3Code;
+      selectMajorObj.level3Name = res[0].level3Name;
+    });
+  }
+};
+
+/**
+ * 选择一级目录
+ */
+const setSelectMajorLevel1 = async (item: any) => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  selectMajorObj.level1Code = item.level1Code;
+  selectMajorObj.level1Name = item.level1Name;
+  searchMajorList.value[1] = [];
+  searchMajorList.value[2] = [];
+  await majorCompareLevel2({ degreeType, level1Code: item.level1Code }).then((res: any) => {
+    searchMajorList.value[1] = res;
+    selectMajorObj.level2Code = res[0].level2Code;
+    selectMajorObj.level2Name = res[0].level2Name;
+  });
+  // 如果存在二级专业，则请求二级专业列表
+  if (searchMajorList.value[1].length) {
+    const { level2Code } = searchMajorList.value[1][0];
+    await majorCompareLevel3({ degreeType, level2Code }).then((res: any) => {
+      searchMajorList.value[2] = res;
+      selectMajorObj.level3Code = res[0].level3Code;
+      selectMajorObj.level3Name = res[0].level3Name;
+    });
+  }
+};
+
+/**
+ * 选择二级目录
+ */
+const setSelectMajorLevel2 = async (item: any) => {
+  const degreeType = currentSubIndex.value === 0 ? 1 : 2;
+  selectMajorObj.level2Code = item.level2Code;
+  selectMajorObj.level2Name = item.level2Name;
+  searchMajorList.value[2] = [];
+  await majorCompareLevel3({ degreeType, level2Code: item.level2Code }).then((res: any) => {
+    searchMajorList.value[2] = res;
+    selectMajorObj.level3Code = res[0].level3Code;
+    selectMajorObj.level3Name = res[0].level3Name;
+  });
+};
+
+/**
+ * 选择三级目录
+ */
+const setSelectMajorLevel3 = (item: any) => {
+  selectMajorObj.level3Code = item.level3Code;
+  selectMajorObj.level3Name = item.level3Name;
+  showSelectMajor.value = selectMajorObj;
+  showMajor.value = false;
+};
 
 /**
  * 省份数据选中事件
@@ -196,21 +335,13 @@ function queryList(pageNo: number, pageSize: number) {
  */
 const addSchool = (item: schoolVO) => {
   insertSchoolMajor(item).then(() => {
+    uni.showToast({
+      title: '添加成功',
+      icon: 'none',
+      duration: 1000,
+    });
     uni.navigateBack();
   });
-  // uni.navigateBack({
-  //   success: () => {
-  //     uni.setStorageSync('intention', {
-  //       ...uni.getStorageSync('intention'),
-  //       school: item,
-  //     }); // 保存选择的院校信息 到本地缓存
-  //     uni.showToast({
-  //       title: '添加成功',
-  //       icon: 'none',
-  //       duration: 1000,
-  //     });
-  //   },
-  // });
 };
 
 /**
@@ -225,6 +356,25 @@ const getProvince = () => {
   });
 };
 
+/**
+ * 打开选专业弹窗
+ */
+const openMajorModal = () => {
+  showMajor.value = true;
+};
+
+watch(currentSubIndex, () => {
+  getInitMajorList();
+});
+
+watch(showMajor, (newVal) => {
+  if (newVal) {
+    if (searchMajorList.value && searchMajorList.value.length === 0) {
+      getInitMajorList();
+    }
+  }
+});
+
 onLoad(() => {
   getProvince();
 });
@@ -234,20 +384,24 @@ onLoad(() => {
 .container {
   flex: 1;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
+
   .search-wrapper {
     padding: 32rpx 32rpx 0 32rpx;
   }
+
   .condition {
     margin: 24rpx 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .condition-item {
     width: 220rpx;
     height: 60rpx;
@@ -262,8 +416,10 @@ onLoad(() => {
     line-height: 44rpx;
   }
 }
+
 .list-wrapper {
   padding: 0 32rpx;
+
   .school-item {
     padding: 32rpx;
     border-radius: 16rpx;
@@ -274,29 +430,36 @@ onLoad(() => {
     justify-content: space-between;
     width: 100%;
     box-sizing: border-box;
+
     .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       ::v-deep .u-iconfont {
         color: #E94650 !important;
       }
+
       .top-left {
         display: flex;
       }
+
       .btn-right {
         padding: 12rpx 16rpx;
         border-radius: 8rpx;
         font-weight: 600;
         font-size: 24rpx;
-        color: rgba(0,0,0,0.25);
+        color: rgba(0, 0, 0, 0.25);
       }
+
       .selected {
         background: #F2F2F7;
       }
+
       .unselected {
-        background: rgba(252,227,229,0.4);
+        background: rgba(252, 227, 229, 0.4);
       }
+
       .school-info {
         display: flex;
         flex-direction: column;
@@ -304,57 +467,131 @@ onLoad(() => {
         margin-left: 24rpx;
         height: 100rpx;
       }
-      .school-name{
+
+      .school-name {
         font-weight: 500;
         font-size: 32rpx;
         color: #000000;
         line-height: 48rpx;
       }
+
       .tags {
         display: flex;
       }
+
       .tag {
         padding: 4rpx 8rpx;
         border-radius: 4rpx;
         font-size: 20rpx;
         margin-right: 16rpx;
       }
+
       .tag-1 {
         color: #E94650;
         background-color: #FFECEB;
       }
+
       .tag-2 {
         color: #4D59FF;
         background-color: #EBEFFF;
       }
+
       .tag-3 {
         color: #0EAEB4;
         background-color: #E0F8F5;
       }
     }
+
     .bottom {
       margin-top: 24rpx;
       font-size: 24rpx;
       line-height: 36rpx;
     }
+
     .detail-item {
       margin: 4rpx 0;
+
       .left {
         flex: 6;
         flex-shrink: 0;
       }
+
       .right {
         flex: 4;
         flex-shrink: 0;
       }
+
       .item {
         display: flex;
       }
+
       .label {
         color: #898989;
         margin-right: 10rpx;
       }
     }
   }
+}
+
+.major-popup {
+  display: flex;
+  flex-direction: column;
+
+  .subsection {
+    padding: 0 20rpx;
+  }
+
+  .major-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+
+    .level1 {
+      flex: 3;
+      flex-shrink: 0;
+      background-color: #F2F2F7;
+    }
+
+    .level2 {
+      flex: 4;
+      flex-shrink: 0;
+      border-right: 2rpx solid #F2F2F7;
+    }
+
+    .level3 {
+      flex: 6;
+      flex-shrink: 0;
+    }
+  }
+
+  .major-main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+  }
+
+  .major-item {
+    padding: 14rpx;
+    font-size: 24rpx;
+    line-height: 36rpx;
+    min-height: 100rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .active {
+    font-weight: 500;
+    color: #E94650;
+  }
+}
+
+.major-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

@@ -1,8 +1,8 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-28 17:58:04
- * @LastEditTime : 2024-08-28 18:36:40
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-08-28 21:33:14
+ * @LastEditors  : jiangronghua
  * @Description  : 蒙层组件
  * @Remark       :
 -->
@@ -20,6 +20,7 @@
   </view>
 </template>
 <script setup lang="ts">
+import { getToken } from '@/utils/auth';
 const props = defineProps({
   isShowMask: {
     type: Boolean,
@@ -28,7 +29,16 @@ const props = defineProps({
 });
 const { isShowMask } = toRefs(props);
 const activationFn = () => {
-
+  if (!getToken()) {
+    uni.reLaunch({
+      url: '/pages/common/login/index'
+    })
+    return
+  } else {
+    uni.navigateTo({
+      url: '/pages/code/index'
+    })
+  }
 }
 </script>
 <style lang="scss" scoped>

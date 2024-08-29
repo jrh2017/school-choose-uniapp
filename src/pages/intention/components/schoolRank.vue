@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-24 13:11:56
- * @LastEditTime : 2024-07-24 20:36:56
+ * @LastEditTime : 2024-08-29 10:50:46
  * @LastEditors  : jiangronghua
  * @Description  : 学校排名
 -->
@@ -13,6 +13,12 @@
       </view>
       <view class="title" @click="changeSort">
         {{ title }}
+        <view class="sort-icons" :class="{ desc: !sort }">
+          <image class="w-22rpx h-22rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/caret-up.png"
+            mode="aspectFit" />
+          <image class="w-22rpx h-22rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/caret-down.png"
+            mode="aspectFit" />
+        </view>
       </view>
     </view>
     <view class="list">
@@ -20,10 +26,10 @@
         <scroll-view style="height: 100%;" scroll-y="true" :scroll-top="scrollTop" @scroll="onScroll">
           <view v-for="(item, index) in showList" :key="index" class="item">
             <view class="rank">
-              {{ item.rank }}
+              {{ item.number }}
             </view>
             <view class="name">
-              {{ item.name }}
+              {{ item.schoolName }}
             </view>
           </view>
         </scroll-view>
@@ -64,19 +70,32 @@ const scrollToTop = () => {
 };
 
 const changeSort = () => {
+  sort.value = !sort.value;
+  doSort()
+}
+const doSort = () => {
   const newList = [...list.value];
   newList.sort((a: any, b: any) => {
     if (sort.value) {
-      return b.rank - a.rank;
+      return a.number - b.number;
     }
     else {
-      return a.rank - b.rank;
+      return b.number - a.number;
     }
   });
   showList.value = newList;
   scrollToTop();
-  sort.value = !sort.value;
 };
+
+// 监听行数、列数变化
+watch(
+  () => props.list,
+  (val) => {
+    showList.value = val;
+    doSort()
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   showList.value = list.value;
@@ -88,11 +107,13 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
+
   .top {
     height: 80rpx;
     background-color: #F2F2F7;
     display: flex;
     align-items: center;
+
     .name {
       width: 110rpx;
       display: flex;
@@ -103,17 +124,23 @@ onMounted(() => {
       line-height: 32rpx;
       flex-shrink: 0;
     }
+
     .title {
       padding: 0 16rpx;
       font-weight: 500;
       font-size: 28rpx;
       color: #252525;
       line-height: 44rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
+
   .list {
     flex: 1;
     position: relative;
+
     .scrool-main {
       position: absolute;
       top: 0;
@@ -121,11 +148,13 @@ onMounted(() => {
       width: 100%;
       box-sizing: border-box;
     }
+
     .item {
       display: flex;
       height: 80rpx;
       align-items: center;
     }
+
     .rank {
       width: 110rpx;
       display: flex;
@@ -136,16 +165,33 @@ onMounted(() => {
       line-height: 32rpx;
       flex-shrink: 0;
     }
+
     .name {
       padding: 0 16rpx;
       font-weight: 500;
       font-size: 28rpx;
       color: #252525;
       line-height: 44rpx;
-      overflow:hidden;/*内容超出后隐藏*/
-      text-overflow:ellipsis;/*超出内容显示为省略号*/
-      white-space:nowrap;/*文本不进行换行*/
+      overflow: hidden;
+      /*内容超出后隐藏*/
+      text-overflow: ellipsis;
+      /*超出内容显示为省略号*/
+      white-space: nowrap;
+      /*文本不进行换行*/
     }
   }
+}
+
+.sort-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16rpx;
+  transform: rotate(180deg);
+}
+
+.desc {
+  transform: rotate(0deg);
 }
 </style>

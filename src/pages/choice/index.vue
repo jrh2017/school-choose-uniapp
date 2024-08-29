@@ -7,11 +7,7 @@
 -->
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#D8575D"
-      autoBack
-    />
+    <up-navbar :placeholder="true" bg-color="#D8575D" autoBack />
     <view class="page-title p-x-32rpx">
       <view class="text-44rpx c-#FFFFFF font-600 line-height-52rpx">
         轻松5步
@@ -28,25 +24,12 @@
         目标一志愿
       </view>
       <view class="form-main">
-        <up-form
-          ref="uFormRef"
-          :model="form"
-          :rules="rules"
-          label-width="150rpx"
-          :border-bottom="true"
-        >
+        <up-form ref="uFormRef" :model="form" :rules="rules" label-width="150rpx" :border-bottom="true">
           <view class="item-wrapper">
-            <up-form-item
-              label="目标专业:"
-              prop="major"
-              required
-              @click="openMajorModal"
-            >
+            <up-form-item label="目标专业:" prop="major" required @click="openMajorModal">
               <up-input v-model="form.major" placeholder="请选择目标专业" border="none" disabled disabledColor="#ffffff" />
               <template #right>
-                <up-icon
-                  name="arrow-right"
-                />
+                <up-icon name="arrow-right" />
               </template>
             </up-form-item>
           </view>
@@ -62,13 +45,16 @@
           <view class="item-wrapper">
             <up-form-item label="学习方式:" labelPosition="top" required>
               <view class="select-wrapper">
-                <view class="select-item" :class="{ active: recruitType.includes('0') }" @click="selectRecruitType('0')">
+                <view class="select-item" :class="{ active: recruitType.includes('0') }"
+                  @click="selectRecruitType('0')">
                   不限
                 </view>
-                <view class="select-item" :class="{ active: recruitType.includes('1') }" @click="selectRecruitType('1')">
+                <view class="select-item" :class="{ active: recruitType.includes('1') }"
+                  @click="selectRecruitType('1')">
                   全日制
                 </view>
-                <view class="select-item" :class="{ active: recruitType.includes('2') }" @click="selectRecruitType('2')">
+                <view class="select-item" :class="{ active: recruitType.includes('2') }"
+                  @click="selectRecruitType('2')">
                   非全日制
                 </view>
               </view>
@@ -77,19 +63,24 @@
           <view class="item-wrapper">
             <up-form-item label="院校水平:" labelPosition="top" required>
               <view class="select-wrapper">
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('0') }" @click="selectSchoolLevel('0')">
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('0') }"
+                  @click="selectSchoolLevel('0')">
                   不限
                 </view>
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('1') }" @click="selectSchoolLevel('1')">
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('1') }"
+                  @click="selectSchoolLevel('1')">
                   985
                 </view>
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('2') }" @click="selectSchoolLevel('2')">
+                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('2') }"
+                  @click="selectSchoolLevel('2')">
                   211
                 </view>
-                <view class="select-item" :class="{ active: schoolLevel.includes('3') }" @click="selectSchoolLevel('3')">
+                <view class="select-item" :class="{ active: schoolLevel.includes('3') }"
+                  @click="selectSchoolLevel('3')">
                   双一流
                 </view>
-                <view class="select-item" :class="{ active: schoolLevel.includes('4') }" @click="selectSchoolLevel('4')">
+                <view class="select-item" :class="{ active: schoolLevel.includes('4') }"
+                  @click="selectSchoolLevel('4')">
                   普通院校
                 </view>
                 <view class="select-item b-unset!" />
@@ -97,17 +88,11 @@
             </up-form-item>
           </view>
           <view class="item-wrapper">
-            <up-form-item
-              label="报考省份:"
-              prop="provinces"
-              required
-              @click="openProvincesModal"
-            >
-              <up-input v-model="form.provinces" placeholder="至少选择三个省份" border="none" disabled disabledColor="#ffffff" />
+            <up-form-item label="报考省份:" prop="provinces" required @click="openProvincesModal">
+              <up-input v-model="form.provinces" placeholder="至少选择三个省份" border="none" disabled
+                disabledColor="#ffffff" />
               <template #right>
-                <up-icon
-                  name="arrow-right"
-                />
+                <up-icon name="arrow-right" />
               </template>
             </up-form-item>
           </view>
@@ -115,12 +100,7 @@
       </view>
     </view>
     <view class="bottom-box">
-      <button
-        size="default"
-        type="warn"
-        class="btn-start"
-        @click="submitForm"
-      >
+      <button size="default" type="warn" class="btn-start" @click="submitForm">
         立即生成报告
       </button>
       <up-safe-bottom />
@@ -129,27 +109,31 @@
   <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
     <view class="major-popup h-700rpx">
       <view class="subsection mt-80rpx">
-        <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650" @change="changeMajorType" />
+        <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650"
+          @change="changeMajorType" />
       </view>
       <view class="major-wrapper">
         <view class="major-main">
           <view class="level1">
             <scroll-view style="height: 100%;" scroll-y="true">
-              <view v-for="(item, index) in (searchMajorList[0] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level1Code === item.level1Code }" @click="setSelectMajorLevel1(item)">
+              <view v-for="(item, index) in (searchMajorList[0] || [])" :key="index" class="major-item"
+                :class="{ active: selectMajorObj.level1Code === item.level1Code }" @click="setSelectMajorLevel1(item)">
                 {{ item.level1Name }}({{ item.level1Code }})
               </view>
             </scroll-view>
           </view>
           <view class="level2">
             <scroll-view style="height: 100%;" scroll-y="true">
-              <view v-for="(item, index) in (searchMajorList[1] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level2Code === item.level2Code }" @click="setSelectMajorLevel2(item)">
+              <view v-for="(item, index) in (searchMajorList[1] || [])" :key="index" class="major-item"
+                :class="{ active: selectMajorObj.level2Code === item.level2Code }" @click="setSelectMajorLevel2(item)">
                 {{ item.level2Name }}({{ item.level2Code }})
               </view>
             </scroll-view>
           </view>
           <view class="level3">
             <scroll-view style="height: 100%;" scroll-y="true">
-              <view v-for="(item, index) in (searchMajorList[2] || [])" :key="index" class="major-item" :class="{ active: selectMajorObj.level3Code === item.level3Code }" @click="setSelectMajorLevel3(item)">
+              <view v-for="(item, index) in (searchMajorList[2] || [])" :key="index" class="major-item"
+                :class="{ active: selectMajorObj.level3Code === item.level3Code }" @click="setSelectMajorLevel3(item)">
                 {{ item.level3Name }}({{ item.level3Code }})
               </view>
             </scroll-view>
@@ -158,7 +142,8 @@
       </view>
     </view>
   </up-popup>
-  <MultiplePicker :show="showMultiplePicker" :defaultIndex="selectProvincesData" :columns="columns" @confirm="confirmProvince" @cancel="showMultiplePicker = false" />
+  <MultiplePicker :show="showMultiplePicker" :defaultIndex="selectProvincesData" :columns="columns"
+    @confirm="confirmProvince" @cancel="showMultiplePicker = false" />
 </template>
 
 <script setup lang="ts">
@@ -421,23 +406,28 @@ onLoad(() => {
   display: flex;
   flex-direction: column;
 }
+
 .page-title {
   height: 330rpx;
-  background: linear-gradient( 180deg, #D8575D 0%, rgba(239,68,119,0.1) 100%);
+  background: linear-gradient(180deg, #D8575D 0%, rgba(239, 68, 119, 0.1) 100%);
 }
+
 .main {
   border-radius: 24rpx 24rpx 0rpx 0rpx;
   padding: 32rpx;
   box-sizing: border-box;
   margin-bottom: 160rpx;
+
   .item-wrapper {
     border-bottom: 2rpx solid #F2F2F7;
     padding: 16rpx 0;
   }
+
   .active {
     border-color: #E94650 !important;
     font-weight: 500;
     position: relative;
+
     &::after {
       content: "";
       position: absolute;
@@ -451,31 +441,38 @@ onLoad(() => {
     }
   }
 }
+
 .major-popup {
   display: flex;
   flex-direction: column;
+
   .subsection {
     padding: 0 20rpx;
   }
+
   .major-wrapper {
     flex: 1;
     position: relative;
     display: flex;
+
     .level1 {
       flex: 3;
       flex-shrink: 0;
       background-color: #F2F2F7;
     }
+
     .level2 {
       flex: 4;
       flex-shrink: 0;
       border-right: 2rpx solid #F2F2F7;
     }
+
     .level3 {
       flex: 6;
       flex-shrink: 0;
     }
   }
+
   .major-main {
     position: absolute;
     top: 0;
@@ -484,6 +481,7 @@ onLoad(() => {
     display: flex;
     width: 100%;
   }
+
   .major-item {
     padding: 14rpx;
     font-size: 24rpx;
@@ -493,17 +491,20 @@ onLoad(() => {
     display: flex;
     align-items: center;
   }
+
   .active {
     font-weight: 500;
     color: #E94650;
   }
 }
+
 .select-wrapper {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
   margin-top: 16rpx;
+
   .select-item {
     width: 212rpx;
     height: 112rpx;
@@ -513,9 +514,10 @@ onLoad(() => {
     justify-content: center;
     align-items: center;
     font-size: 32rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
   }
 }
+
 .bottom-box {
   position: fixed;
   left: 0;
@@ -525,10 +527,11 @@ onLoad(() => {
   box-sizing: border-box;
   background: #FFFFFF;
   z-index: 1000;
-  box-shadow: -10px 0 rgba(0,0,0,0.1);
+  box-shadow: -10px 0 rgba(0, 0, 0, 0.1);
+
   .btn-start {
     border-radius: 40rpx;
-    color:#ffffff;
+    color: #ffffff;
     height: 80rpx;
     display: flex;
     align-items: center;
