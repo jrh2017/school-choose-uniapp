@@ -1,7 +1,7 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-08-29 08:47:23
+ * @LastEditTime : 2024-09-01 11:11:32
  * @LastEditors  : jiangronghua
  * @Description  : 用户相关请求
  */
@@ -23,6 +23,7 @@ enum URL {
   getSchoolPost = '/school-major/get-school-post', // 查询院校详情
   schoolMajorDetail = '/school-major/get-school-major', // 查询院校专业详情
   schoolScoreStatis = '/school-major/list-school-score-statis', // 一志愿录取信息 / 成绩统计
+  chatMatriculationRecord = '/school-major/chart-matriculation-record',
   matriculationRecord = '/school-major/list-matriculation-record', // 一志愿录取名单
   interviewLine = '/school-major/list-score-line-school', // 复试线
   nationalLine = '/school-major/list-score-line-country', // 国家线
@@ -50,3 +51,4 @@ export const interviewLine = (params: any) => request({ url: URL.interviewLine, 
 export const nationalLine = (params: any) => request({ url: URL.nationalLine, method: 'GET', params });
 export const enrollPlan = (params: any) => request({ url: URL.enrollPlan, method: 'GET', params });
 export const schoolRanking = () => request({ url: URL.schoolRanking, method: 'GET' });
+export const chatMatriculationRecord = (params: any) => request({ url: URL.chatMatriculationRecord, method: 'GET', params });

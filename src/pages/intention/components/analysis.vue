@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-08-26 15:35:49
+ * @LastEditTime : 2024-09-01 13:17:28
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -9,7 +9,8 @@
   <view class="analysis">
     <view class="analysis-select">
       <view class="analysis-select-item-left">
-        <view v-for="(item, index) in itemList" :key="index" class="item" :class="{ active: currentIndex === index }" @click="recruitTypeChange(index, item.recruitType)">
+        <view v-for="(item, index) in itemList" :key="index" class="item" :class="{ active: currentIndex === index }"
+          @click="recruitTypeChange(index)">
           {{ item.name }}
         </view>
       </view>
@@ -41,9 +42,10 @@
               2022(人)
             </view>
           </view>
-          <view v-for="(item, index) in tableData" :key="index" class="tr" style="" :class="{ active: index % 2 === 1 }">
+          <view v-for="(item, index) in tableData" :key="index" class="tr" style=""
+            :class="{ active: index % 2 === 1 }">
             <view class="td">
-              {{ item.score }}
+              {{ item['segment'] }}
             </view>
             <view class="td">
               {{ item['2024'] }}
@@ -55,20 +57,6 @@
               {{ item['2022'] }}
             </view>
           </view>
-          <view class="tr">
-            <view class="td">
-              建议分
-            </view>
-            <view class="td">
-              332分
-            </view>
-            <view class="td">
-              335分
-            </view>
-            <view class="td">
-              336分
-            </view>
-          </view>
         </view>
       </view>
       <view class="title">
@@ -76,13 +64,14 @@
       </view>
       <view class="table-header">
         <view class="item-wrapper">
-          <view v-for="(item, index) in yearList" :key="index" class="item" :class="{ active: currentYearIndex === index }">
+          <view v-for="(item, index) in yearList" :key="index" class="item"
+            :class="{ active: currentYearIndex === item }" @click="changeYear(item)">
             {{ item }}
           </view>
         </view>
         <view class="num-wrapper">
           总录取人数:<text class="num">
-            5人
+            {{ tableData2.length }}人
           </text>
         </view>
       </view>
@@ -102,70 +91,66 @@
               复试成绩
             </view>
           </view>
-          <view v-for="(item, index) in tableData2" :key="index" class="tr" style="" :class="{ active: index % 2 === 1 }">
+          <view v-for="(item, index) in tableData2" :key="index" class="tr" style=""
+            :class="{ active: index % 2 === 1 }">
             <view class="td">
               {{ index + 1 }}
             </view>
             <view class="td">
-              {{ item.collage }}
+              {{ item.collegeName }}
             </view>
             <view class="td">
               {{ item.firstScore }}
             </view>
             <view class="td">
-              {{ item.secondScore }}
+              {{ item.retrialScore }}
             </view>
           </view>
         </view>
       </view>
     </view>
-    <up-picker :show="collegeShow" :columns="collegeColumns" keyName="collegeName" @confirm="confirmCollege" @cancel="collegeCancel" />
+    <up-picker ref="collegePickerRef" :show="collegeShow" :columns="collegeColumns" keyName="collegeName"
+      @confirm="confirmCollege" @cancel="collegeCancel" />
   </view>
 </template>
 
 <script setup lang="ts">
-import { useCollege } from '@/store/index';
+import { matriculationRecord, schoolScoreStatis, chatMatriculationRecord } from '@/api/collage';
+import { groupBy } from 'lodash-es';
 
 const props = defineProps({
-  scoreStatisDetail: {
+  majorDetail: {
     type: Object,
     default: () => ({}),
   },
-  collegeList: {
-    type: Array,
-    default: () => ([]),
+  level3Code: {
+    type: String,
+    default: '',
+  },
+  schoolId: {
+    type: String,
+    default: '',
   },
 });
-const emit = defineEmits(['getMatriculationRecordFn']);
-const collegeStore = useCollege();
+const collegePickerRef = ref(null);
+const recruitType = ref(1);
 const itemList = [{
   name: '全日制',
-  recruitType: '1',
+  recruitType: 1,
 }, {
   name: '非全日制',
-  recruitType: '2',
+  recruitType: 2,
 }];
 const currentIndex = ref(0);
+const majorDatail = ref<any>(null)
 const chart = ref();
-const yearList = reactive(['2024', '2023', '2022']); // 2024, 2023, 2022
-const currentYearIndex = ref(0);
+const yearList = reactive(['2024', '2023', '2022']);
+const currentYearIndex = ref('2024');
+const scoreStatisDetail = ref<any>({})
 
-const chartData = reactive({
-  categories: ['316-332', '332-348', '348-364', '364-380', '380-400'],
-  series: [
-    {
-      name: '2024年',
-      data: [35, 36, 31, 33, 13],
-    },
-    {
-      name: '2023年',
-      data: [18, 27, 21, 24, 6],
-    },
-    {
-      name: '2022年',
-      data: [18, 27, 21, 24, 6],
-    },
-  ],
+const chartData = ref({
+  categories: [],
+  series: [],
 });
 
 const opts = {
@@ -201,85 +186,153 @@ const opts = {
   },
 };
 
-const tableData = ref([{
-  score: '364-380',
-  2024: 180,
-  2023: 150,
-  2022: 120,
-}, {
-  score: '348-364',
-  2024: 180,
-  2023: 150,
-  2022: 120,
-}, {
-  score: '332-348',
-  2024: 180,
-  2023: 150,
-  2022: 120,
-}, {
-  score: '316-332',
-  2024: 180,
-  2023: 150,
-  2022: 120,
-}]);
+const tableData = ref([]);
 
-const tableData2 = ref([{
-  collage: '计算机科学与技术学院',
-  firstScore: 360,
-  secondScore: 365,
-}, {
-  collage: '计算机科学与技术学院',
-  firstScore: 360,
-  secondScore: 365,
-}, {
-  collage: '计算机科学与技术学院',
-  firstScore: 360,
-  secondScore: 365,
-}]);
-const { scoreStatisDetail, collegeList } = toRefs(props);
+const tableData2 = ref([]);
+const collegeList = ref<any[]>([])
 const collegeShow = ref(false);
-const collegeColumns = ref([]);
-const collegeItem = ref({
-  collegeName: '所有学院',
+const collegeColumns = ref<any[]>([[]]);
+const collegeItem = ref<any>({
+  collegeId: '',
+  collegeItem: '',
 });
 // 学院选择确认
 const confirmCollege = (item: any) => {
-  collegeStore.setCollegeItem(item);
   collegeItem.value = item;
   collegeShow.value = false;
+  reloadPageData()
 };
 // 学院选择取消
 const collegeCancel = () => {
   collegeShow.value = false;
 };
 // 切换全日制和非全日制
-const recruitTypeChange = (index: number, recruitType: string) => {
+const recruitTypeChange = (index: number) => {
   currentIndex.value = index;
-  collegeStore.setRecruitType(recruitType);
-  emit('getMatriculationRecordFn');
+  recruitType.value = itemList[index].recruitType;
+  getMatriculationRecordFn();
 };
-onMounted(() => {
-  chart.value = chartData;
-});
-watchEffect(() => {
-  collegeColumns.value = [[{ collegeName: '所有学院' }, ...collegeList.value]];
-});
+
+// 查录取与分数分布
+const getSchoolScoreStatisFn = () => {
+  schoolScoreStatis({
+    level3Code: props.level3Code,
+    schoolId: props.schoolId,
+  }).then((res: any) => {
+    scoreStatisDetail.value = res || {};
+  });
+};
+
+// 一志愿录取名单
+const getMatriculationRecordFn = () => {
+  matriculationRecord({
+    level3Code: props.level3Code,
+    schoolId: props.schoolId,
+    // collegeId: collegeItem.value.collegeId,
+    collegeId: '',
+    recruitType: recruitType.value,
+  }).then((res: any) => {
+    const response = res || [];
+    const groupList = groupBy(response, 'year');
+    scoreStatisDetail.value = groupList;
+    tableData2.value = scoreStatisDetail.value[currentYearIndex.value]
+  });
+};
+
+const setChartData = (data: any) => {
+  const categories = [];
+  let series = [];
+  const year2022 = [];
+  const year2023 = [];
+  const year2024 = [];
+  for (const item of data) {
+    if (item.segment !== '建议分') {
+      categories.push(item.segment);
+      year2022.push(item['2022']);
+      year2023.push(item['2023']);
+      year2024.push(item['2024']);
+    }
+  }
+  series = [{
+    name: '2024年',
+    data: year2024,
+  }, {
+    name: '2023年',
+    data: year2023,
+  }, {
+    name: '2022年',
+    data: year2022,
+  }]
+  chartData.value.categories = categories;
+  chartData.value.series = series;
+  chart.value = chartData.value;
+}
+
+// 获取一志愿录取与分数分布
+const getChatMatriculationRecord = () => {
+  chatMatriculationRecord({
+    level3Code: props.level3Code,
+    schoolId: props.schoolId,
+    collegeId: '',
+    recruitType: recruitType.value,
+  }).then((res: any) => {
+    tableData.value = res || [];
+    setChartData(res)
+  });
+};
+
+const changeYear = (year: string) => {
+  console.log(year, 'changeYear')
+  currentYearIndex.value = year;
+  tableData2.value = scoreStatisDetail.value[year]
+}
+
+
+watch(
+  () => props.majorDetail,
+  (val: any[]) => {
+    if (val && val.collegeList) {
+      majorDatail.value = val
+      collegeList.value = val.collegeList
+      setTimeout(() => {
+        collegePickerRef.value.setColumnValues(0, collegeList.value)
+        if (collegeList.value.length > 0) {
+          collegeItem.value = collegeList.value[0];
+        }
+        reloadPageData()
+      }, 200)
+    }
+  },
+  {
+    immediate: true
+  }
+)
+
+const reloadPageData = () => {
+  getChatMatriculationRecord()
+  getSchoolScoreStatisFn()
+  getMatriculationRecordFn()
+}
+
 </script>
 
 <style scoped lang="scss">
 .analysis {
   padding: 32rpx 0rpx;
 }
+
 .analysis-select {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   .analysis-select-item-left {
     width: 288rpx;
     height: 60rpx;
     display: flex;
     border-radius: 8rpx;
     overflow: hidden;
+
     .item {
       width: 144rpx;
       background: #F2F2F7;
@@ -287,11 +340,13 @@ watchEffect(() => {
       justify-content: center;
       align-items: center;
     }
+
     .active {
       color: #ffffff;
       background-color: #E94650;
     }
   }
+
   .analysis-select-item-right {
     width: 366rpx;
     height: 60rpx;
@@ -304,22 +359,26 @@ watchEffect(() => {
     align-items: center;
   }
 }
+
 .analysis-detail {
   .title {
     margin: 24rpx 0;
     font-weight: 500;
     font-size: 32rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 48rpx;
   }
+
   .table-header {
     .item-wrapper {
       display: flex;
     }
+
     .active {
       background: #FFECEB !important;
       color: #E94650 !important;
     }
+
     .item {
       width: 160rpx;
       height: 64rpx;
@@ -327,22 +386,25 @@ watchEffect(() => {
       background: #F2F2F7;
       font-weight: 500;
       font-size: 28rpx;
-      color: rgba(0,0,0,0.85);
+      color: rgba(0, 0, 0, 0.85);
       display: flex;
       justify-content: center;
       align-items: center;
       margin-right: 32rpx;
     }
+
     .num-wrapper {
       font-size: 24rpx;
-      color: rgba(0,0,0,0.45);
+      color: rgba(0, 0, 0, 0.45);
       margin: 24rpx 0;
+
       .num {
-        color: rgba(0,0,0,0.85);
+        color: rgba(0, 0, 0, 0.85);
       }
     }
   }
 }
+
 .table {
   width: 100%;
   border-radius: 8rpx;
