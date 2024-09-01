@@ -1,7 +1,7 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 08:34:04
- * @LastEditTime : 2024-08-27 16:04:13
+ * @LastEditTime : 2024-08-30 17:27:54
  * @LastEditors  : jiangronghua
  * @Description  : 择校相关api
  */
@@ -14,6 +14,7 @@ enum URL {
   reportProvinceList = '/select-school-report/list-province',
   reportCreate = '/select-school-report/create',
   reportList = '/select-school-report/page-school-report',
+  reportDetail = '/select-school-report/get-school-report'
 }
 
 export const reportListLevel1 = (params: any) => request({ url: URL.reportListLevel1, method: 'GET', params });
@@ -22,3 +23,4 @@ export const reportListLevel3 = (params: any) => request({ url: URL.reportListLe
 export const reportProvinceList = () => request({ url: URL.reportProvinceList, method: 'GET' });
 export const reportCreate = (data: any) => request({ url: URL.reportCreate, method: 'POST', data });
 export const reportList = (params: any) => request({ url: URL.reportList, method: 'GET', params });
+export const reportDetail = (params: any) => request({ url: URL.reportDetail, method: 'GET', params });

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-08-29 10:09:09
+ * @LastEditTime : 2024-08-29 13:42:27
  * @LastEditors  : jiangronghua
  * @Description  : 学校排行榜
 -->
@@ -79,9 +79,9 @@ const filterSchool = () => {
  */
 const getRankingList = async () => {
   const response: Array<any> = await schoolRanking() as unknown as Array<any>;
-  response?.map(item => {
-    item.number = Number(item.number)
-  })
+  // response?.map(item => {
+  //   item.number = Number(item.number)
+  // })
   schoolListAll.value = response
   filterSchool()
 };

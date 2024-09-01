@@ -10,17 +10,13 @@
     <view class="content">
       <z-paging ref="pagingRef" v-model="dataList" @query="queryList">
         <template #top>
-          <up-navbar
-            :placeholder="true"
-            bg-color="#F8EFF2"
-            title="我的报告"
-            autoBack
-          />
+          <up-navbar :placeholder="true" bg-color="#F8EFF2" title="我的报告" autoBack />
         </template>
         <view class="list-wrapper">
-          <view v-for="(item, index) in dataList" :key="index" class="report-item">
+          <view v-for="(item, index) in dataList" :key="index" class="report-item" @click="handleClick(item)">
             <view v-if="item.status === 2" class="report-status">
-              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/icon-warning.png" class="icon" width="44rpx" height="44rpx" />
+              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/icon-warning.png" class="icon"
+                width="44rpx" height="44rpx" />
               <view class="report-status-text">
                 生成失败：{{ item.failedReason }}
               </view>
@@ -130,26 +126,39 @@ function queryList(pageNo: number, pageSize: number) {
     pagingRef.value.complete(false);
   });
 }
+
+/**
+ * 点击跳转到报告详情页
+ */
+const handleClick = (item: any) => {
+  uni.navigateTo({
+    url: `/pages/user/report/detail?id=${item.id}`,
+  });
+}
 </script>
 
 <style scoped lang="scss">
 .container {
   flex: 1;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
 }
+
 .list-wrapper {
   padding: 0 32rpx;
+
   .report-item {
     background: #FFFFFF;
     border-radius: 24rpx;
     margin-bottom: 24rpx;
     overflow: hidden;
   }
+
   .report-status {
     height: 96rpx;
     padding: 0 32rpx;
@@ -157,18 +166,21 @@ function queryList(pageNo: number, pageSize: number) {
     display: flex;
     align-items: center;
     background: #FFC9C7;
+
     .report-status-text {
       font-size: 28rpx;
-      color: rgba(0,0,0,0.9);
+      color: rgba(0, 0, 0, 0.9);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       margin-left: 16rpx;
     }
+
     .icon {
       flex-shrink: 0;
     }
   }
+
   .report-date {
     width: 128rpx;
     height: 32rpx;
@@ -183,6 +195,7 @@ function queryList(pageNo: number, pageSize: number) {
     line-height: 24rpx;
     margin-left: 20rpx;
   }
+
   .report-title {
     font-weight: 500;
     font-size: 32rpx;
@@ -191,25 +204,30 @@ function queryList(pageNo: number, pageSize: number) {
     display: flex;
     align-items: center;
   }
+
   .report-cell {
-    background: rgba(246,245,248,0.65);
+    background: rgba(246, 245, 248, 0.65);
     border-radius: 16rpx;
     margin-top: 20rpx;
     padding: 16px;
   }
+
   .report-cell-line {
     display: flex;
     align-items: center;
     margin-bottom: 24rpx;
+
     &:last-child {
       margin-bottom: 0;
     }
+
     .label {
       font-size: 24rpx;
       color: #BDBDBD;
       line-height: 28rpx;
       flex-shrink: 0;
     }
+
     .value {
       font-size: 24rpx;
       color: #4F4F4F;

@@ -124,6 +124,11 @@
         "style": {
           "navigationStyle": "custom"
         }
+      }, {
+        "path": "report/detail",
+        "style": {
+          "navigationStyle": "custom"
+        }
       }]
     }
   ],

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-24 13:11:56
- * @LastEditTime : 2024-08-29 10:50:46
+ * @LastEditTime : 2024-08-29 13:42:50
  * @LastEditors  : jiangronghua
  * @Description  : 学校排名
 -->
@@ -77,10 +77,10 @@ const doSort = () => {
   const newList = [...list.value];
   newList.sort((a: any, b: any) => {
     if (sort.value) {
-      return a.number - b.number;
+      return a.id - b.id;
     }
     else {
-      return b.number - a.number;
+      return b.id - a.id;
     }
   });
   showList.value = newList;
