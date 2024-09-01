@@ -42,6 +42,13 @@
         <steps />
       </view>
     </view>
+    <view class="free-school-selection">
+      <up-transition :show="imgShow" :mode="'slide-right'">
+        <image class="img-wrapper" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/free-school-selection.png"
+          mode="scaleToFill" @click="show = true" />
+      </up-transition>
+    </view>
+    <FreeSchoolPop :show="show" @close="show = false" />
   </view>
 </template>
 
@@ -49,10 +56,11 @@
 import QuickStart from './components/quick-start.vue';
 import steps from './components/steps.vue';
 import { chartIntention } from '@/api/userinfo';
-
+import FreeSchoolPop from '@/components/free-school-selection/free-school-selection.vue'
 const chart = ref();
 const showConfig = ref(false); // 是否显示配置面板
-
+const imgShow = ref(false); // 是否显示免费学校选择图片
+const show = ref(false); // 是否显示二维码弹窗
 const chartData = reactive({
   categories: [],
   series: [
@@ -140,9 +148,11 @@ const toConfigPage = () => {
     url: '/pages/intention/detail/index',
   });
 };
-
 onShow(async () => {
   getChatData();
+});
+onUpdated(() => {
+  imgShow.value = true;
 });
 </script>
 
@@ -216,6 +226,51 @@ onShow(async () => {
     .right {
       font-size: 24rpx;
       color: rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+
+.free-school-selection {
+  position: fixed;
+  bottom: 100rpx;
+  right: 20rpx;
+  width: 160rpx;
+  height: 120rpx;
+
+  .img-wrapper {
+    width: 160rpx;
+    height: 120rpx;
+  }
+}
+
+.popup-box {
+  width: 686rpx;
+  height: 664rpx;
+  border-radius: 24rpx;
+
+  .popup-title {
+    height: 112rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 32rpx;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 48rpx;
+  }
+
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24rpx;
+
+    .text {
+      margin-top: 24rpx;
+      font-size: 28rpx;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 36rpx;
     }
   }
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-30 17:24:35
- * @LastEditTime : 2024-09-01 16:55:54
+ * @LastEditTime : 2024-09-01 17:29:36
  * @LastEditors  : chenyuchao
  * @Description  :
 -->
@@ -314,6 +314,7 @@
   </view>
 </template>
 <script setup lang="ts">
+import { useShare } from '@/hooks';
 import { reportDetail } from '@/api/choice';
 import { majorCollegeSave } from '@/api/userinfo';
 import {
@@ -530,6 +531,12 @@ const getMatriculationRecordFn = (schoolId: any, level3Code: any, collegeId: any
 onLoad((options: any) => {
   reportId.value = options!.id;
   getReoprtDetail();
+  // useShare({
+  //   title: '个人择校报告',
+  //   path: `/pages/user/report/detail?id=${reportId.value}`,
+  //   query: `id=${reportId.value}`,
+  //   imageUrl: '',
+  // })
 })
 </script>
 <style scoped lang="scss">

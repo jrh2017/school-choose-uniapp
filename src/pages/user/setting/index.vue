@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 15:08:43
- * @LastEditTime : 2024-08-28 21:23:01
- * @LastEditors  : jiangronghua
+ * @LastEditTime : 2024-09-01 17:50:39
+ * @LastEditors  : chenyuchao
  * @Description  :
 -->
 <template>
@@ -11,7 +11,7 @@
     <view class="content">
       <view class="m-y-20rpx border-rd-24rpx bg-white">
         <u-cell-group :border="false">
-          <u-cell icon="star" title="商务合作" is-link>
+          <u-cell icon="star" title="商务合作" is-link @click="show = true">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-06.png"
                 width="40rpx" height="40rpx" />
@@ -27,11 +27,14 @@
       </view>
       <up-button type="error" shape="circle" text="退出登录" class="mt-20rpx" @click="logout" />
     </view>
+    <FreeSchoolPop :show="show" @close="show = false" />
   </view>
 </template>
 
 <script setup lang="ts">
 import { clearToken } from '@/utils/auth';
+import FreeSchoolPop from '@/components/free-school-selection/free-school-selection.vue'
+const show = ref(false);
 
 const logout = () => {
   uni.showModal({

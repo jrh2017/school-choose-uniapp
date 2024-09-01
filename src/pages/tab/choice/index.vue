@@ -1,18 +1,13 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-08-27 14:24:50
- * @LastEditors  : jiangronghua
+ * @LastEditTime : 2024-09-01 17:47:21
+ * @LastEditors  : chenyuchao
  * @Description  : 择校页面
 -->
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#F8EFF2"
-      title="择校设置"
-      leftIcon=""
-    />
+    <up-navbar :placeholder="true" bg-color="#F8EFF2" title="择校设置" leftIcon="" />
     <view class="content">
       <view class="top">
         <view class="line-01">
@@ -35,12 +30,7 @@
             <text>专属保底院校</text>
           </view>
         </view>
-        <button
-          size="default"
-          type="default"
-          class="create-btn"
-          @click="toAddChoice"
-        >
+        <button size="default" type="default" class="create-btn" @click="toAddChoice">
           无限次生成
         </button>
       </view>
@@ -51,24 +41,13 @@
       </view>
       <up-safe-bottom />
     </view>
-    <up-popup :show="show" mode="center" :closeable="true" round="24rpx" @close="show = false">
-      <view class="popup-box">
-        <view class="popup-title">
-          深度择校
-        </view>
-        <view class="popup-content">
-          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/qrcode.png" mode="aspectFit" width="436rpx" height="436rpx" />
-          <text class="text">
-            长按识别二维码
-          </text>
-        </view>
-      </view>
-    </up-popup>
+    <FreeSchoolPop :show="show" @close="show = false" />
   </view>
 </template>
 
 <script lang="ts" setup>
 import { getToken } from '@/utils/auth';
+import FreeSchoolPop from '@/components/free-school-selection/free-school-selection.vue'
 
 const show = ref(false);
 
@@ -89,6 +68,7 @@ onShow(() => {
   display: flex;
   flex-direction: column;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;
@@ -98,6 +78,7 @@ onShow(() => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
   .top {
     width: 686rpx;
     height: 396rpx;
@@ -108,23 +89,27 @@ onShow(() => {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+
     .line-01 {
       font-weight: 600;
       font-size: 36rpx;
       color: #FFFFFF;
       line-height: 42rpx;
     }
+
     .line-02 {
       margin-top: 16rpx;
       font-size: 24rpx;
       color: #F2F2F2;
       line-height: 36rpx;
     }
+
     .list {
       margin-top: 40rpx;
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .item {
         flex: 1;
         height: 40rpx;
@@ -135,6 +120,7 @@ onShow(() => {
         line-height: 36rpx;
         align-items: center;
       }
+
       .circle {
         width: 16rpx;
         height: 16rpx;
@@ -143,12 +129,13 @@ onShow(() => {
         margin-right: 16rpx;
       }
     }
+
     .create-btn {
       width: 100%;
       height: 96rpx;
       margin-top: 38rpx;
-      background: linear-gradient( 180deg, rgba(255,255,255,0.8) 0%, #FFFFFF 100%);
-      box-shadow: 0rpx 8rpx 20rpx 0rpx rgba(233,76,88,0.25);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #FFFFFF 100%);
+      box-shadow: 0rpx 8rpx 20rpx 0rpx rgba(233, 76, 88, 0.25);
       border-radius: 48rpx;
       border: 2rpx solid #FFFFFF;
       font-weight: 600;
@@ -160,14 +147,16 @@ onShow(() => {
       align-items: center;
     }
   }
+
   .bottom-box {
     padding: 24rpx 64rpx;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
+
     .btn-start {
       border-radius: 40rpx;
-      color:#ffffff;
+      color: #ffffff;
       height: 80rpx;
       display: flex;
       align-items: center;
@@ -177,10 +166,12 @@ onShow(() => {
     }
   }
 }
+
 .popup-box {
   width: 686rpx;
   height: 664rpx;
   border-radius: 24rpx;
+
   .popup-title {
     height: 112rpx;
     display: flex;
@@ -188,19 +179,21 @@ onShow(() => {
     justify-content: center;
     font-weight: 600;
     font-size: 32rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 48rpx;
   }
+
   .popup-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 24rpx;
+
     .text {
       margin-top: 24rpx;
       font-size: 28rpx;
-      color: rgba(0,0,0,0.85);
+      color: rgba(0, 0, 0, 0.85);
       line-height: 36rpx;
     }
   }
