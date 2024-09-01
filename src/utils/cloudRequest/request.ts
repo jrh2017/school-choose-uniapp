@@ -9,6 +9,7 @@ interface RequestDO {
   data?: any
   headers?: any
   contenType?: string | null
+  hiddenMsg?: boolean | undefined
 }
 
 function objectToQueryString(obj: any) {
@@ -21,7 +22,7 @@ function objectToQueryString(obj: any) {
   }).join('&');
 }
 
-function request({ url, method, params, data, headers, contenType }: RequestDO) {
+function request({ url, method, params, data, headers, contenType, hiddenMsg }: RequestDO) {
   if (params) {
     url += `?${objectToQueryString(params)}`;
   }
@@ -53,10 +54,12 @@ function request({ url, method, params, data, headers, contenType }: RequestDO) 
           });
         }
         else {
-          uni.showToast({
-            title: data.msg,
-            icon: 'none',
-          });
+          if (!hiddenMsg) {
+            uni.showToast({
+              title: data.msg,
+              icon: 'none',
+            });
+          }
           reject(data);
         }
       },

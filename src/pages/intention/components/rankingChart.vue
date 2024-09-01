@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:28:30
- * @LastEditTime : 2024-07-20 19:30:09
+ * @LastEditTime : 2024-09-01 16:25:38
  * @LastEditors  : jiangronghua
  * @Description  : 排名组件
 -->
@@ -64,7 +64,7 @@ const opts = reactive({
 
 onMounted(() => {
   chart.value = chartData;
-});
+})
 </script>
 
 <style scoped lang="scss"></style>

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-01 13:17:28
+ * @LastEditTime : 2024-09-01 14:36:44
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -273,6 +273,7 @@ const getChatMatriculationRecord = () => {
   chatMatriculationRecord({
     level3Code: props.level3Code,
     schoolId: props.schoolId,
+    // collegeId: collegeItem.value.collegeId,
     collegeId: '',
     recruitType: recruitType.value,
   }).then((res: any) => {

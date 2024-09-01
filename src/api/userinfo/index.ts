@@ -1,7 +1,7 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-08-28 21:13:06
+ * @LastEditTime : 2024-09-01 16:06:52
  * @LastEditors  : jiangronghua
  * @Description  : 用户相关请求
  */
@@ -19,10 +19,11 @@ enum URL {
   intentionInformationListlevel2 = '/intention-information/list-level2',
   intentionInformationListlevel3 = '/intention-information/list-level3',
   intentionInformationSubmit = '/intention-information/submit',
+  isEditable = '/intention-information/is-editable'
 }
 
 export const login = (data: any) => request({ url: URL.login, method: 'POST', data });
-export const chartIntention = () => request({ url: URL.chartIntention, method: 'GET' });
+export const chartIntention = () => request({ url: URL.chartIntention, method: 'GET', hiddenMsg: true });
 export const pageSchool = (params: any) => request({ url: URL.pageSchool, method: 'GET', params });
 export const intentionInformationListlevel1 = (params: any) => request({ url: URL.intentionInformationListlevel1, method: 'GET', params });
 export const intentionInformationListlevel2 = (params: any) => request({ url: URL.intentionInformationListlevel2, method: 'GET', params });
@@ -32,3 +33,4 @@ export const majorCollegeSave = (data: any) => request({ url: URL.majorCollegeSa
 export const listMajorCollege = () => request({ url: URL.listMajorCollege, method: 'GET' });
 export const activeCode = () => request({ url: URL.activeCode, method: 'GET' });
 export const enableActiveCode = (params: any) => request({ url: URL.enableActiveCode, method: 'GET', params });
+export const isEditable = () => request({ url: URL.isEditable, method: 'GET', hiddenMsg: true });

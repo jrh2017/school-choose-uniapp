@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-07-20 21:31:14
+ * @LastEditTime : 2024-09-01 16:10:20
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -13,7 +13,8 @@
         <view class="school-name">
           <text>{{ schoolInfo.name }}</text>
           <view class="w-144rpx">
-            <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="schoolInfo.editAble" />
+            <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="disabeledBtn"
+              @click="showChangeIntentionModal" />
           </view>
         </view>
         <view class="tags">
@@ -63,11 +64,13 @@
 </template>
 
 <script setup lang="ts">
+import { isEditable } from '@/api/userinfo'
 const customStyle = {
   height: '44rpx',
   fontSize: '14rpx',
   border: 'none',
 };
+const disabeledBtn = ref(false);
 const schoolInfo = reactive({
   name: '上海交通大学',
   logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
@@ -80,6 +83,20 @@ const schoolInfo = reactive({
   tag3: 'A+',
   editAble: true,
 });
+
+const emit = defineEmits(['change']);
+
+const showChangeIntentionModal = () => {
+  emit('change', true);
+}
+
+onMounted(() => {
+  isEditable().then((res) => {
+    disabeledBtn.value = false;
+  }).catch(() => {
+    disabeledBtn.value = true;
+  });
+});
 </script>
 
 <style lang="scss" scoped>
@@ -87,13 +104,16 @@ const schoolInfo = reactive({
   padding: 32rpx;
   background-color: #ffffff;
   border-radius: 24rpx;
+
   .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .logo {
       flex-shrink: 0;
     }
+
     .right {
       flex: 1;
       margin-left: 24rpx;
@@ -102,32 +122,39 @@ const schoolInfo = reactive({
       flex-direction: column;
       justify-content: space-between;
     }
+
     .school-name {
       display: flex;
       justify-content: space-between;
     }
+
     .tags {
       display: flex;
     }
+
     .tag {
       padding: 4rpx 8rpx;
       border-radius: 4rpx;
       font-size: 20rpx;
       margin-right: 16rpx;
     }
+
     .tag-1 {
       color: #E94650;
       background-color: #FFECEB;
     }
+
     .tag-2 {
       color: #4D59FF;
       background-color: #EBEFFF;
     }
+
     .tag-3 {
       color: #0EAEB4;
       background-color: #E0F8F5;
     }
   }
+
   .bottom {
     margin-top: 24rpx;
     background-color: #F9F9FA;
@@ -136,19 +163,24 @@ const schoolInfo = reactive({
     font-size: 24rpx;
     line-height: 36rpx;
   }
+
   .detail-item {
     margin: 4rpx 0;
+
     .left {
       flex: 6;
       flex-shrink: 0;
     }
+
     .right {
       flex: 4;
       flex-shrink: 0;
     }
+
     .item {
       display: flex;
     }
+
     .label {
       color: #898989;
       margin-right: 10rpx;
