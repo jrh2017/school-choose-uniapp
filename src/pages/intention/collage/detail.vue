@@ -1,18 +1,13 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 19:23:54
- * @LastEditTime : 2024-08-28 09:13:59
+ * @LastEditTime : 2024-09-01 17:00:18
  * @LastEditors  : jiangronghua
  * @Description  : 院校详情页面
 -->
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#F8EFF2"
-      title="院校专业详情"
-      autoBack
-    />
+    <up-navbar :placeholder="true" bg-color="#F8EFF2" title="院校专业详情" autoBack />
     <School :majorDetail="majorDetail" :level3Code="level3Code" :schoolId="schoolId" />
   </view>
 </template>

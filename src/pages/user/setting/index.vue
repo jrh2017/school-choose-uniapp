@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 15:08:43
- * @LastEditTime : 2024-08-28 21:23:01
+ * @LastEditTime : 2024-09-01 17:23:33
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -17,7 +17,7 @@
                 width="40rpx" height="40rpx" />
             </template>
           </u-cell>
-          <u-cell icon="heart" title="隐私政策" is-link :border="false">
+          <u-cell icon="heart" title="隐私政策" is-link :border="false" @click="toPrivacy">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-07.png"
                 width="40rpx" height="40rpx" />
@@ -46,6 +46,10 @@ const logout = () => {
       }
     },
   });
+};
+
+const toPrivacy = () => {
+  uni.navigateTo({ url: '/pages/user/policy/index' });
 };
 </script>
 

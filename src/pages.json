@@ -129,6 +129,11 @@
         "style": {
           "navigationStyle": "custom"
         }
+      },{
+        "path": "policy/index",
+        "style": {
+          "navigationStyle": "custom"
+        }
       }]
     }
   ],

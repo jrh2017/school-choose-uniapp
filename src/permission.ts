@@ -14,6 +14,7 @@ const whiteList = [
   '/pages/intention/compare/list',
   '/pages/intention/compare/school',
   '/pages/intention/rank/index',
+  '/pages/user/policy/index'
 ];
 
 // 检查地址白名单

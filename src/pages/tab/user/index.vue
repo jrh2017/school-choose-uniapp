@@ -42,7 +42,7 @@
                 width="40rpx" height="40rpx" />
             </template>
           </u-cell>
-          <u-cell icon="heart" title="一起分销赚钱" is-link :border="false">
+          <u-cell icon="heart" title="一起分销赚钱" is-link :border="false" @click="toShare">
             <template #icon>
               <up-image class="mr-16rpx" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/user-04.png"
                 width="40rpx" height="40rpx" />
@@ -112,6 +112,15 @@ const toCode = () => {
     url: '/pages/code/index',
   });
 };
+
+const toShare = () => {
+  const linkUrl =
+    "https://mp.weixin.qq.com/s?__biz=MzkyODYwMzQ3NQ==&mid=2247483659&idx=1&sn=77afd5cdcc89efe45eef8657c99d22ee&chksm=c2170d37f5608421fa03b7faba0d66af1bb3d8e055ce088667de7f0f4eb348a61285ab200ab3#rd";
+  const params = encodeURIComponent(linkUrl);
+  wx.navigateTo({
+    url: `/pages/common/webview/index?url=${params}`,
+  });
+}
 </script>
 
 <style lang="scss" scoped>

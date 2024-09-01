@@ -1,14 +1,10 @@
 <template>
   <view class="container">
-    <up-navbar
-      :placeholder="true"
-      bg-color="#F8EFF2"
-      title=""
-      left-icon=""
-    />
+    <up-navbar :placeholder="true" bg-color="#F8EFF2" title="" left-icon="" />
     <view class="content">
       <view class="top">
-        <up-image class="edit-icon" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/logo.png" width="184rpx" height="184rpx" />
+        <up-image class="edit-icon" src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/logo.png" width="184rpx"
+          height="184rpx" />
         <view class="info">
           <text class="font-size-32rpx color-#000000 line-height-48rpx">
             小程序申请获得以下权限：
@@ -27,25 +23,17 @@
           >
             手机号一键登录
           </button> -->
-          <button
-            size="default" type="default"
-            class="login-btn"
-            hover-class="is-hover"
-            @click="getPhoneNumber"
-          >
+          <button size="default" type="default" class="login-btn" hover-class="is-hover" @click="getPhoneNumber">
             手机号一键登录
           </button>
         </view>
         <view class="agreement">
           <up-checkbox-group v-model="checkbox" activeColor="#E94650">
-            <up-checkbox
-              :customStyle="{ marginBottom: '8px' }"
-              name="agree"
-            >
+            <up-checkbox :customStyle="{ marginBottom: '8px' }" name="agree">
               <template #label>
                 <text class="color-#BDB9BB line-height-32rpx">
                   我已阅读并同意
-                  <text class="color-#E94650">
+                  <text class="color-#E94650" @click.stop="openUrl">
                     《用户协议与隐私条款》
                   </text>
                 </text>
@@ -54,7 +42,7 @@
           </up-checkbox-group>
         </view>
       </view>
-      <text class="contact">
+      <text class="contact" @click="toService">
         联系客服
       </text>
     </view>
@@ -75,9 +63,29 @@ const submit = () => {
   });
 };
 
+const openUrl = () => {
+  uni.navigateTo({ url: '/pages/user/policy/index' });
+};
+
 const getPhoneNumber = (e: any) => {
   submit();
 };
+
+const toService = () => {
+  console.log("toService");
+  wx.openCustomerServiceChat({
+    corpId: "wwec843afac46c76c2",
+    extInfo: {
+      url: "https://work.weixin.qq.com/kfid/kfccaa80616c6052be2",
+    },
+    success: function (res) {
+      console.log("res", res);
+    },
+    fail: function (res) {
+      console.log("res", res);
+    },
+  });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -88,6 +96,7 @@ const getPhoneNumber = (e: any) => {
   flex-direction: column;
   flex: 1;
 }
+
 .content {
   box-sizing: border-box;
   padding: 0 40rpx;
@@ -96,12 +105,14 @@ const getPhoneNumber = (e: any) => {
   align-items: center;
   justify-content: space-between;
   flex: 1;
+
   .top {
     margin-top: 100rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     .info {
       margin-top: 64rpx;
       display: flex;
@@ -109,11 +120,13 @@ const getPhoneNumber = (e: any) => {
       align-items: center;
       justify-content: center;
     }
+
     .btn {
       margin-top: 96rpx;
+
       .login-btn {
-        color:#ffffff;
-        background-color:#E94650;
+        color: #ffffff;
+        background-color: #E94650;
         border-color: #E94650;
         width: 558rpx;
         height: 108rpx;
@@ -127,11 +140,13 @@ const getPhoneNumber = (e: any) => {
         line-height: 48rpx;
       }
     }
+
     .agreement {
       margin-top: 98rpx;
       width: 100%;
     }
   }
+
   .contact {
     margin-bottom: 96rpx;
     font-size: 28rpx;
