@@ -1,14 +1,14 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:42:19
- * @LastEditTime : 2024-09-01 16:35:12
+ * @LastEditTime : 2024-09-02 22:49:18
  * @LastEditors  : jiangronghua
  * @Description  : 专业详情主页
 -->
 <template>
   <div class="major">
     <view class="top">
-      <baseinfo @change="changeMajor" />
+      <baseinfo v-bind="$attrs" @change="changeMajor" />
     </view>
     <view class="main">
       <view class="title">

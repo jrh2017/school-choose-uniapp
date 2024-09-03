@@ -1,17 +1,18 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-09-01 16:10:20
+ * @LastEditTime : 2024-09-02 22:50:22
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
   <view class="school-info">
     <view class="top">
-      <up-image class="logo" :src="schoolInfo.logo" width="96rpx" height="96rpx" />
+      <up-image class="logo" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${majorDetail.schoolId}.jpg`"
+        width="96rpx" height="96rpx" />
       <view class="right">
         <view class="school-name">
-          <text>{{ schoolInfo.name }}</text>
+          <text>{{ majorDetail.schoolName }}</text>
           <view class="w-144rpx">
             <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="disabeledBtn"
               @click="showChangeIntentionModal" />
@@ -19,13 +20,16 @@
         </view>
         <view class="tags">
           <view class="tag tag-1">
-            {{ schoolInfo.tag1 }}
+            {{ majorDetail.typeName }}
           </view>
-          <view v-for="(tag, index) in schoolInfo.tag2" :key="index" class="tag tag-2">
-            {{ tag }}
+          <view v-if="majorDetail.is985 === 1" class="tag tag-2">
+            985
           </view>
-          <view class="tag tag-3">
-            {{ schoolInfo.tag3 }}
+          <view v-if="majorDetail.is211 === 1" class="tag tag-2">
+            211
+          </view>
+          <view v-if="majorDetail.isZihuaxian === 1" class="tag tag-3">
+            A+
           </view>
         </view>
       </view>
@@ -36,13 +40,13 @@
           <view class="label">
             意向专业:
           </view>
-          <text>{{ schoolInfo.major }}</text>
+          <text>{{ intentionInfo.level3Name }}</text>
         </view>
         <view class="item right">
           <view class="label">
             专业代码:
           </view>
-          <text>{{ schoolInfo.majorCode }}</text>
+          <text>{{ intentionInfo.level3Code }}</text>
         </view>
       </view>
       <view class="detail-item flex justify-between">
@@ -50,13 +54,13 @@
           <view class="label">
             学位类型:
           </view>
-          <text>{{ schoolInfo.type }}</text>
+          <text>{{ majorDetail.degreeType }}</text>
         </view>
         <view class="item right">
           <view class="label">
             预估分数:
           </view>
-          <text>{{ schoolInfo.score }}分</text>
+          <text>{{ intentionInfo.assessScore }}分</text>
         </view>
       </view>
     </view>
@@ -65,6 +69,57 @@
 
 <script setup lang="ts">
 import { isEditable } from '@/api/userinfo'
+
+const props = defineProps({
+  intention: {
+    type: Object,
+    default: () => ({}),
+  },
+  majorDetail: {
+    type: Object,
+    default: () => ({}),
+  }
+});
+
+const intentionInfo = ref({
+  level3Name: '',
+  level3Code: '',
+  assessScore: 0,
+});
+
+const majorDetail = ref({
+  schoolName: '',
+  typeName: '',
+  is985: 0,
+  is211: 0,
+  isZihuaxian: 0,
+  degreeType: '',
+});
+
+watch(
+  () => props.intention,
+  (newVal) => {
+    intentionInfo.value = newVal;
+  },
+  {
+    immediate: true,
+  }
+)
+
+watch(
+  () => props.majorDetail,
+  (newVal) => {
+    if (newVal) {
+      majorDetail.value = newVal;
+    }
+  },
+  {
+    immediate: true,
+  }
+)
+
+
+
 const customStyle = {
   height: '44rpx',
   fontSize: '14rpx',
@@ -91,6 +146,7 @@ const showChangeIntentionModal = () => {
 }
 
 onMounted(() => {
+  console.log(intentionInfo.value, '----->2');
   isEditable().then((res) => {
     disabeledBtn.value = false;
   }).catch(() => {

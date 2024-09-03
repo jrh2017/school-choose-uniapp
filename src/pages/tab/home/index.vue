@@ -116,6 +116,8 @@ const opts = reactive({
 const getChatData = () => {
   chartIntention().then((res: any) => {
     const chartBase = res.chartBase.reverse()
+    chartData.categories = []
+    chartData.series[0].data = []
     chartBase?.forEach((item: any) => {
       chartData.categories.push(item.score)
       chartData.series[0].data.push(item.people)

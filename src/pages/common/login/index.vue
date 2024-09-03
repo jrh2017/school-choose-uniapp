@@ -14,18 +14,13 @@
           </text>
         </view>
         <view class="btn">
-          <!-- <button
-            size="default" type="default"
-            class="login-btn"
-            hover-class="is-hover"
-            open-type="getPhoneNumber"
-            @getphonenumber="getPhoneNumber"
-          >
-            手机号一键登录
-          </button> -->
-          <button size="default" type="default" class="login-btn" hover-class="is-hover" @click="getPhoneNumber">
+          <button size="default" type="default" class="login-btn" hover-class="is-hover" open-type="getPhoneNumber"
+            @getphonenumber="getPhoneNumber">
             手机号一键登录
           </button>
+          <!-- <button size="default" type="default" class="login-btn" hover-class="is-hover" @click="getPhoneNumber">
+            手机号一键登录
+          </button> -->
         </view>
         <view class="agreement">
           <up-checkbox-group v-model="checkbox" activeColor="#E94650">
@@ -51,7 +46,7 @@
 
 <script setup lang="ts">
 import { setToken } from '@/utils/auth';
-import { login } from '@/api/userinfo';
+import { login, login2 } from '@/api/userinfo';
 
 const checkbox = ref([]);
 
@@ -67,8 +62,14 @@ const openUrl = () => {
   uni.navigateTo({ url: '/pages/user/policy/index' });
 };
 
-const getPhoneNumber = (e: any) => {
-  submit();
+const getPhoneNumber = (event: any) => {
+  // submit();
+  const code = event.detail.code;
+  login2({ code }).then((res: any) => {
+    const { Authorization } = res;
+    setToken(Authorization);
+    uni.reLaunch({ url: '/pages/tab/home/index' });
+  });
 };
 
 const toService = () => {

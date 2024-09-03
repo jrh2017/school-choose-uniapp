@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-01 14:36:44
+ * @LastEditTime : 2024-09-02 23:29:01
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -24,7 +24,7 @@
         一志愿拟录取与分数分布
       </view>
       <view class="chart">
-        <qiun-data-charts type="column" :opts="opts" :chart-data="chart" />
+        <qiun-data-charts :canvas2d="true" type="column" :opts="opts" :chart-data="chart" />
       </view>
       <view class="ranking-table">
         <view class="table">
@@ -48,13 +48,13 @@
               {{ item['segment'] }}
             </view>
             <view class="td">
-              {{ item['2024'] }}
+              {{ item['2024'] || '-' }}
             </view>
             <view class="td">
-              {{ item['2023'] }}
+              {{ item['2023'] || '-' }}
             </view>
             <view class="td">
-              {{ item['2022'] }}
+              {{ item['2022'] || '-' }}
             </view>
           </view>
         </view>
@@ -228,8 +228,7 @@ const getMatriculationRecordFn = () => {
   matriculationRecord({
     level3Code: props.level3Code,
     schoolId: props.schoolId,
-    // collegeId: collegeItem.value.collegeId,
-    collegeId: '',
+    collegeId: collegeItem.value.collegeId,
     recruitType: recruitType.value,
   }).then((res: any) => {
     const response = res || [];
@@ -248,9 +247,9 @@ const setChartData = (data: any) => {
   for (const item of data) {
     if (item.segment !== '建议分') {
       categories.push(item.segment);
-      year2022.push(item['2022']);
-      year2023.push(item['2023']);
-      year2024.push(item['2024']);
+      year2022.push(item['2022'] || 0);
+      year2023.push(item['2023'] || 0);
+      year2024.push(item['2024'] || 0);
     }
   }
   series = [{
@@ -265,6 +264,7 @@ const setChartData = (data: any) => {
   }]
   chartData.value.categories = categories;
   chartData.value.series = series;
+  console.log(chartData.value, 'chartData.value')
   chart.value = chartData.value;
 }
 
@@ -273,8 +273,7 @@ const getChatMatriculationRecord = () => {
   chatMatriculationRecord({
     level3Code: props.level3Code,
     schoolId: props.schoolId,
-    // collegeId: collegeItem.value.collegeId,
-    collegeId: '',
+    collegeId: collegeItem.value.collegeId,
     recruitType: recruitType.value,
   }).then((res: any) => {
     tableData.value = res || [];
@@ -284,6 +283,7 @@ const getChatMatriculationRecord = () => {
 
 const changeYear = (year: string) => {
   console.log(year, 'changeYear')
+  console.log(scoreStatisDetail.value, 'changeYear')
   currentYearIndex.value = year;
   tableData2.value = scoreStatisDetail.value[year]
 }
@@ -293,6 +293,7 @@ watch(
   () => props.majorDetail,
   (val: any[]) => {
     if (val && val.collegeList) {
+      console.log(val, 'props.majorDetail')
       majorDatail.value = val
       collegeList.value = val.collegeList
       setTimeout(() => {
@@ -311,7 +312,7 @@ watch(
 
 const reloadPageData = () => {
   getChatMatriculationRecord()
-  getSchoolScoreStatisFn()
+  // getSchoolScoreStatisFn()
   getMatriculationRecordFn()
 }
 

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-08-29 13:36:33
+ * @LastEditTime : 2024-09-02 08:37:44
  * @LastEditors  : jiangronghua
  * @Description  : 添加院校对比页面
 -->
@@ -14,7 +14,7 @@
           <view class="search-wrapper">
             <view class="search-box">
               <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx"
-                placeholder="请输入院校名称" />
+                placeholder="请输入院校名称" @search="searchSchools" />
             </view>
             <view class="condition">
               <view class="condition-item" @click="openMajorModal">
@@ -385,6 +385,14 @@ const resetMajor = () => {
   };
   pagingRef.value.reload();
 };
+
+/**
+ * 搜索学校
+ */
+const searchSchools = () => {
+  console.log('searchSchools');
+  pagingRef.value.reload();
+}
 
 watch(currentSubIndex, () => {
   getInitMajorList();

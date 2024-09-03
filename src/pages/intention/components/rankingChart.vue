@@ -1,13 +1,13 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:28:30
- * @LastEditTime : 2024-09-01 16:25:38
+ * @LastEditTime : 2024-09-02 23:01:00
  * @LastEditors  : jiangronghua
  * @Description  : 排名组件
 -->
 <template>
   <view class="ranking">
-    <qiun-data-charts type="area" :opts="opts" :chart-data="chart" />
+    <qiun-data-charts :canvas2d="true" type="area" :opts="opts" :chart-data="chart" />
   </view>
 </template>
 

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-09-01 16:21:32
+ * @LastEditTime : 2024-09-02 22:42:40
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校详情页
 -->
@@ -14,10 +14,11 @@
           bgColor="#F1E9EC" @change="changeIndex" />
       </view>
       <template v-if="subIndex === 0">
-        <Major @change="show = true" />
+        <Major :majorDetail="currentMajorInfo" :intention="currentIntentionInfo" @change="show = true" />
       </template>
       <template v-if="subIndex === 1">
-        <School />
+        <School :majorDetail="currentMajorInfo" :level3Code="currentIntentionInfo.level3Code"
+          :schoolId="currentIntentionInfo.schoolId" />
       </template>
     </view>
     <view v-else class="empty">
@@ -117,13 +118,13 @@
 <script setup lang="ts">
 import Major from '../components/major.vue';
 import School from '../components/school.vue';
-
+import { schoolMajorDetail } from '@/api/collage';
 import {
-  chartIntention,
   intentionInformationListlevel1,
   intentionInformationListlevel2,
   intentionInformationListlevel3,
   intentionInformationSubmit,
+  getIntenionInfomation,
   pageSchool,
 } from '@/api/userinfo';
 
@@ -173,6 +174,8 @@ const list = reactive(['专业学位', '学术学位']); // 专业列表
 const currentSubIndex = ref(0); // 当前选择的子项
 const searchMajorList = ref<any>([]);
 const showSelectMajor = ref({});
+const currentIntentionInfo = ref(null); // 当前选择的专业信息
+const currentMajorInfo = ref(null); // 当前选择的专业信息
 
 const querySchoolList = () => {
   uni.showLoading({
@@ -330,19 +333,6 @@ const confirmModal = () => {
   });
 };
 
-/**
- * 获取图表信息
- */
-const getChatData = () => {
-  chartIntention().then((res: any) => {
-    ifSetConfig.value = true;
-  }).catch(() => {
-    // 没有配置的情况下显示输入配置的按钮
-    ifSetConfig.value = false;
-    show.value = true;
-  });
-};
-
 const changeIndex = (index: number) => {
   subIndex.value = index;
 };
@@ -383,6 +373,28 @@ watch(showMajor, (newVal) => {
   }
 });
 
+const getCurrentCollegeInfo = () => {
+  const { schoolId, level3Code } = currentIntentionInfo.value!;
+  schoolMajorDetail({ schoolId, level3Code }).then((res: any) => {
+    currentMajorInfo.value = res;
+    console.log(res, 'currentMajorInfo');
+  })
+}
+
+const getInentionDetail = () => {
+  getIntenionInfomation().then((res: any) => {
+    if (res) {
+      ifSetConfig.value = true;
+      currentIntentionInfo.value = res;
+      getCurrentCollegeInfo();
+    } else {
+      // 没有配置的情况下显示输入配置的按钮
+      ifSetConfig.value = false;
+      show.value = true;
+    }
+  })
+}
+
 watch(currentSubIndex, () => {
   getInitMajorList();
 });
@@ -391,8 +403,8 @@ const changeMajorType = (index: number) => {
   currentSubIndex.value = index;
 };
 
-onLoad((options: any) => {
-  getChatData();
+onLoad(() => {
+  getInentionDetail()
 });
 </script>
 
