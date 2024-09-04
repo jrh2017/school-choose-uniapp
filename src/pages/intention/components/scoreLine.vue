@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-08-28 18:35:50
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-09-04 08:10:00
+ * @LastEditors  : jiangronghua
  * @Description  : 国家线
 -->
 <template>
@@ -126,15 +126,13 @@ const getCurveFn = () => {
   });
   nationalLine({
     level3Code: props.level3Code,
+    schoolId: props.schoolId,
   }).then((res: any) => { // 国家线
-    const list: any = [{ name: '初试总成绩(A区)' }, { name: '初试总成绩(B区)' }, { name: '单科=100(A区)' }, { name: '单科=100(B区)' }, { name: '单科>100(A区)' }, { name: '单科>100(B区)' }];
+    const list: any = [{ name: '初试总成绩' }, { name: '单科=100' }, { name: '单科>100' }];
     res?.forEach((item: any) => {
-      list[0][item.year] = item.scoreTotalA;
-      list[1][item.year] = item.scoreTotalB;
-      list[2][item.year] = item.scoreSingle1A;
-      list[3][item.year] = item.scoreSingle1B;
-      list[4][item.year] = item.scoreSingle2A;
-      list[5][item.year] = item.scoreSingle2B;
+      list[0][item.year] = item.scoreTotal;
+      list[1][item.year] = item.scoreSingle1;
+      list[2][item.year] = item.scoreSingle2;
     });
     tableCountryData.value = list;
   });

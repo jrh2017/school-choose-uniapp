@@ -172,7 +172,7 @@
                   <view v-if="value.id" :class="[{ 'is-active': value.isActive }, 'icon-tips']"
                     @click="topUpFn(collegeIndex, index)"><up-icon name="arrow-upward"
                       :color="value.isActive ? '#E94650' : '#000000'" size="10"></up-icon>{{ value.isActive ? '已置顶' :
-                    '未置顶' }}</view>
+                        '未置顶' }}</view>
                   {{ value.collegeName }}
                 </view>
               </view>
@@ -311,10 +311,8 @@ const templateItem = ref<schoolItem>({
   schoolScoreStatisVOList: []
 })
 const getCompareData = () => {
-  console.log(ids.value, 'ids')
   majorCompare({ ids: ids.value }).then((res: any) => {
     schoolList.value = [...res, templateItem.value]
-    console.log(res, schoolList.value, '对比学校');
     let listRes = schoolList.value || [];
     let list: any = []
     listRes.forEach((item: any) => {
@@ -378,8 +376,6 @@ const getCompareData = () => {
       })
     })
     collegeYearList.value = newCyl
-    console.log(receiveList, 'collegeList')
-    console.log(newCyl, 'newCyl')
   });
 };
 // 置顶

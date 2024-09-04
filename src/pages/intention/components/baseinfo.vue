@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-09-02 22:50:22
+ * @LastEditTime : 2024-09-04 08:32:31
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -28,8 +28,8 @@
           <view v-if="majorDetail.is211 === 1" class="tag tag-2">
             211
           </view>
-          <view v-if="majorDetail.isZihuaxian === 1" class="tag tag-3">
-            A+
+          <view v-if="majorDetail.subjectRanking" class="tag tag-3">
+            {{ majorDetail.subjectRanking }}
           </view>
         </view>
       </view>
@@ -92,7 +92,7 @@ const majorDetail = ref({
   typeName: '',
   is985: 0,
   is211: 0,
-  isZihuaxian: 0,
+  subjectRanking: '',
   degreeType: '',
 });
 
@@ -126,18 +126,6 @@ const customStyle = {
   border: 'none',
 };
 const disabeledBtn = ref(false);
-const schoolInfo = reactive({
-  name: '上海交通大学',
-  logo: 'https://static.kaoyan.cn/image/logo/470_log.jpg',
-  major: '计算机科学与技术',
-  majorCode: '025872',
-  type: '学术学位',
-  score: 400,
-  tag1: '综合类',
-  tag2: ['985', '211'],
-  tag3: 'A+',
-  editAble: true,
-});
 
 const emit = defineEmits(['change']);
 
@@ -146,7 +134,6 @@ const showChangeIntentionModal = () => {
 }
 
 onMounted(() => {
-  console.log(intentionInfo.value, '----->2');
   isEditable().then((res) => {
     disabeledBtn.value = false;
   }).catch(() => {

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-21 10:11:26
- * @LastEditTime : 2024-08-26 20:38:52
+ * @LastEditTime : 2024-09-04 08:33:15
  * @LastEditors  : jiangronghua
  * @Description  : 院校库页面
 -->
@@ -10,15 +10,11 @@
     <view class="content">
       <z-paging ref="pagingRef" v-model="dataList" @query="queryList">
         <template #top>
-          <up-navbar
-            :placeholder="true"
-            bg-color="#F8EFF2"
-            :title="majorName"
-            autoBack
-          />
+          <up-navbar :placeholder="true" bg-color="#F8EFF2" :title="majorName" autoBack />
           <view class="search-wrapper">
             <view class="search-box">
-              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx" placeholder="请输入院校名称" @search="searchSchool()" />
+              <up-search v-model="keyword" shape="square" bgColor="#FFFFFF" :showAction="false" height="88rpx"
+                placeholder="请输入院校名称" @search="searchSchool()" />
             </view>
             <view class="condition">
               <view class="condition-item" @click="provincePopup = true">
@@ -39,7 +35,8 @@
         <view class="list-wrapper">
           <view v-for="(item, index) in dataList" :key="index" class="school-item" @click="toDetail(item)">
             <view class="left">
-              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx" height="100rpx" />
+              <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.id}.jpg`" width="100rpx"
+                height="100rpx" />
               <view class="school-info">
                 <view class="school-name">
                   <text>{{ item.schoolName }}</text>
@@ -54,14 +51,15 @@
                   <view v-if="item.is211 === 1" class="tag tag-2">
                     211
                   </view>
-                  <view v-if="item.isZihuaxian === 1" class="tag tag-3">
-                    A+
+                  <view v-if="item.subjectRanking" class="tag tag-3">
+                    {{ item.subjectRanking }}
                   </view>
                 </view>
               </view>
             </view>
             <view class="right">
-              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/location.png" width="22rpx" height="22rpx" />
+              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/location.png" width="22rpx"
+                height="22rpx" />
               <text class="area">
                 {{ item.provinceName }}({{ item.provinceArea }}区)
               </text>
@@ -70,8 +68,10 @@
           </view>
         </view>
       </z-paging>
-      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="provinces" @confirm="confirmProvince" @cancel="provincePopup = false" />
-      <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel" @cancel="levelPopup = false" />
+      <up-picker ref="provincePickerRef" :show="provincePopup" :columns="provinces" @confirm="confirmProvince"
+        @cancel="provincePopup = false" />
+      <up-picker :show="levelPopup" :columns="levels" keyName="label" @confirm="confirmLevel"
+        @cancel="levelPopup = false" />
     </view>
   </view>
 </template>
@@ -148,7 +148,6 @@ const getProvince = () => {
  */
 const toDetail = (item: schoolVO) => {
   const { id, schoolName } = item;
-  console.log('[ toDetail ] >', majorId.value);
   if (majorId.value) {
     uni.navigateTo({
       url: `/pages/intention/collage/detail?level3Code=${majorId.value}&schoolId=${id}`,
@@ -235,20 +234,24 @@ onLoad((options: any) => {
 .container {
   flex: 1;
 }
+
 .content {
   min-height: 1000rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8EFF2 0%, #F6F5F8 100%);
+
   .search-wrapper {
     padding: 32rpx 32rpx 0 32rpx;
   }
+
   .condition {
     margin: 24rpx 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .condition-item {
     width: 327rpx;
     height: 60rpx;
@@ -263,8 +266,10 @@ onLoad((options: any) => {
     line-height: 44rpx;
   }
 }
+
 .list-wrapper {
   padding: 0 32rpx;
+
   .school-item {
     padding: 32rpx;
     border-radius: 16rpx;
@@ -273,8 +278,10 @@ onLoad((options: any) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .left {
       display: flex;
+
       .school-info {
         flex: 1;
         display: flex;
@@ -284,38 +291,48 @@ onLoad((options: any) => {
         height: 100rpx;
         flex-shrink: 0;
       }
-      .school-name{
+
+      .school-name {
         width: 335rpx;
         font-weight: 500;
         font-size: 32rpx;
         color: #000000;
         line-height: 48rpx;
-        overflow:hidden;/*内容超出后隐藏*/
-        text-overflow:ellipsis;/*超出内容显示为省略号*/
-        white-space:nowrap;/*文本不进行换行*/
+        overflow: hidden;
+        /*内容超出后隐藏*/
+        text-overflow: ellipsis;
+        /*超出内容显示为省略号*/
+        white-space: nowrap;
+        /*文本不进行换行*/
       }
+
       .tags {
         display: flex;
       }
+
       .tag {
         padding: 4rpx 8rpx;
         border-radius: 4rpx;
         font-size: 20rpx;
         margin-right: 16rpx;
       }
+
       .tag-1 {
         color: #E94650;
         background-color: #FFECEB;
       }
+
       .tag-2 {
         color: #4D59FF;
         background-color: #EBEFFF;
       }
+
       .tag-3 {
         color: #0EAEB4;
         background-color: #E0F8F5;
       }
     }
+
     .right {
       display: flex;
       justify-content: flex-end;
@@ -324,6 +341,7 @@ onLoad((options: any) => {
       font-size: 20rpx;
       flex-shrink: 0;
     }
+
     .area {
       margin-left: 8rpx;
       margin-right: 26rpx;

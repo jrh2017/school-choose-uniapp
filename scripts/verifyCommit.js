@@ -9,7 +9,6 @@ const commitRE =
   /^(revert: )?(feat|fix|docs|dx|style|refactor|perf|test|workflow|build|ci|chore|types|wip|release)(\(.+\))?: .{1,50}/;
 
 if (!commitRE.test(msg)) {
-  console.log();
   console.error(
     `  ${pc.bgRed(pc.white(' ERROR '))} ${pc.red('Git提交信息不符合规范!')}\n\n${pc.green(
       '推荐使用命令 npm run cz 生成符合规范的Git提交信息',

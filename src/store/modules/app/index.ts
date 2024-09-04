@@ -4,11 +4,6 @@ import type { AppState } from './types';
 const useAppStore = defineStore('app', {
   state: (): AppState => ({
     systemInfo: {} as UniApp.GetSystemInfoResult,
-    collegeItem: {
-      collegeId: '',
-      collegeName: '',
-    }, // 学院信息
-    recruitType: '1', // 全日制，非全日制
   }),
   getters: {
     getSystemInfo(): UniApp.GetSystemInfoResult {
@@ -16,12 +11,6 @@ const useAppStore = defineStore('app', {
     },
   },
   actions: {
-    setCollegeItem(val: any) {
-      this.collegeItem = val;
-    },
-    setRecruitType(val: any) {
-      this.recruitType = val;
-    },
     setSystemInfo(info: UniApp.GetSystemInfoResult) {
       this.systemInfo = info;
     },
@@ -64,6 +53,9 @@ const useAppStore = defineStore('app', {
       });
     },
   },
+  persist: {
+    enabled: true,
+  }
 });
 
 export default useAppStore;

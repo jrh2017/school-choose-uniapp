@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 08:16:30
- * @LastEditTime : 2024-08-29 08:15:54
+ * @LastEditTime : 2024-09-04 08:33:34
  * @LastEditors  : jiangronghua
  * @Description  : 择校对比列表
 -->
@@ -54,8 +54,8 @@
                       <view v-if="school.is211 === 1" class="tag tag-2">
                         211
                       </view>
-                      <view v-if="school.isZihuaxian === 1" class="tag tag-3">
-                        A+
+                      <view v-if="school.subjectRanking" class="tag tag-3">
+                        {{ school.subjectRanking }}
                       </view>
                     </view>
                   </view>
@@ -188,7 +188,6 @@ const addSchool = () => {
  */
 const getCompareList = () => {
   listSchoolMajor().then((res) => {
-    console.log(res);
     schoolList.value = res;
   });
 };

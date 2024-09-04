@@ -11,10 +11,15 @@ import { clearToken, setToken } from '@/utils/auth';
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    user_id: '',
-    user_name: '江阳小道',
+    activeCode: '',
     avatar: '',
-    token: '',
+    code: '',
+    id: 0,
+    mobile: '',
+    nickname: '江阳小道',
+    openid: '',
+    registerTime: '',
+    status: 0,
   }),
   getters: {
     userInfo(state: UserState): UserState {
@@ -77,6 +82,9 @@ const useUserStore = defineStore('user', {
       });
     },
   },
+  persist: {
+    enabled: true,
+  }
 });
 
 export default useUserStore;

@@ -1,18 +1,20 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-08-28 09:24:22
+ * @LastEditTime : 2024-09-04 08:17:44
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
   <view class="school-info">
     <view class="top">
-      <up-image class="logo" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${schoolInfo.schoolId}.jpg`" width="96rpx" height="96rpx" />
+      <up-image class="logo" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${schoolInfo.schoolId}.jpg`"
+        width="96rpx" height="96rpx" />
       <view class="right">
         <view class="school-name">
           <text>{{ schoolInfo.schoolName }}</text>
-          <up-image class="edit-icon" :src="schoolInfo.collected === 1 ? star : unstar" width="40rpx" height="40rpx" @click="changeCollecte" />
+          <up-image class="edit-icon" :src="schoolInfo.collected === 1 ? star : unstar" width="40rpx" height="40rpx"
+            @click="changeCollecte" />
         </view>
         <view class="tags">
           <view class="tag tag-1">
@@ -27,8 +29,8 @@
           <view v-if="schoolInfo.is211 === 1" class="tag tag-2">
             211
           </view>
-          <view v-if="schoolInfo.isZihuaxian === 1" class="tag tag-3">
-            A+
+          <view v-if="schoolInfo.subjectRanking" class="tag tag-3">
+            {{ schoolInfo.subjectRanking }}
           </view>
         </view>
       </view>
@@ -108,13 +110,16 @@ watchEffect(() => {
   padding: 32rpx;
   background-color: #ffffff;
   border-radius: 24rpx;
+
   .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .logo {
       flex-shrink: 0;
     }
+
     .right {
       flex: 1;
       margin-left: 24rpx;
@@ -123,32 +128,39 @@ watchEffect(() => {
       flex-direction: column;
       justify-content: space-between;
     }
+
     .school-name {
       display: flex;
       justify-content: space-between;
     }
+
     .tags {
       display: flex;
     }
+
     .tag {
       padding: 4rpx 8rpx;
       border-radius: 4rpx;
       font-size: 20rpx;
       margin-right: 16rpx;
     }
+
     .tag-1 {
       color: #E94650;
       background-color: #FFECEB;
     }
+
     .tag-2 {
       color: #4D59FF;
       background-color: #EBEFFF;
     }
+
     .tag-3 {
       color: #0EAEB4;
       background-color: #E0F8F5;
     }
   }
+
   .bottom {
     margin-top: 24rpx;
     background-color: #F9F9FA;
@@ -157,19 +169,24 @@ watchEffect(() => {
     font-size: 24rpx;
     line-height: 36rpx;
   }
+
   .detail-item {
     margin: 4rpx 0;
+
     .left {
       flex: 6;
       flex-shrink: 0;
     }
+
     .right {
       flex: 4;
       flex-shrink: 0;
     }
+
     .item {
       display: flex;
     }
+
     .label {
       color: #898989;
       margin-right: 10rpx;

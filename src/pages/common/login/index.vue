@@ -14,13 +14,13 @@
           </text>
         </view>
         <view class="btn">
-          <button size="default" type="default" class="login-btn" hover-class="is-hover" open-type="getPhoneNumber"
-            @getphonenumber="getPhoneNumber">
+          <button v-if="checkbox.length > 0" size="default" type="default" class="login-btn" hover-class="is-hover"
+            open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
             手机号一键登录
           </button>
-          <!-- <button size="default" type="default" class="login-btn" hover-class="is-hover" @click="getPhoneNumber">
+          <button v-else size="default" type="default" class="login-btn" hover-class="is-hover" @click="showToastMsg">
             手机号一键登录
-          </button> -->
+          </button>
         </view>
         <view class="agreement">
           <up-checkbox-group v-model="checkbox" activeColor="#E94650">
@@ -46,10 +46,13 @@
 
 <script setup lang="ts">
 import { setToken } from '@/utils/auth';
-import { login, login2 } from '@/api/userinfo';
+import { login, login2, memberInfo } from '@/api/userinfo';
+import type { UserState } from '@/store/modules/user/types';
+import { useUserStore } from '@/store';
 
 const checkbox = ref([]);
-
+const userStore = useUserStore();
+// openid直接登录方法
 const submit = () => {
   login({}).then((res: any) => {
     const { Authorization } = res;
@@ -62,13 +65,31 @@ const openUrl = () => {
   uni.navigateTo({ url: '/pages/user/policy/index' });
 };
 
+const showToastMsg = () => {
+  uni.showToast({
+    title: '请先同意用户协议与隐私条款',
+    icon: 'none',
+    duration: 2000,
+  });
+};
+
 const getPhoneNumber = (event: any) => {
   // submit();
   const code = event.detail.code;
-  login2({ code }).then((res: any) => {
-    const { Authorization } = res;
-    setToken(Authorization);
-    uni.reLaunch({ url: '/pages/tab/home/index' });
+  login2({ code }).then(async (res: any) => {
+    try {
+      const { Authorization } = res;
+      setToken(Authorization);
+      const userinfo: UserState = await memberInfo()
+      userStore.setInfo(userinfo)
+      uni.reLaunch({ url: '/pages/tab/home/index' });
+    } catch (error) {
+      uni.showToast({
+        title: '登录失败，请稍后再试',
+        icon: 'none',
+        duration: 2000,
+      });
+    }
   });
 };
 

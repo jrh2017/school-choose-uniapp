@@ -1,9 +1,14 @@
 export type RoleType = '' | '*' | 'user';
 export interface UserState {
-  user_id?: string
-  user_name?: string
+  activeCode?: string
+  nickname?: string
   avatar?: string
-  token?: string
+  code?: string,
+  id?: number,
+  mobile?: string,
+  openid?: string,
+  registerTime?: string,
+  status?: number,
 }
 
 export type providerType =

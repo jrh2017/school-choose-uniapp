@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-08-28 17:08:21
+ * @LastEditTime : 2024-09-04 08:30:36
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
@@ -29,8 +29,8 @@
                   <view v-if="item.is211 === 1" class="tag tag-2">
                     211
                   </view>
-                  <view v-if="item.isZihuaxian === 1" class="tag tag-3">
-                    A+
+                  <view v-if="item.subjectRanking" class="tag tag-3">
+                    {{ item.subjectRanking }}
                   </view>
                 </view>
               </view>

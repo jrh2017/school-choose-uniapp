@@ -9,10 +9,10 @@
         </view>
         <view class="h-128rpx flex flex-1 flex-col flex-justify-between">
           <view class="font-weight-bold pb-20rpx font-size-40rpx color-#252424">
-            {{ memberDetailInfo.code }}
+            {{ code }}
           </view>
-          <view class="font-size-28rpx color-#888486" @click="toCopy">
-            手机号:{{ memberDetailInfo.mobile }}
+          <view class="font-size-28rpx color-#888486">
+            手机号:{{ mobile }}
           </view>
         </view>
       </view>
@@ -67,12 +67,12 @@
 
 <script setup lang="ts">
 import { useClipboard } from '@/hooks';
-import { memberInfo } from '@/api/userinfo';
+import { useUserStore } from '@/store';
 
 const { setClipboardData, getClipboardData } = useClipboard();
+const userStore = useUserStore();
 
-const memberDetailInfo = ref<any>({})
-
+const { code, mobile } = storeToRefs(userStore)
 // 复制
 const toCopy = async () => {
   await setClipboardData({ data: '1234567890' });
@@ -124,19 +124,6 @@ const toShare = () => {
     url: `/pages/common/webview/index?url=${params}`,
   });
 }
-
-/**
- * 获取用户信息
- */
-const getMemberInfo = () => {
-  memberInfo().then((res) => {
-    memberDetailInfo.value = res
-  });
-}
-
-onLoad(() => {
-  getMemberInfo()
-})
 </script>
 
 <style lang="scss" scoped>

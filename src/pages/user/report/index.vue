@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 15:28:59
- * @LastEditTime : 2024-08-28 08:48:31
+ * @LastEditTime : 2024-09-04 08:34:23
  * @LastEditors  : jiangronghua
  * @Description  : 我的报告列表页面
 -->
@@ -120,7 +120,6 @@ function queryList(pageNo: number, pageSize: number) {
       item.recruitTypeIndex = Number(item.recruitType);
       item.schoolLevelStr = schoolLevelStrList.join(',');
     });
-    console.log('[ dataList ] >', list);
     pagingRef.value?.complete(list);
   }).catch(() => {
     pagingRef.value.complete(false);

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-09-02 08:37:44
+ * @LastEditTime : 2024-09-04 08:33:39
  * @LastEditors  : jiangronghua
  * @Description  : 添加院校对比页面
 -->
@@ -58,8 +58,8 @@
                     <view v-if="item.is211 === 1" class="tag tag-2">
                       211
                     </view>
-                    <view v-if="item.isZihuaxian === 1" class="tag tag-3">
-                      A+
+                    <view v-if="item.subjectRanking" class="tag tag-3">
+                      {{ item.subjectRanking }}
                     </view>
                   </view>
                 </view>
@@ -390,7 +390,6 @@ const resetMajor = () => {
  * 搜索学校
  */
 const searchSchools = () => {
-  console.log('searchSchools');
   pagingRef.value.reload();
 }
 

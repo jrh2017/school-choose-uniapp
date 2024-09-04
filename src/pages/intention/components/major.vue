@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:42:19
- * @LastEditTime : 2024-09-02 22:49:18
+ * @LastEditTime : 2024-09-04 08:43:52
  * @LastEditors  : jiangronghua
  * @Description  : 专业详情主页
 -->
@@ -31,7 +31,7 @@
         24届院校录取排名
       </view>
       <view class="content">
-        <ranking :type="1" />
+        <ranking :type="2" />
       </view>
       <view class="title">
         意向院校<text class="sub-title">

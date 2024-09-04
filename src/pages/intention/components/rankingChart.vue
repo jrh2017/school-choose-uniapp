@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:28:30
- * @LastEditTime : 2024-09-02 23:01:00
+ * @LastEditTime : 2024-09-04 08:50:17
  * @LastEditors  : jiangronghua
  * @Description  : 排名组件
 -->
@@ -12,13 +12,20 @@
 </template>
 
 <script setup lang="ts">
+import { chartIntention, chartIntentionSchool } from '@/api/userinfo';
+const props = defineProps({
+  type: {
+    type: Number,
+    default: 1,
+  }
+});
 const chart = ref();
 const chartData = reactive({
-  categories: ['2018', '2019', '2020', '2021', '2022', '202'],
+  categories: [],
   series: [
     {
-      name: '成交量A',
-      data: [35, 8, 25, 37, 4, 20],
+      name: '录取人数',
+      data: [],
     },
   ],
 });
@@ -62,8 +69,40 @@ const opts = reactive({
   },
 });
 
+const getIntentionData = () => {
+  chartIntention().then((res: any) => {
+    const chartBase = res.chartBase.reverse()
+    chartData.categories = []
+    chartData.series[0].data = []
+    chartBase?.forEach((item: any) => {
+      chartData.categories.push(item.score)
+      chartData.series[0].data.push(item.people)
+    })
+    chart.value = chartData;
+  })
+}
+
+const getIntentionSchoolData = () => {
+  chartIntentionSchool().then((res: any) => {
+    const chartBase = res.chartBase.reverse()
+    chartData.categories = []
+    chartData.series[0].data = []
+    chartBase?.forEach((item: any) => {
+      chartData.categories.push(item.score)
+      chartData.series[0].data.push(item.people)
+    })
+    chart.value = chartData;
+  })
+}
+
 onMounted(() => {
-  chart.value = chartData;
+  const type = props.type;
+  if (type === 1) {
+    getIntentionData();
+  }
+  if (type === 2) {
+    getIntentionSchoolData()
+  }
 })
 </script>
 

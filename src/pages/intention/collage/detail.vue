@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-22 19:23:54
- * @LastEditTime : 2024-09-01 17:00:18
+ * @LastEditTime : 2024-09-04 08:33:09
  * @LastEditors  : jiangronghua
  * @Description  : 院校详情页面
 -->
@@ -26,7 +26,6 @@ const getScoolDetailFn = () => {
     level3Code: level3Code.value,
     schoolId: schoolId.value,
   }).then((res: any) => {
-    console.log(res, 'res');
     majorDetail.value = res || {};
   });
 };
