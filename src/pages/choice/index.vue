@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 08:02:58
- * @LastEditTime : 2024-08-27 16:20:52
+ * @LastEditTime : 2024-09-04 13:23:20
  * @LastEditors  : jiangronghua
  * @Description  : 择校录入页面
 -->
@@ -19,87 +19,89 @@
         冲刺院校*3 / 稳妥院校*3 / 保底院校*3
       </view>
     </view>
-    <view class="main mt-[-130rpx] min-h-800rpx bg-#FFFFFF">
-      <view class="text-40rpx c-#000000 font-500 line-height-40rpx">
-        目标一志愿
-      </view>
-      <view class="form-main">
-        <up-form ref="uFormRef" :model="form" :rules="rules" label-width="150rpx" :border-bottom="true">
-          <view class="item-wrapper">
-            <up-form-item label="目标专业:" prop="major" required @click="openMajorModal">
-              <up-input v-model="form.major" placeholder="请选择目标专业" border="none" disabled disabledColor="#ffffff" />
-              <template #right>
-                <up-icon name="arrow-right" />
-              </template>
-            </up-form-item>
-          </view>
-          <view class="item-wrapper">
-            <up-form-item label="预估分数:" prop="score" required>
-              <up-input v-model="form.score" type="number" placeholder="请选输入预估分数">
-                <template #suffix>
-                  <text>分</text>
+    <maskLayer :isShowMask="status !== 2">
+      <view class="main mt-[-130rpx] min-h-800rpx bg-#FFFFFF">
+        <view class="text-40rpx c-#000000 font-500 line-height-40rpx">
+          目标一志愿
+        </view>
+        <view class="form-main">
+          <up-form ref="uFormRef" :model="form" :rules="rules" label-width="150rpx" :border-bottom="true">
+            <view class="item-wrapper">
+              <up-form-item label="目标专业:" prop="major" required @click="openMajorModal">
+                <up-input v-model="form.major" placeholder="请选择目标专业" border="none" disabled disabledColor="#ffffff" />
+                <template #right>
+                  <up-icon name="arrow-right" />
                 </template>
-              </up-input>
-            </up-form-item>
-          </view>
-          <view class="item-wrapper">
-            <up-form-item label="学习方式:" labelPosition="top" required>
-              <view class="select-wrapper">
-                <view class="select-item" :class="{ active: recruitType.includes('0') }"
-                  @click="selectRecruitType('0')">
-                  不限
+              </up-form-item>
+            </view>
+            <view class="item-wrapper">
+              <up-form-item label="预估分数:" prop="score" required>
+                <up-input v-model="form.score" type="number" placeholder="请选输入预估分数">
+                  <template #suffix>
+                    <text>分</text>
+                  </template>
+                </up-input>
+              </up-form-item>
+            </view>
+            <view class="item-wrapper">
+              <up-form-item label="学习方式:" labelPosition="top" required>
+                <view class="select-wrapper">
+                  <view class="select-item" :class="{ active: recruitType.includes('0') }"
+                    @click="selectRecruitType('0')">
+                    不限
+                  </view>
+                  <view class="select-item" :class="{ active: recruitType.includes('1') }"
+                    @click="selectRecruitType('1')">
+                    全日制
+                  </view>
+                  <view class="select-item" :class="{ active: recruitType.includes('2') }"
+                    @click="selectRecruitType('2')">
+                    非全日制
+                  </view>
                 </view>
-                <view class="select-item" :class="{ active: recruitType.includes('1') }"
-                  @click="selectRecruitType('1')">
-                  全日制
+              </up-form-item>
+            </view>
+            <view class="item-wrapper">
+              <up-form-item label="院校水平:" labelPosition="top" required>
+                <view class="select-wrapper">
+                  <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('0') }"
+                    @click="selectSchoolLevel('0')">
+                    不限
+                  </view>
+                  <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('1') }"
+                    @click="selectSchoolLevel('1')">
+                    985
+                  </view>
+                  <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('2') }"
+                    @click="selectSchoolLevel('2')">
+                    211
+                  </view>
+                  <view class="select-item" :class="{ active: schoolLevel.includes('3') }"
+                    @click="selectSchoolLevel('3')">
+                    双一流
+                  </view>
+                  <view class="select-item" :class="{ active: schoolLevel.includes('4') }"
+                    @click="selectSchoolLevel('4')">
+                    普通院校
+                  </view>
+                  <view class="select-item b-unset!" />
                 </view>
-                <view class="select-item" :class="{ active: recruitType.includes('2') }"
-                  @click="selectRecruitType('2')">
-                  非全日制
-                </view>
-              </view>
-            </up-form-item>
-          </view>
-          <view class="item-wrapper">
-            <up-form-item label="院校水平:" labelPosition="top" required>
-              <view class="select-wrapper">
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('0') }"
-                  @click="selectSchoolLevel('0')">
-                  不限
-                </view>
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('1') }"
-                  @click="selectSchoolLevel('1')">
-                  985
-                </view>
-                <view class="select-item mb-24rpx" :class="{ active: schoolLevel.includes('2') }"
-                  @click="selectSchoolLevel('2')">
-                  211
-                </view>
-                <view class="select-item" :class="{ active: schoolLevel.includes('3') }"
-                  @click="selectSchoolLevel('3')">
-                  双一流
-                </view>
-                <view class="select-item" :class="{ active: schoolLevel.includes('4') }"
-                  @click="selectSchoolLevel('4')">
-                  普通院校
-                </view>
-                <view class="select-item b-unset!" />
-              </view>
-            </up-form-item>
-          </view>
-          <view class="item-wrapper">
-            <up-form-item label="报考省份:" prop="provinces" required @click="openProvincesModal">
-              <up-input v-model="form.provinces" placeholder="至少选择三个省份" border="none" disabled
-                disabledColor="#ffffff" />
-              <template #right>
-                <up-icon name="arrow-right" />
-              </template>
-            </up-form-item>
-          </view>
-        </up-form>
+              </up-form-item>
+            </view>
+            <view class="item-wrapper">
+              <up-form-item label="报考省份:" prop="provinces" required @click="openProvincesModal">
+                <up-input v-model="form.provinces" placeholder="至少选择三个省份" border="none" disabled
+                  disabledColor="#ffffff" />
+                <template #right>
+                  <up-icon name="arrow-right" />
+                </template>
+              </up-form-item>
+            </view>
+          </up-form>
+        </view>
       </view>
-    </view>
-    <view class="bottom-box">
+    </maskLayer>
+    <view v-if="status === 2" class="bottom-box">
       <button size="default" type="warn" class="btn-start" @click="submitForm">
         立即生成报告
       </button>
@@ -150,6 +152,9 @@
 import { watch } from 'vue';
 import { reportCreate, reportListLevel1, reportListLevel2, reportListLevel3, reportProvinceList } from '@/api/choice';
 import MultiplePicker from '@/components/multiple-picker/multiple-picker.vue';
+import { useUserStore } from '@/store';
+const userStore = useUserStore();
+const { status } = storeToRefs(userStore)
 
 const showMajor = ref(false); // 是否显示专业选择弹窗
 const list = reactive(['专业学位', '学术学位']); // 专业列表
@@ -369,18 +374,21 @@ const submitForm = () => {
         schoolLevel: schoolLevel.value.join(','),
       };
       reportCreate(params).then((res) => {
-        uni.showToast({
-          title: '生成报告成功',
-          icon: 'none',
-          duration: 2000,
-          success: () => {
-            setTimeout(() => {
-              uni.navigateTo({
-                url: '/pages/user/report/index',
-              });
-            }, 2000);
-          },
+        uni.navigateTo({
+          url: '/pages/user/report/index',
         });
+        // uni.showToast({
+        //   title: '生成报告成功',
+        //   icon: 'none',
+        //   duration: 2000,
+        //   success: () => {
+        //     setTimeout(() => {
+        //       uni.navigateTo({
+        //         url: '/pages/user/report/index',
+        //       });
+        //     }, 2000);
+        //   },
+        // });
       });
     }
     else {

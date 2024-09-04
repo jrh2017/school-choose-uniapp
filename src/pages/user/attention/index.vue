@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-09-04 08:30:36
+ * @LastEditTime : 2024-09-04 13:43:37
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
@@ -10,7 +10,7 @@
     <up-navbar :placeholder="true" bg-color="#F8EFF2" title="关注院校" autoBack />
     <view class="content">
       <view class="list-wrapper">
-        <view v-for="(item, index) in dataList" :key="index" class="school-item">
+        <view v-for="(item, index) in dataList" :key="index" class="school-item" @click="toSchool(item)">
           <view class="top">
             <view class="top-left">
               <up-image :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.schoolId}.jpg`" width="100rpx"
@@ -36,7 +36,7 @@
               </view>
             </view>
             <up-image class="edit-icon" :src="item.collected === 1 ? star : unstar" width="40rpx" height="40rpx"
-              @click="changeCollecte(item)" />
+              @tap.stop="changeCollecte(item)" />
           </view>
           <view class="bottom">
             <view class="detail-item flex justify-between">
@@ -92,6 +92,15 @@ const changeCollecte = (school: any) => {
     school.collected = action;
   });
 };
+
+/**
+ * 点击跳转到院校详情页面
+ */
+const toSchool = (school: any) => {
+  uni.navigateTo({
+    url: `/pages/intention/collage/detail?level3Code=${school.level3Code}&schoolId=${school.schoolId}`,
+  });
+}
 
 onLoad(() => {
   queryList();

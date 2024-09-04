@@ -1,7 +1,7 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-28 17:58:04
- * @LastEditTime : 2024-08-28 21:33:14
+ * @LastEditTime : 2024-09-04 12:47:04
  * @LastEditors  : jiangronghua
  * @Description  : 蒙层组件
  * @Remark       :
@@ -52,7 +52,7 @@ const activationFn = () => {
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5rpx);
+    backdrop-filter: blur(7rpx);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,6 +74,10 @@ const activationFn = () => {
 .default {
   display: none;
   height: 300rpx;
+}
+
+.content {
+  min-height: 400rpx;
 }
 
 .content:empty+.default {

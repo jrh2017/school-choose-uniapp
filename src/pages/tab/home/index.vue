@@ -4,7 +4,7 @@
     <view class="content w-100% flex flex-col items-start justify-start">
       <view v-if="showConfig" class="description">
         <view class="btn-wrapper">
-          <up-button text="立即配置获取报告" :custom-style="{
+          <up-button text="立即匹配获取建议分和排名" :custom-style="{
             width: '590rpx',
             height: '108rpx',
             color: '#FFFFFF',

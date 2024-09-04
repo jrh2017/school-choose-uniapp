@@ -16,7 +16,7 @@ const useUserStore = defineStore('user', {
     code: '',
     id: 0,
     mobile: '',
-    nickname: '江阳小道',
+    nickname: '',
     openid: '',
     registerTime: '',
     status: 0,

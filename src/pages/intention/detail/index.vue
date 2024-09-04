@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-09-02 22:42:40
+ * @LastEditTime : 2024-09-04 15:13:23
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校详情页
 -->
@@ -314,12 +314,24 @@ const confirmModal = () => {
         level3Code: selectMajorObj.level3Code,
         level3Name: selectMajorObj.level3Name,
       };
+      uni.showLoading({
+        title: '提交中...',
+        mask: true,
+      });
       intentionInformationSubmit(params).then(() => {
         uni.$u.toast('提交成功');
         show.value = false;
+        subIndex.value = -1
+        const pages = getCurrentPages()
+        // 声明一个pages使用getCurrentPages方法
+        const curPage = pages[pages.length - 1]
+        // 声明一个当前页面
+        curPage.onLoad() // 传入参数
       }).catch((err) => {
         console.log(err, 'err');
         uni.$u.toast(err.msg || '提交失败');
+      }).finally(() => {
+        uni.hideLoading()
       });
     }
     else {
@@ -405,6 +417,9 @@ const changeMajorType = (index: number) => {
 
 onLoad(() => {
   getInentionDetail()
+  nextTick(() => {
+    subIndex.value = 0
+  })
 });
 </script>
 

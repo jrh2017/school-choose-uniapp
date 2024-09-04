@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-08-28 21:07:44
+ * @LastEditTime : 2024-09-04 13:03:52
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
@@ -38,7 +38,11 @@
 </template>
 
 <script lang="ts" setup>
-import { activeCode, enableActiveCode } from '@/api/userinfo'
+import { activeCode, enableActiveCode, memberInfo } from '@/api/userinfo'
+import type { UserState } from '@/store/modules/user/types';
+import { useUserStore } from '@/store';
+
+const userStore = useUserStore();
 const activeList = ref([]) // 激活码列表
 const code = ref('') // 激活码输入框内容
 /**
@@ -59,9 +63,12 @@ const enableCode = () => {
     uni.$u.toast('请先输入激活码');
     return
   }
-  enableActiveCode({ code: code.value }).then(res => {
+  enableActiveCode({ code: code.value }).then(async res => {
     uni.$u.toast('激活成功');
     getActiveCode();
+    // 更新全局store
+    const userinfo: UserState = await memberInfo()
+    userStore.setInfo(userinfo)
   })
 }
 

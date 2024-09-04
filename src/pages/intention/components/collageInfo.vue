@@ -1,69 +1,74 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 18:59:23
- * @LastEditTime : 2024-08-26 19:35:11
+ * @LastEditTime : 2024-09-04 12:41:17
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
-  <view class="collage-info">
-    <view class="title">
-      联系方式
-    </view>
-    <view class="item">
-      <text class="label">
-        院校电话：
-      </text>
-      <view class="text">
-        <view v-for="(item, index) in phoneList" :key="index">
-          {{ item }}
-          <text class="copy" @click="copyText(item)">
-            复制
-          </text>
+  <maskLayer :isShowMask="status !== 2">
+    <view class="collage-info">
+      <view class="title">
+        联系方式
+      </view>
+      <view class="item">
+        <text class="label">
+          院校电话：
+        </text>
+        <view class="text">
+          <view v-for="(item, index) in phoneList" :key="index">
+            {{ item }}
+            <text class="copy" @click="copyText(item)">
+              复制
+            </text>
+          </view>
         </view>
       </view>
-    </view>
-    <view class="item">
-      <text class="label">
-        院校邮箱：
-      </text>
-      <view class="text">
-        <view v-for="(item, index) in emailList" :key="index">
-          {{ item }}
-          <text class="copy" @click="copyText(item)">
-            复制
-          </text>
+      <view class="item">
+        <text class="label">
+          院校邮箱：
+        </text>
+        <view class="text">
+          <view v-for="(item, index) in emailList" :key="index">
+            {{ item }}
+            <text class="copy" @click="copyText(item)">
+              复制
+            </text>
+          </view>
         </view>
       </view>
-    </view>
-    <view class="item">
-      <text class="label">
-        院校网址：
-      </text>
-      <view class="text">
-        <view v-for="(item, index) in websiteList" :key="index">
-          {{ item }}
-          <text class="copy" @click="copyText(item)">
-            复制
-          </text>
+      <view class="item">
+        <text class="label">
+          院校网址：
+        </text>
+        <view class="text">
+          <view v-for="(item, index) in websiteList" :key="index">
+            {{ item }}
+            <text class="copy" @click="copyText(item)">
+              复制
+            </text>
+          </view>
         </view>
       </view>
+      <view class="item">
+        <text class="label">
+          院校网址：
+        </text>
+        <text class="text">
+          {{ collageMain.provinceName }}
+        </text>
+      </view>
     </view>
-    <view class="item">
-      <text class="label">
-        院校网址：
-      </text>
-      <text class="text">
-        {{ collageMain.provinceName }}
-      </text>
-    </view>
-  </view>
+  </maskLayer>
 </template>
 
 <script lang="ts" setup>
 import {
   getSchoolInfo,
 } from '@/api/collage';
+import { useUserStore } from '@/store';
+const userStore = useUserStore();
+const { status } = storeToRefs(userStore)
 
 const props = defineProps({
   schoolId: {
@@ -108,25 +113,28 @@ onMounted(() => {
 <style scoped lang="scss">
 .collage-info {
   padding: 32rpx 0;
+
   .title {
     font-weight: 500;
     font-size: 32rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 48rpx;
     margin-bottom: 24rpx;
   }
 
   .item {
     font-size: 28rpx;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     line-height: 44rpx;
     margin-bottom: 24rpx;
     display: flex;
+
     .label {
-      color: rgba(0,0,0,0.65);
+      color: rgba(0, 0, 0, 0.65);
       width: 150rpx;
       flex-shrink: 0;
     }
+
     .text {
       flex: 1;
       width: 400rpx;
@@ -134,6 +142,7 @@ onMounted(() => {
       flex-wrap: wrap;
       word-break: break-all;
     }
+
     .copy {
       color: #E94650;
       margin-left: 32rpx;

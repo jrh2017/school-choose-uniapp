@@ -4,12 +4,12 @@
     <view class="content">
       <view class="flex items-center">
         <view class="mr-32rpx">
-          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/avatar.jpg" shape="circle" width="128rpx"
+          <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/logo.png" shape="circle" width="128rpx"
             height="128rpx" />
         </view>
         <view class="h-128rpx flex flex-1 flex-col flex-justify-between">
           <view class="font-weight-bold pb-20rpx font-size-40rpx color-#252424">
-            {{ code }}
+            {{ nickname || code }}
           </view>
           <view class="font-size-28rpx color-#888486">
             手机号:{{ mobile }}
@@ -72,7 +72,7 @@ import { useUserStore } from '@/store';
 const { setClipboardData, getClipboardData } = useClipboard();
 const userStore = useUserStore();
 
-const { code, mobile } = storeToRefs(userStore)
+const { code, mobile, nickname } = storeToRefs(userStore)
 // 复制
 const toCopy = async () => {
   await setClipboardData({ data: '1234567890' });

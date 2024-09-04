@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:42:19
- * @LastEditTime : 2024-09-04 08:43:52
+ * @LastEditTime : 2024-09-04 12:49:46
  * @LastEditors  : jiangronghua
  * @Description  : 专业详情主页
 -->
@@ -14,33 +14,37 @@
       <view class="title">
         24届专业录取排名
       </view>
-      <view class="content">
-        <ranking :type="1" />
-      </view>
-      <view class="title">
-        意向专业<text class="sub-title">
-          录取该专业的所有排名
-        </text>
-      </view>
-      <view class="content">
-        <ranking-table :type="1" />
-      </view>
+      <maskLayer :isShowMask="status !== 2">
+        <view class="content">
+          <ranking :type="1" />
+        </view>
+        <view class="title">
+          意向专业<text class="sub-title">
+            录取该专业的所有排名
+          </text>
+        </view>
+        <view class="content">
+          <ranking-table :type="1" />
+        </view>
+      </maskLayer>
     </view>
     <view class="main" style="margin-top: 24rpx;">
       <view class="title">
         24届院校录取排名
       </view>
-      <view class="content">
-        <ranking :type="2" />
-      </view>
-      <view class="title">
-        意向院校<text class="sub-title">
-          意向院校中该专业录取排名
-        </text>
-      </view>
-      <view class="content">
-        <ranking-table :type="2" />
-      </view>
+      <maskLayer :isShowMask="status !== 2">
+        <view class="content">
+          <ranking :type="2" />
+        </view>
+        <view class="title">
+          意向院校<text class="sub-title">
+            意向院校中该专业录取排名
+          </text>
+        </view>
+        <view class="content">
+          <ranking-table :type="2" />
+        </view>
+      </maskLayer>
     </view>
   </div>
 </template>
@@ -49,6 +53,9 @@
 import baseinfo from './baseinfo.vue';
 import ranking from './rankingChart.vue';
 import rankingTable from './rankingTable.vue';
+import { useUserStore } from '@/store';
+const userStore = useUserStore();
+const { status } = storeToRefs(userStore)
 
 const emit = defineEmits(['change']);
 const changeMajor = (event: any) => {

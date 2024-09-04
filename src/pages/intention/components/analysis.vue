@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-02 23:29:01
+ * @LastEditTime : 2024-09-04 12:29:13
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -23,91 +23,95 @@
       <view class="title">
         一志愿拟录取与分数分布
       </view>
-      <view class="chart">
-        <qiun-data-charts :canvas2d="true" type="column" :opts="opts" :chart-data="chart" />
-      </view>
-      <view class="ranking-table">
-        <view class="table">
-          <view class="tr">
-            <view class="th">
-              年份
+      <maskLayer :isShowMask="status !== 2">
+        <view class="chart">
+          <qiun-data-charts :canvas2d="true" type="column" :opts="opts" :chart-data="chart" />
+        </view>
+        <view class="ranking-table">
+          <view class="table">
+            <view class="tr">
+              <view class="th">
+                年份
+              </view>
+              <view class="th">
+                2024(人)
+              </view>
+              <view class="th">
+                2023(人)
+              </view>
+              <view class="th">
+                2022(人)
+              </view>
             </view>
-            <view class="th">
-              2024(人)
-            </view>
-            <view class="th">
-              2023(人)
-            </view>
-            <view class="th">
-              2022(人)
-            </view>
-          </view>
-          <view v-for="(item, index) in tableData" :key="index" class="tr" style=""
-            :class="{ active: index % 2 === 1 }">
-            <view class="td">
-              {{ item['segment'] }}
-            </view>
-            <view class="td">
-              {{ item['2024'] || '-' }}
-            </view>
-            <view class="td">
-              {{ item['2023'] || '-' }}
-            </view>
-            <view class="td">
-              {{ item['2022'] || '-' }}
+            <view v-for="(item, index) in tableData" :key="index" class="tr" style=""
+              :class="{ active: index % 2 === 1 }">
+              <view class="td">
+                {{ item['segment'] }}
+              </view>
+              <view class="td">
+                {{ item['2024'] || '-' }}
+              </view>
+              <view class="td">
+                {{ item['2023'] || '-' }}
+              </view>
+              <view class="td">
+                {{ item['2022'] || '-' }}
+              </view>
             </view>
           </view>
         </view>
-      </view>
+      </maskLayer>
       <view class="title">
         一志愿拟录取名单
       </view>
-      <view class="table-header">
-        <view class="item-wrapper">
-          <view v-for="(item, index) in yearList" :key="index" class="item"
-            :class="{ active: currentYearIndex === item }" @click="changeYear(item)">
-            {{ item }}
-          </view>
-        </view>
-        <view class="num-wrapper">
-          总录取人数:<text class="num">
-            {{ tableData2.length }}人
-          </text>
-        </view>
-      </view>
-      <view class="ranking-table">
-        <view class="table">
-          <view class="tr">
-            <view class="th">
-              序号
-            </view>
-            <view class="th">
-              学院
-            </view>
-            <view class="th">
-              初试成绩
-            </view>
-            <view class="th">
-              复试成绩
+      <maskLayer :isShowMask="status !== 2">
+        <view v-if="yearList.length" class="table-header">
+          <view class="item-wrapper">
+            <view v-for="(item, index) in yearList" :key="index" class="item"
+              :class="{ active: currentYearIndex === item }" @click="changeYear(item)">
+              {{ item }}
             </view>
           </view>
-          <view v-for="(item, index) in tableData2" :key="index" class="tr" style=""
-            :class="{ active: index % 2 === 1 }">
-            <view class="td">
-              {{ index + 1 }}
+          <view class="num-wrapper">
+            总录取人数:<text class="num">
+              {{ tableData2.length }}人
+            </text>
+          </view>
+        </view>
+        <view v-if="tableData2.length" class="ranking-table">
+          <view class="table">
+            <view class="tr">
+              <view class="th">
+                序号
+              </view>
+              <view class="th">
+                学院
+              </view>
+              <view class="th">
+                初试成绩
+              </view>
+              <view class="th">
+                复试成绩
+              </view>
             </view>
-            <view class="td">
-              {{ item.collegeName }}
-            </view>
-            <view class="td">
-              {{ item.firstScore }}
-            </view>
-            <view class="td">
-              {{ item.retrialScore }}
+            <view v-for="(item, index) in tableData2" :key="index" class="tr" style=""
+              :class="{ active: index % 2 === 1 }">
+              <view class="td">
+                {{ index + 1 }}
+              </view>
+              <view class="td">
+                {{ item.collegeName }}
+              </view>
+              <view class="td">
+                {{ item.firstScore }}
+              </view>
+              <view class="td">
+                {{ item.retrialScore }}
+              </view>
             </view>
           </view>
         </view>
-      </view>
+      </maskLayer>
     </view>
     <up-picker ref="collegePickerRef" :show="collegeShow" :columns="collegeColumns" keyName="collegeName"
       @confirm="confirmCollege" @cancel="collegeCancel" />
@@ -117,6 +121,10 @@
 <script setup lang="ts">
 import { matriculationRecord, schoolScoreStatis, chatMatriculationRecord } from '@/api/collage';
 import { groupBy } from 'lodash-es';
+import { useUserStore } from '@/store';
+const userStore = useUserStore();
+
+const { status } = storeToRefs(userStore)
 
 const props = defineProps({
   majorDetail: {
@@ -198,7 +206,8 @@ const collegeItem = ref<any>({
 });
 // 学院选择确认
 const confirmCollege = (item: any) => {
-  collegeItem.value = item;
+  console.log(item, 'item')
+  collegeItem.value = item.value[0];
   collegeShow.value = false;
   reloadPageData()
 };
@@ -210,7 +219,7 @@ const collegeCancel = () => {
 const recruitTypeChange = (index: number) => {
   currentIndex.value = index;
   recruitType.value = itemList[index].recruitType;
-  getMatriculationRecordFn();
+  reloadPageData()
 };
 
 // 查录取与分数分布
@@ -232,9 +241,14 @@ const getMatriculationRecordFn = () => {
     recruitType: recruitType.value,
   }).then((res: any) => {
     const response = res || [];
-    const groupList = groupBy(response, 'year');
-    scoreStatisDetail.value = groupList;
-    tableData2.value = scoreStatisDetail.value[currentYearIndex.value]
+    if (response && response.length) {
+      const groupList = groupBy(response, 'year');
+      scoreStatisDetail.value = groupList;
+      tableData2.value = scoreStatisDetail.value[currentYearIndex.value]
+    } else {
+      scoreStatisDetail.value = [];
+      tableData2.value = []
+    }
   });
 };
 
@@ -282,8 +296,6 @@ const getChatMatriculationRecord = () => {
 };
 
 const changeYear = (year: string) => {
-  console.log(year, 'changeYear')
-  console.log(scoreStatisDetail.value, 'changeYear')
   currentYearIndex.value = year;
   tableData2.value = scoreStatisDetail.value[year]
 }
@@ -293,7 +305,6 @@ watch(
   () => props.majorDetail,
   (val: any[]) => {
     if (val && val.collegeList) {
-      console.log(val, 'props.majorDetail')
       majorDatail.value = val
       collegeList.value = val.collegeList
       setTimeout(() => {

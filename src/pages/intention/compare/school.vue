@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-09-04 08:33:39
+ * @LastEditTime : 2024-09-04 13:59:49
  * @LastEditors  : jiangronghua
  * @Description  : 添加院校对比页面
 -->
@@ -77,7 +77,7 @@
                   <view class="label">
                     专业:
                   </view>
-                  <text>{{ item.level3Name }}</text>
+                  <text>{{ item.level3Name }}({{ item.level3Code }})</text>
                 </view>
                 <view class="item right">
                   <view class="label">
@@ -142,7 +142,6 @@
 import type zPaging from 'z-paging/components/z-paging/z-paging.vue';
 import type { schoolVO } from '@/api/school/types';
 import { insertSchoolMajor, listProvince, pageSchoolMajor, majorCompareLevel1, majorCompareLevel2, majorCompareLevel3 } from '@/api/compare';
-
 const keyword = ref('');
 
 const pagingRef = ref<InstanceType<typeof zPaging> | null>(null); // 实例化z-paging组件的ref
@@ -326,10 +325,16 @@ function queryList(pageNo: number, pageSize: number) {
     level3Code: showSelectMajor.value.level3Name === '专业' ? '' : showSelectMajor.value.level3Code,
     level3Name: showSelectMajor.value.level3Name === '专业' ? '' : showSelectMajor.value.level3Name,
   };
+  uni.showLoading({
+    title: '加载中...',
+    mask: true,
+  });
   pageSchoolMajor(params).then((res: any) => {
     pagingRef.value?.complete(res.data);
   }).catch(() => {
     pagingRef.value.complete(false);
+  }).finally(() => {
+    uni.hideLoading()
   });
 }
 
