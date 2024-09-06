@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-30 17:24:35
- * @LastEditTime : 2024-09-06 16:14:27
+ * @LastEditTime : 2024-09-06 17:53:01
  * @LastEditors  : chenyuchao
  * @Description  :
 -->
@@ -32,7 +32,11 @@
           </view>
           <view class="module-row">
             <view class="row-label">学习方式：</view>
-            <view class="row-value">{{ targetVolunteer.recruitName }}</view>
+            <view class="row-value">
+              <text v-if="targetVolunteer.recruitType === '0'">不限</text>
+              <text v-if="targetVolunteer.recruitType === '1'">全日制</text>
+              <text v-if="targetVolunteer.recruitType === '2'">非全日制</text>
+            </view>
           </view>
           <view class="module-row">
             <view class="row-label">院校水平：</view>
@@ -340,6 +344,9 @@ const getReoprtDetail = async () => {
   const res: any = await reportDetail({ id: reportId.value });
   console.log(res, '查询报告详情');
   let arry = []
+  if (res.recruitType.includes('1')) {
+    arry.push('全日制')
+  }
   if (res.recruitType.includes('1')) {
     arry.push('全日制')
   }
