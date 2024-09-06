@@ -1,8 +1,8 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-09-04 08:59:05
- * @LastEditors  : jiangronghua
+ * @LastEditTime : 2024-09-06 15:23:14
+ * @LastEditors  : chenyuchao
  * @Description  : 用户相关请求
  */
 import request from '@/utils/cloudRequest/request';
@@ -29,7 +29,8 @@ enum URL {
   nationalLine = '/school-major/list-score-line-country', // 国家线
   enrollPlan = '/school-major/list-enroll-plan', // 考试科目 / 院校专业基础信息
   schoolRanking = '/school-ranking/list-all',
-  schoolLineCompore = '/school-major/list-score-line-compare'
+  schoolLineCompore = '/school-major/list-score-line-compare',
+  schoolReportAnalytics = '/select-school-report/get-school-report-analytics' // 推荐考研院校分析
 }
 
 export const getSchoolInfo = (params: any) => request({ url: URL.getSchoolInfo, method: 'GET', params });
@@ -54,3 +55,4 @@ export const enrollPlan = (params: any) => request({ url: URL.enrollPlan, method
 export const schoolRanking = () => request({ url: URL.schoolRanking, method: 'GET' });
 export const chatMatriculationRecord = (params: any) => request({ url: URL.chatMatriculationRecord, method: 'GET', params });
 export const schoolLineCompore = (params: any) => request({ url: URL.schoolLineCompore, method: 'GET', params });
+export const schoolReportAnalytics = (params: any) => request({ url: URL.schoolReportAnalytics, method: 'GET', params });

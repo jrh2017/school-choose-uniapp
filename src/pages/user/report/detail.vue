@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-30 17:24:35
- * @LastEditTime : 2024-09-01 17:29:36
+ * @LastEditTime : 2024-09-06 16:14:27
  * @LastEditors  : chenyuchao
  * @Description  :
 -->
@@ -94,15 +94,15 @@
         <view class="report-module">
           <view class="module-title">三、推荐考研院校分析</view>
           <view class="module-content-3">
-            <view class="school-item" v-for="(item, index) in schoolList" :key="index">
+            <view class="school-item" v-for="(item, index) in graduateSchoolsList" :key="index">
               <view class="school-item-name">
-                <view class="school-name">{{ index + 1 }}、{{ item.schoolName }}</view>
+                <view class="school-name">{{ index + 1 }}、{{ item.school.schoolName }}</view>
                 <view class="school-name-desc">{{ item.selectType === 1 ? '保底院校' : item.selectType === 2 ? '稳妥学校' :
                   '冲刺学校' }}</view>
               </view>
               <view class="school-module">
                 <view class="school-module-title">(1) 院校专业基础信息</view>
-                <view class="green-box" v-for="(college, index2) in item.enrollPlan" :key="index2">
+                <view class="green-box" v-for="(college, index2) in item.enrollPlanList" :key="index2">
                   <view class="college-name">{{ college.collegeName }}</view>
                   <view class="college-introduce">
                     <view class="introduce-row">
@@ -147,19 +147,19 @@
                       单科>100
                     </view>
                   </view>
-                  <view v-for="(countryItem, index3) in item.tableCountryData" :key="index3" class="tr" style=""
+                  <view v-for="(countryItem, index3) in item.scoreLineCountryList" :key="index3" class="tr" style=""
                     :class="{ active: index3 % 2 === 1 }">
                     <view class="td">
                       {{ countryItem.year }}
                     </view>
                     <view class="td">
-                      {{ item[2024] }}
+                      {{ countryItem.scoreTotal }}
                     </view>
                     <view class="td">
-                      {{ item[2023] }}
+                      {{ countryItem.scoreSingle1 }}
                     </view>
                     <view class="td">
-                      {{ item[2022] }}
+                      {{ countryItem.scoreSingle2 }}
                     </view>
                   </view>
                 </view>
@@ -169,31 +169,19 @@
                 <view class="table">
                   <view class="tr">
                     <view class="th" style="width: 35%;">
-                      科目
+                      科目/年份
                     </view>
-                    <view class="th">
-                      初试总成绩
-                    </view>
-                    <view class="th">
-                      单科=100
-                    </view>
-                    <view class="th">
-                      单科>100
+                    <view class="th" v-for="(year, yearIndex) in item.interviewLineYear" :key="yearIndex">
+                      {{ year }}
                     </view>
                   </view>
-                  <view v-for="(schoolItem, index3) in item.tableSchoolData" :key="index3" class="tr" style=""
+                  <view v-for="(schoolItem, index3) in item.interviewLine" :key="index3" class="tr" style=""
                     :class="{ active: index3 % 2 === 1 }">
                     <view class="td">
                       {{ schoolItem.name }}
                     </view>
-                    <view class="td">
-                      {{ item[2024] }}
-                    </view>
-                    <view class="td">
-                      {{ item[2023] }}
-                    </view>
-                    <view class="td">
-                      {{ item[2022] }}
+                    <view class="td" v-for="(year, yearIndex) in item.interviewLineYear" :key="yearIndex">
+                      {{ schoolItem[year] }}
                     </view>
                   </view>
                 </view>
@@ -207,8 +195,8 @@
                       {{ year }}
                     </view>
                   </view>
-                  <view v-for="(scoreStatisItem, scoreStatisIndex) in item.scoreStatisList" :key="scoreStatisIndex"
-                    class="tr" style="" :class="{ active: scoreStatisIndex % 2 === 1 }">
+                  <view v-for="(scoreStatisItem, scoreStatisIndex) in item.scoreList" :key="scoreStatisIndex" class="tr"
+                    style="" :class="{ active: scoreStatisIndex % 2 === 1 }">
                     <view class="td">
                       {{ scoreStatisItem.name }}
                     </view>
@@ -220,8 +208,9 @@
               </view>
               <view class="school-module">
                 <view class="school-module-title">(5) 拟录取考试名单</view>
-                <view class="year-item">
-                  <view class="year-desc">2024年（共6人）</view>
+                <view class="year-item" v-for="(admissionItem, admissionIndex) in item.admissionInformation"
+                  :key="admissionIndex">
+                  <view class="year-desc">{{ admissionItem[0].year }}年（共{{ item.admissionInformation.length }}人）</view>
                   <view class="table">
                     <view class="tr">
                       <view class="th" style="width: 35%;">
@@ -231,80 +220,23 @@
                         初试分数
                       </view>
                       <view class="th">
-                        人数
+                        复试分数
                       </view>
                     </view>
-                    <view v-for="(item, index) in tableCountryData" :key="index" class="tr" style=""
+                    <view v-for="(people, peopleIndex) in admissionItem" :key="peopleIndex" class="tr" style=""
                       :class="{ active: index % 2 === 1 }">
                       <view class="td">
-                        {{ item.name }}
+                        {{ people.schoolName }}
                       </view>
                       <view class="td">
-                        {{ item[2024] }}
+                        {{ people.firstScore }}
                       </view>
                       <view class="td">
-                        {{ item[2023] }}
+                        {{ people.retrialScore }}
                       </view>
                     </view>
                   </view>
                 </view>
-                <view class="year-item">
-                  <view class="year-desc">2024年（共6人）</view>
-                  <view class="table">
-                    <view class="tr">
-                      <view class="th" style="width: 35%;">
-                        一志愿院校
-                      </view>
-                      <view class="th">
-                        初试分数
-                      </view>
-                      <view class="th">
-                        人数
-                      </view>
-                    </view>
-                    <view v-for="(item, index) in tableCountryData" :key="index" class="tr" style=""
-                      :class="{ active: index % 2 === 1 }">
-                      <view class="td">
-                        {{ item.name }}
-                      </view>
-                      <view class="td">
-                        {{ item[2024] }}
-                      </view>
-                      <view class="td">
-                        {{ item[2023] }}
-                      </view>
-                    </view>
-                  </view>
-                </view>
-                <view class="year-item">
-                  <view class="year-desc">2024年（共6人）</view>
-                  <view class="table">
-                    <view class="tr">
-                      <view class="th" style="width: 35%;">
-                        一志愿院校
-                      </view>
-                      <view class="th">
-                        初试分数
-                      </view>
-                      <view class="th">
-                        人数
-                      </view>
-                    </view>
-                    <view v-for="(item, index) in tableCountryData" :key="index" class="tr" style=""
-                      :class="{ active: index % 2 === 1 }">
-                      <view class="td">
-                        {{ item.name }}
-                      </view>
-                      <view class="td">
-                        {{ item[2024] }}
-                      </view>
-                      <view class="td">
-                        {{ item[2023] }}
-                      </view>
-                    </view>
-                  </view>
-                </view>
-
               </view>
             </view>
           </view>
@@ -322,7 +254,8 @@ import {
   interviewLine,
   nationalLine,
   schoolScoreStatis,
-  matriculationRecord
+  matriculationRecord,
+  schoolReportAnalytics
 } from '@/api/collage';
 interface volunteer {
   level3Name: string,
@@ -345,6 +278,19 @@ interface schoolItem {
   lelvel3Name: string,
   collected: number, // 1收藏 2取消收藏
   enrollPlan: any, // 院校专业基础信息
+}
+interface courtyardItem {
+  schoolName: string,
+  selectType: number,
+  enrollPlanList: any,
+  scoreLineCountryList: any,
+  scoreLineSchoolList: any,
+  scoreStatisTh: any,
+  scoreList: any,
+  admissionInformation: any,
+  school: any,
+  interviewLineYear: any,
+  interviewLine: any
 }
 const reportId = ref('');
 const star = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/star.png');
@@ -388,7 +334,7 @@ const levelList = ref([
     name: '普通院校'
   }
 ])
-const eiList = ref([]) // (1) 院校专业基础信息
+const graduateSchoolsList = ref<Array<courtyardItem>>([]) // 推荐考研院校
 // 查询择校详情
 const getReoprtDetail = async () => {
   const res: any = await reportDetail({ id: reportId.value });
@@ -420,12 +366,6 @@ const getReoprtDetail = async () => {
   }
   targetVolunteer.value = obj;
   schoolList.value = res.schoolList;
-  eiList.value = []
-  schoolList.value.forEach((item: any) => {
-    if (item.schoolId && item.level3Code) {
-      getCurveFn(item.schoolId, item.level3Code)
-    }
-  })
 }
 /**
  * 切换收藏状态
@@ -441,6 +381,62 @@ const changeCollecte = (school: any) => {
     school.collected = action;
   });
 };
+// 推荐考研院校分析
+const schoolReportAnalyticsFn = () => {
+  schoolReportAnalytics({
+    id: reportId.value
+  }).then((data: any) => {
+    let arr = data || []
+    arr.forEach((item: any) => {
+      let scoreList = item.scoreList || [] // 一志愿录取信息
+      let list: any = [{ name: '一志愿拟录取人数' }, { name: '录取最高分' }, { name: '录取中位分' }, { name: '录取最低分' }, { name: '录取建议分' }];
+      let scoreStatisTh: any = [] // 年份集合
+      scoreList.forEach((item2: any) => {
+        scoreStatisTh.push(item2.year)
+        list[0][item2.year] = item2.people
+        list[1][item2.year] = item2.maxScore
+        list[2][item2.year] = item2.middleScore
+        list[3][item2.year] = item2.minScore
+        list[4][item2.year] = item2.adviceScore
+      })
+      item.scoreStatisTh = scoreStatisTh
+      item.scoreList = list
+      // 拟录取名单处理
+      let matriculationRecordList = item.matriculationRecordList || []
+      let admissionInformation: any = [] // 拟录取考试名单分年
+      let yearList: any = [] // 年份集合
+      matriculationRecordList.forEach((item2: any) => {
+        yearList.push(item2.year)
+      })
+      yearList = Array.from(new Set(yearList)); // 去重后的年份集合
+      yearList.forEach((year: any, index: number) => {
+        admissionInformation.push([])
+        matriculationRecordList.forEach((item2: any) => {
+          if (item2.year === year) {
+            admissionInformation[index].push(item2)
+          }
+        })
+      })
+      item.admissionInformation = admissionInformation
+      // 复试线处理
+      let list2: any = [{ name: '初始总成绩' }, { name: '政治' }, { name: '外语' }, { name: '专业课一' }, { name: '专业课二' }];
+      let interviewLine = item.scoreLineSchoolList || []
+      let interviewLineYear: any = []
+      interviewLine.forEach((item2: any) => {
+        interviewLineYear.push(item2.year)
+        list2[0][item2.year] = item2.total
+        list2[1][item2.year] = item2.politics
+        list2[2][item2.year] = item2.english
+        list2[3][item2.year] = item2.specialOne
+        list2[4][item2.year] = item2.specialTwo
+      })
+      item.interviewLine = list2
+      item.interviewLineYear = interviewLineYear
+    })
+    graduateSchoolsList.value = arr || []
+    console.log(arr, '推荐考研院校分析')
+  })
+}
 // 学校专业基本信息
 const getCurveFn = (schoolId: any, level3Code: any) => {
   enrollPlan({
@@ -528,15 +524,23 @@ const getMatriculationRecordFn = (schoolId: any, level3Code: any, collegeId: any
     console.log(res, '(5) 拟录取考试名单');
   });
 };
+onShareAppMessage(() => {
+  return {
+    title: '个人择校报告',
+    path: `/pages/user/report/detail?id=${reportId.value}`,
+    imageUrl: '',
+  };
+});
 onLoad((options: any) => {
   reportId.value = options!.id;
   getReoprtDetail();
+  schoolReportAnalyticsFn()
   // useShare({
   //   title: '个人择校报告',
   //   path: `/pages/user/report/detail?id=${reportId.value}`,
   //   query: `id=${reportId.value}`,
   //   imageUrl: '',
-  // })
+  // }).onShareAppMessage()
 })
 </script>
 <style scoped lang="scss">
@@ -557,6 +561,7 @@ onLoad((options: any) => {
     left: 0;
     top: -1rpx;
     z-index: -1;
+    box-sizing: border-box;
 
     .blod-box {
       font-weight: 600;
