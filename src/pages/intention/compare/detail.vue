@@ -21,14 +21,16 @@
                   +
                 </view>
                 <view class="connect-flex-box" v-else>
-                  <img class="img-icon" :src="item.logo" alt="">
+                  <img class="img-icon" :src="`https://ypdsc.oss-cn-shanghai.aliyuncs.com/app/${item.schoolId}.jpg`"
+                    alt="">
                   <view>{{ item.schoolName }}</view>
                 </view>
               </view>
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">省份</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.province }}</view>
+              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.provinceName }}
+              </view>
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">归属地区</view>
@@ -41,10 +43,16 @@
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">院校类型</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.level }}</view>
+              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.typeName }}</view>
             </view>
             <view class="de-th position-box">
-              <view class="flex-left de-td width-200 height-138">专业</view>
+              <view class="flex-left de-td width-200 height-138 height-auto-box">
+                <view class="label-item">专业</view>
+                <view class="height-auto-item">
+                  <view>{{ maxSpeciality.level3Name }}</view>
+                  <view>{{ maxSpeciality.level3Code }}</view>
+                </view>
+              </view>
               <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
                 <view>{{ item.level3Name }}</view>
                 <view>
@@ -54,7 +62,8 @@
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">学科排名</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.level }}</view>
+              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.subjectRanking }}
+              </view>
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200 height-138 height-auto-box">
@@ -294,6 +303,7 @@ interface schoolItem {
 }
 const schoolFold = ref(false);// 学校的折叠
 const collegeFold = ref(false);// 学院的折叠
+const maxSpeciality = ref({});
 const ids = ref('');
 const collegeList = ref<Array<any>>([])
 const collegeYearList = ref<Array<any>>([])
@@ -312,7 +322,20 @@ const templateItem = ref<schoolItem>({
 })
 const getCompareData = () => {
   majorCompare({ ids: ids.value }).then((res: any) => {
-    schoolList.value = [...res, templateItem.value]
+    let resList = res || []
+    maxSpeciality.value = {
+      level3Name: resList[0] ? resList[0].level3Name : '',
+      level3Code: resList[0] ? resList[0].level3Code : '',
+    }
+    resList.forEach((item: any, index: number) => {
+      if (item.level3Name && item.level3Name.length > maxSpeciality.value.level3Name.length) {
+        maxSpeciality.value = {
+          level3Name: item.level3Name || '',
+          level3Code: item.level3Code || '',
+        }
+      }
+    })
+    schoolList.value = [...resList, templateItem.value]
     let listRes = schoolList.value || [];
     let list: any = []
     listRes.forEach((item: any) => {
@@ -376,6 +399,7 @@ const getCompareData = () => {
       })
     })
     collegeYearList.value = newCyl
+    console.log(newCyl, 'newCyl')
   });
 };
 // 置顶
@@ -552,6 +576,11 @@ onLoad((options) => {
 .height-auto-box {
   .height-auto-item {
     opacity: 0;
+  }
+
+  .label-item {
+    position: absolute;
+
   }
 }
 
