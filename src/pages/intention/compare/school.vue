@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-23 16:42:34
- * @LastEditTime : 2024-09-04 13:59:49
+ * @LastEditTime : 2024-09-05 13:20:46
  * @LastEditors  : jiangronghua
  * @Description  : 添加院校对比页面
 -->
@@ -67,7 +67,7 @@
               <view v-if="item.joined === 1" class="btn-right selected">
                 已添加
               </view>
-              <view v-else class="btn-right unselected" @click="addSchool(item)">
+              <view v-else class="btn-right unselected" @click="addSchool(item, index)">
                 <up-icon name="plus-circle" color="#E94650" labelColor="#E94650" label="对比" />
               </view>
             </view>
@@ -91,9 +91,9 @@
         </view>
       </z-paging>
       <up-popup :show="showMajor" closeable :safeAreaInsetBottom="false" @close="showMajor = false">
-        <view class="reset-btn" @click="resetMajor">重置</view>
+        <!-- <view class="reset-btn" @click="resetMajor">重置</view> -->
         <view class="major-popup h-700rpx">
-          <view class="subsection">
+          <view class="subsection mt-80rpx">
             <up-subsection :list="list" mode="subsection" :current="currentSubIndex" activeColor="#e94650"
               @change="changeMajorType" />
           </view>
@@ -341,14 +341,15 @@ function queryList(pageNo: number, pageSize: number) {
 /**
  * 添加学校并返回
  */
-const addSchool = (item: schoolVO) => {
+const addSchool = (item: schoolVO, index: number) => {
   insertSchoolMajor(item).then(() => {
     uni.showToast({
       title: '添加成功',
       icon: 'none',
       duration: 1000,
     });
-    uni.navigateBack();
+    dataList.value[index].joined = 1;
+    // uni.navigateBack();
   });
 };
 

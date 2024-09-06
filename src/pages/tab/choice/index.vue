@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-09-01 17:47:21
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-09-05 14:56:16
+ * @LastEditors  : jiangronghua
  * @Description  : 择校页面
 -->
 <template>
@@ -11,7 +11,7 @@
     <view class="content">
       <view class="top">
         <view class="line-01">
-          你都择校报告
+          你的择校报告
         </view>
         <view class="line-02">
           1亿大数据最优考研院校推荐

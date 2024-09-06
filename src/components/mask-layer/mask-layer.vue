@@ -1,7 +1,7 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-28 17:58:04
- * @LastEditTime : 2024-09-04 12:47:04
+ * @LastEditTime : 2024-09-05 13:33:23
  * @LastEditors  : jiangronghua
  * @Description  : 蒙层组件
  * @Remark       :
@@ -56,6 +56,7 @@ const activationFn = () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 
     .custom-style {
       color: #fff;

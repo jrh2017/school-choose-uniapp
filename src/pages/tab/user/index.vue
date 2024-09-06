@@ -66,6 +66,8 @@
 </template>
 
 <script setup lang="ts">
+import { memberInfo } from '@/api/userinfo'
+import type { UserState } from '@/store/modules/user/types';
 import { useClipboard } from '@/hooks';
 import { useUserStore } from '@/store';
 
@@ -124,6 +126,11 @@ const toShare = () => {
     url: `/pages/common/webview/index?url=${params}`,
   });
 }
+
+onShow(async () => {
+  const userinfo: UserState = await memberInfo()
+  userStore.setInfo(userinfo)
+})
 </script>
 
 <style lang="scss" scoped>

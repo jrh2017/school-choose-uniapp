@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 15:28:59
- * @LastEditTime : 2024-09-04 08:34:23
+ * @LastEditTime : 2024-09-06 13:03:04
  * @LastEditors  : jiangronghua
  * @Description  : 我的报告列表页面
 -->
@@ -23,9 +23,18 @@
             </view>
             <view class="report-conteng p-32rpx">
               <view class="report-title">
-                个人择校报告
-                <view class="report-date">
-                  {{ dayjs(item.createTime).format('YYYY-MM-DD') }}
+                <view class="report-title-left">
+                  个人择校报告
+                  <view class="report-date">
+                    {{ dayjs(item.createTime).format('YYYY-MM-DD') }}
+                  </view>
+                </view>
+                <view class="report-title-right">
+                  <text v-if="item.status === 0">生成中...</text>
+                  <template v-if="item.status === 1">
+                    <text>详情</text>
+                    <up-icon name="arrow-right" />
+                  </template>
                 </view>
               </view>
               <view class="report-cell">
@@ -88,6 +97,7 @@ const dataList = ref<any[]>([]); // 存放请求回来的数据
 
 const recruitTypeList = ['不限', '全日制', '非全日制']; // 存放报考类型列表
 const schoolLevelList = ['不限', '985', '211', '双一流', '普通院校']; // 存放院校层次列表
+let timeout // 设置定时器，如果返回的结果中存在生成报告中的状态需要隔5秒重新获取一次
 
 /**
  * 请求院校信息
@@ -120,6 +130,12 @@ function queryList(pageNo: number, pageSize: number) {
       item.recruitTypeIndex = Number(item.recruitType);
       item.schoolLevelStr = schoolLevelStrList.join(',');
     });
+    const listReporting = list.filter((item: any) => item.status === 0);
+    if (listReporting.length > 0) {
+      timeout = setTimeout(() => {
+        pagingRef.value.reload();
+      }, 5000);
+    }
     pagingRef.value?.complete(list);
   }).catch(() => {
     pagingRef.value.complete(false);
@@ -130,10 +146,14 @@ function queryList(pageNo: number, pageSize: number) {
  * 点击跳转到报告详情页
  */
 const handleClick = (item: any) => {
-  uni.navigateTo({
-    url: `/pages/user/report/detail?id=${item.id}`,
-  });
+  // 只有已经生成成功的报告可以跳转
+  if (item.status === 1) {
+    uni.navigateTo({
+      url: `/pages/user/report/detail?id=${item.id}`,
+    });
+  }
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -202,6 +222,20 @@ const handleClick = (item: any) => {
     line-height: 38rpx;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    .report-title-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .report-title-right {
+      font-size: 32rpx;
+      color: #828282;
+      line-height: 38rpx;
+      display: flex;
+      align-items: center;
+    }
   }
 
   .report-cell {

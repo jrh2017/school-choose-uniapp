@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:42:19
- * @LastEditTime : 2024-09-04 12:49:46
+ * @LastEditTime : 2024-09-05 12:57:44
  * @LastEditors  : jiangronghua
  * @Description  : 专业详情主页
 -->
@@ -14,7 +14,7 @@
       <view class="title">
         24届专业录取排名
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="content">
           <ranking :type="1" />
         </view>
@@ -32,7 +32,7 @@
       <view class="title">
         24届院校录取排名
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="content">
           <ranking :type="2" />
         </view>

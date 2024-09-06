@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-09-04 15:13:23
+ * @LastEditTime : 2024-09-05 13:24:03
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校详情页
 -->
@@ -64,7 +64,7 @@
   <up-popup :show="showSchool" closeable :safeAreaInsetBottom="false" @close="showSchool = false">
     <view class="schools-popup h-600rpx">
       <view class="search-wrapper">
-        <up-search v-model="keyword" placeholder="请输入学校名称" :show-action="false" @search="getSchoolList" />
+        <up-search v-model="keyword" placeholder="请输入学校名称" @search="getSchoolList" @custom="getSchoolList" />
       </view>
       <view class="schools-wrapper">
         <view v-if="schoolList.length > 0" class="scrool-main">

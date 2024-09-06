@@ -6,7 +6,7 @@
  * @Description  : 招生简章
 -->
 <template>
-  <maskLayer :isShowMask="status !== 2">
+  <maskLayer :isShowMask="status !== 1">
     <view class="post-main">
       <rich-text v-if="postMain.content" :nodes="postMain.content" />
     </view>

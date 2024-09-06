@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-09-04 13:03:52
+ * @LastEditTime : 2024-09-05 13:07:59
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
@@ -16,7 +16,6 @@
       <view class="mt-16rpx text-24rpx line-height-40rpx c-#A09C9E">
         下单后会收到激活码短信，如有激活问题请<text class="c-#E94650">联系客服</text>解决！
       </view>
-      <button size="small" type="default" class="btn-buy">没有激活码？我要购买</button>
       <view class="code-list">
         <view class="code-item" v-for="(item, index) in activeList" :key="index">
           <view class="left">
@@ -24,15 +23,16 @@
               height="96rpx" />
           </view>
           <view class="right">
-            <view class="title">
-              {{ item.name }}
-              <text class="status" :class="{ active: item.status == 0 }">{{ item.status == 0 ? '已激活' : '已失效' }}</text>
-            </view>
+            <view class="title">{{ item.name }}</view>
             <view class="text">激活码： <text class="c-#4F4F4F">{{ item.activeCode }}</text></view>
-            <view class="text">有效期至： <text class="c-#4F4F4F">{{ item.expirationTime }}</text></view>
+            <view class="text">有效期至： <text class="c-#4F4F4F">{{ item.validTime }}</text></view>
           </view>
         </view>
       </view>
+    </view>
+    <view class="footer">
+      <button size="small" type="default" class="btn-buy">没有激活码？我要购买</button>
+      <up-safe-bottom />
     </view>
   </view>
 </template>
@@ -80,6 +80,7 @@ onLoad(() => {
 <style scoped lang="scss">
 .container {
   flex: 1;
+  min-height: 100vh;
 }
 
 .content {
@@ -180,5 +181,12 @@ onLoad(() => {
   .active {
     background-color: #E94650 !important;
   }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 </style>

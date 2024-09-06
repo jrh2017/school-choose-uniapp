@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 08:02:58
- * @LastEditTime : 2024-09-04 13:23:20
+ * @LastEditTime : 2024-09-05 13:31:31
  * @LastEditors  : jiangronghua
  * @Description  : 择校录入页面
 -->
@@ -19,7 +19,7 @@
         冲刺院校*3 / 稳妥院校*3 / 保底院校*3
       </view>
     </view>
-    <maskLayer :isShowMask="status !== 2">
+    <maskLayer :isShowMask="status !== 1">
       <view class="main mt-[-130rpx] min-h-800rpx bg-#FFFFFF">
         <view class="text-40rpx c-#000000 font-500 line-height-40rpx">
           目标一志愿
@@ -101,7 +101,7 @@
         </view>
       </view>
     </maskLayer>
-    <view v-if="status === 2" class="bottom-box">
+    <view v-if="status === 1" class="bottom-box">
       <button size="default" type="warn" class="btn-start" @click="submitForm">
         立即生成报告
       </button>

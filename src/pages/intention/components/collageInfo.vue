@@ -1,12 +1,12 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 18:59:23
- * @LastEditTime : 2024-09-04 12:41:17
+ * @LastEditTime : 2024-09-05 12:57:41
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
-  <maskLayer :isShowMask="status !== 2">
+  <maskLayer :isShowMask="status !== 1">
     <view class="collage-info">
       <view class="title">
         联系方式

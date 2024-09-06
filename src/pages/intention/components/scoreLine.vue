@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-09-04 12:44:54
+ * @LastEditTime : 2024-09-05 12:57:57
  * @LastEditors  : jiangronghua
  * @Description  : 国家线
 -->
@@ -11,7 +11,7 @@
       <view class="title">
         复试线
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <view class="tr">
             <view class="th" style="width: 25%;">
@@ -53,7 +53,7 @@
         <text>单科=100: 满分为100的科目，即英语和政治</text>
         <text>单科>100: 满分大于100的科目，即专业课一和专业课二</text>
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <view class="tr">
             <view class="th" style="width: 35%;">
@@ -91,7 +91,7 @@
       <view class="title">
         趋势分析-总成绩
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <qiun-data-charts :canvas2d="true" type="line" :opts="opts" :chart-data="chartTotalScoreListData" />
         </view>
@@ -101,7 +101,7 @@
       <view class="title">
         趋势分析-政治
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <qiun-data-charts :canvas2d="true" type="line" :opts="opts" :chart-data="chartPoliticsScoreListData" />
         </view>
@@ -111,7 +111,7 @@
       <view class="title">
         趋势分析-外语
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <qiun-data-charts :canvas2d="true" type="line" :opts="opts" :chart-data="chartEnglishScoreListData" />
         </view>
@@ -121,7 +121,7 @@
       <view class="title">
         趋势分析-专业课一
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <qiun-data-charts :canvas2d="true" type="line" :opts="opts" :chart-data="chartSpecialOneScoreListData" />
         </view>
@@ -131,7 +131,7 @@
       <view class="title">
         趋势分析-专业课二
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="table">
           <qiun-data-charts :canvas2d="true" type="line" :opts="opts" :chart-data="chartSpecialTwoScoreListData" />
         </view>

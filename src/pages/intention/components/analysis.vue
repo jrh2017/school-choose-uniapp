@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-04 12:29:13
+ * @LastEditTime : 2024-09-05 12:57:32
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -23,7 +23,7 @@
       <view class="title">
         一志愿拟录取与分数分布
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view class="chart">
           <qiun-data-charts :canvas2d="true" type="column" :opts="opts" :chart-data="chart" />
         </view>
@@ -64,7 +64,7 @@
       <view class="title">
         一志愿拟录取名单
       </view>
-      <maskLayer :isShowMask="status !== 2">
+      <maskLayer :isShowMask="status !== 1">
         <view v-if="yearList.length" class="table-header">
           <view class="item-wrapper">
             <view v-for="(item, index) in yearList" :key="index" class="item"

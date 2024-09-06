@@ -16,11 +16,11 @@
           }" @click="toConfigPage" />
         </view>
       </view>
-      <view v-else class="echart-container" @click="toSchoolLibrary">
-        <view class="title mb-10rpx">
+      <view v-else class="echart-container">
+        <view class="title mb-10rpx" @click="toSchoolLibrary">
           24届专业录取排名 <up-icon name="arrow-right" size="10" style="margin-left: 40rpx;" />
         </view>
-        <qiun-data-charts type="area" :opts="opts" :chart-data="chart" />
+        <qiun-data-charts :reload="reload" :canvas2d="true" type="area" :opts="opts" :chart-data="chart" />
       </view>
       <view class="w-100%">
         <QuickStart />
@@ -61,6 +61,7 @@ const chart = ref();
 const showConfig = ref(false); // 是否显示配置面板
 const imgShow = ref(false); // 是否显示免费学校选择图片
 const show = ref(false); // 是否显示二维码弹窗
+const reload = ref(false); // 图表是否需要重新加载
 const chartData = reactive({
   categories: [],
   series: [
@@ -114,6 +115,9 @@ const opts = reactive({
  * 获取图表信息
  */
 const getChatData = () => {
+  nextTick(() => {
+    reload.value = true;
+  })
   chartIntention().then((res: any) => {
     const chartBase = res.chartBase.reverse()
     chartData.categories = []
@@ -151,6 +155,7 @@ const toConfigPage = () => {
   });
 };
 onShow(async () => {
+  reload.value = false
   getChatData();
 });
 onUpdated(() => {

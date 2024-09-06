@@ -1,12 +1,12 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-09-04 12:39:28
+ * @LastEditTime : 2024-09-05 12:58:26
  * @LastEditors  : jiangronghua
  * @Description  : 考试科目
 -->
 <template>
-  <maskLayer :isShowMask="status !== 2">
+  <maskLayer :isShowMask="status !== 1">
     <view class="subject-main">
       <view v-for="(item, index) in subjectList" :key="index" class="subject-cell">
         <view class="subject-name">
