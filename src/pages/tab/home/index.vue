@@ -2,7 +2,7 @@
   <view class="container">
     <up-navbar :placeholder="true" bg-color="#F8EFF2" title="研攀登" left-icon="" />
     <view class="content w-100% flex flex-col items-start justify-start">
-      <view v-if="showConfig" class="description">
+      <view v-if="status !== 1" class="description">
         <view class="btn-wrapper">
           <up-button text="立即匹配获取建议分和排名" :custom-style="{
             width: '590rpx',
@@ -18,7 +18,7 @@
       </view>
       <view v-else class="echart-container">
         <view class="title mb-10rpx" @click="toSchoolLibrary">
-          24届专业录取排名 <up-icon name="arrow-right" size="10" style="margin-left: 40rpx;" />
+          24级专业录取排名 <up-icon name="arrow-right" size="10" style="margin-left: 40rpx;" />
         </view>
         <qiun-data-charts :reload="reload" :canvas2d="true" type="area" :opts="opts" :chart-data="chart" />
       </view>
@@ -57,8 +57,10 @@ import QuickStart from './components/quick-start.vue';
 import steps from './components/steps.vue';
 import { chartIntention } from '@/api/userinfo';
 import FreeSchoolPop from '@/components/free-school-selection/free-school-selection.vue'
+import { useUserStore } from '@/store';
+const userStore = useUserStore();
+const { status } = storeToRefs(userStore)
 const chart = ref();
-const showConfig = ref(false); // 是否显示配置面板
 const imgShow = ref(false); // 是否显示免费学校选择图片
 const show = ref(false); // 是否显示二维码弹窗
 const reload = ref(false); // 图表是否需要重新加载
@@ -127,10 +129,7 @@ const getChatData = () => {
       chartData.series[0].data.push(item.people)
     })
     chart.value = chartData;
-  }).catch(() => {
-    // 没有配置的情况下显示输入配置的按钮
-    showConfig.value = true;
-  });
+  })
 };
 
 const toSchoolLibrary = () => {
@@ -156,7 +155,9 @@ const toConfigPage = () => {
 };
 onShow(async () => {
   reload.value = false
-  getChatData();
+  if (status.value === 1) {
+    getChatData();
+  }
 });
 onUpdated(() => {
   imgShow.value = true;

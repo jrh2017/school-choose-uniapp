@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-05 12:57:32
+ * @LastEditTime : 2024-09-07 14:50:40
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -65,9 +65,9 @@
         一志愿拟录取名单
       </view>
       <maskLayer :isShowMask="status !== 1">
-        <view v-if="yearList.length" class="table-header">
+        <view v-if="tableYearList.length" class="table-header">
           <view class="item-wrapper">
-            <view v-for="(item, index) in yearList" :key="index" class="item"
+            <view v-for="(item, index) in tableYearList" :key="index" class="item"
               :class="{ active: currentYearIndex === item }" @click="changeYear(item)">
               {{ item }}
             </view>
@@ -152,7 +152,7 @@ const itemList = [{
 const currentIndex = ref(0);
 const majorDatail = ref<any>(null)
 const chart = ref();
-const yearList = reactive(['2024', '2023', '2022']);
+const tableYearList = ref([]);
 const currentYearIndex = ref('2024');
 const scoreStatisDetail = ref<any>({})
 
@@ -243,8 +243,15 @@ const getMatriculationRecordFn = () => {
     const response = res || [];
     if (response && response.length) {
       const groupList = groupBy(response, 'year');
+      for (let key in groupList) {
+        if (groupList[key] && groupList[key].length) {
+          tableYearList.value.push(key)
+        }
+      }
+      tableYearList.value.sort((a, b) => b - a)
       scoreStatisDetail.value = groupList;
-      tableData2.value = scoreStatisDetail.value[currentYearIndex.value]
+      currentYearIndex.value = tableYearList.value[0]
+      tableData2.value = scoreStatisDetail.value[tableYearList.value[0]]
     } else {
       scoreStatisDetail.value = [];
       tableData2.value = []
@@ -278,7 +285,6 @@ const setChartData = (data: any) => {
   }]
   chartData.value.categories = categories;
   chartData.value.series = series;
-  console.log(chartData.value, 'chartData.value')
   chart.value = chartData.value;
 }
 
@@ -362,7 +368,7 @@ const reloadPageData = () => {
 
   .analysis-select-item-right {
     width: 366rpx;
-    height: 60rpx;
+    min-height: 60rpx;
     border-radius: 8rpx 8rpx 8rpx 8rpx;
     padding: 0 16rpx;
     box-sizing: border-box;

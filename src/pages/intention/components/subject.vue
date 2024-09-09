@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-09-05 12:58:26
+ * @LastEditTime : 2024-09-06 17:40:06
  * @LastEditors  : jiangronghua
  * @Description  : 考试科目
 -->
@@ -12,19 +12,19 @@
         <view class="subject-name">
           {{ item.collegeName }}
         </view>
-        <view class="subject-item">
+        <view v-if="item.researchArea" class="subject-item">
           <view class="label">
             研究方向:
           </view>
           <view>{{ item.researchArea }}</view>
         </view>
-        <view class="subject-item">
+        <view v-if="item.examSubject" class="subject-item">
           <view class="label">
             初始科目:
           </view>
           <rich-text :nodes="item.examSubject" />
         </view>
-        <view class="subject-item">
+        <view v-if="item.examBook" class="subject-item">
           <view class="label">
             参考书目:
           </view>

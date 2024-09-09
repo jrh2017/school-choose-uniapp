@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 15:28:59
- * @LastEditTime : 2024-09-06 13:03:04
+ * @LastEditTime : 2024-09-06 17:12:30
  * @LastEditors  : jiangronghua
  * @Description  : 我的报告列表页面
 -->
@@ -15,8 +15,8 @@
         <view class="list-wrapper">
           <view v-for="(item, index) in dataList" :key="index" class="report-item" @click="handleClick(item)">
             <view v-if="item.status === 2" class="report-status">
-              <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/icon-warning.png" class="icon"
-                width="44rpx" height="44rpx" />
+              <!-- <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/icon-warning.png" class="icon"
+                width="44rpx" height="44rpx" /> -->
               <view class="report-status-text">
                 生成失败：{{ item.failedReason }}
               </view>
@@ -180,7 +180,7 @@ const handleClick = (item: any) => {
 
   .report-status {
     height: 96rpx;
-    padding: 0 32rpx;
+    padding: 0 26rpx;
     box-sizing: border-box;
     display: flex;
     align-items: center;
