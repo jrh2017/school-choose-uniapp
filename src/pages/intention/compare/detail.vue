@@ -39,9 +39,14 @@
               </view>
             </view>
             <view class="de-th position-box">
-              <view class="flex-left de-td width-200 height-138 height-auto-box">
-                院校水平</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.levelList }}
+              <view class="flex-left de-td width-200 height-auto-box">
+                <view class="label-item">院校水平</view>
+                <view class="height-auto-item">
+                  <view>{{ maxLevelList }}</view>
+                </view>
+              </view>
+              <view class="de-td pd-right-2 height-auto-box" v-for="(item, index) in schoolList" :key="index">{{
+                item.levelList }}
               </view>
             </view>
             <view class="de-th position-box">
@@ -70,8 +75,11 @@
               </view>
             </view>
             <view class="de-th position-box">
-              <view class="flex-left de-td width-200 height-138 height-auto-box">
-                所有学院
+              <view class="flex-left de-td width-200 height-auto-box">
+                <view class="label-item">所有学院</view>
+                <view class="height-auto-item">
+                  <view v-for="(code, codeIndex) in maxCollegeMajorList" :key="codeIndex">{{ code.collegeName }}</view>
+                </view>
               </view>
               <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
                 <view v-for="(code, codeIndex) in item.collegeMajorList" :key="codeIndex">{{ code.collegeName }}</view>
@@ -175,14 +183,14 @@
           <view class="model-box">
             <view class="list-box">
               <view class="de-th position-box">
-                <view class="flex-left de-td width-200 height-154"></view>
+                <view class="flex-left de-td width-200 height-154" style="z-index: 1;"></view>
                 <view class="de-td pd-right-2 height-154 icon-tips-box" v-for="(value, index) in collegeItem"
                   :key="index">
                   <view v-if="value.id" :class="[{ 'is-active': value.isActive }, 'icon-tips']"
                     @click="topUpFn(collegeIndex, index)"><up-icon name="arrow-upward"
                       :color="value.isActive ? '#E94650' : '#000000'" size="10"></up-icon>{{ value.isActive ? '已置顶' :
                         '未置顶' }}</view>
-                  {{ value.collegeName }}
+                  {{ value.collegeName || '' }}
                 </view>
               </view>
               <view class="de-th position-box">
@@ -198,13 +206,27 @@
                 </view>
               </view>
               <view class="de-th position-box">
-                <view class="flex-left de-td width-200 height-154 height-auto-box">考试科目</view>
+                <view class="flex-left de-td width-200 height-auto-box">
+                  <view class="label-item">考试科目</view>
+                  <view class="height-auto-item">
+                    <view v-for="(code, codeIndex) in maxCollegeField" :key="codeIndex">
+                      <rich-text :nodes="code.examSubject || ''" />
+                    </view>
+                  </view>
+                </view>
                 <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">
                   <rich-text :nodes="value.enrollPlanVO ? value.enrollPlanVO.examSubject : ''" />
                 </view>
               </view>
               <view class="de-th position-box">
-                <view class="flex-left de-td width-200 height-154 height-auto-box">参考书目</view>
+                <view class="flex-left de-td width-200 height-auto-box">
+                  <view class="label-item">参考书目</view>
+                  <view class="height-auto-item" style="flex: 0 0 160rpx;">
+                    <view v-for="(code, codeIndex) in maxCollegeField" :key="codeIndex">
+                      {{ code.examBook }}
+                    </view>
+                  </view>
+                </view>
                 <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">
                   {{ value.enrollPlanVO ? value.enrollPlanVO.examBook : '' }}
                 </view>
@@ -308,7 +330,10 @@ interface schoolItem {
 }
 const schoolFold = ref(false);// 学校的折叠
 const collegeFold = ref(false);// 学院的折叠
-const maxSpeciality = ref({});
+const maxSpeciality = ref({}); // 专业
+const maxLevelList = ref(''); // 院校水平
+const maxCollegeMajorList = ref([]); // 所有学院
+const maxCollegeField = ref([]);
 const ids = ref('');
 const collegeList = ref<Array<any>>([])
 const collegeYearList = ref<Array<any>>([])
@@ -351,6 +376,24 @@ const getCompareData = () => {
         levelListItem.push('双一流')
       }
       item.levelList = levelListItem.join(',')
+      if (item.levelList && item.levelList.length > maxLevelList.value.length) {
+        maxLevelList.value = item.levelList
+      }
+      if (item.collegeMajorList && item.collegeMajorList.length > maxCollegeMajorList.value.length) {
+        maxCollegeMajorList.value = item.collegeMajorList
+      } else if (item.collegeMajorList && item.collegeMajorList.length === maxCollegeMajorList.value.length) {
+        let oldStr = ''
+        let newStr = ''
+        maxCollegeMajorList.value.forEach((item2: any) => {
+          oldStr += item2.collegeName
+        })
+        item.collegeMajorList.forEach((item2: any) => {
+          newStr += item2.collegeName
+        })
+        if (newStr.length > oldStr.length) {
+          maxCollegeMajorList.value = item.collegeMajorList
+        }
+      }
     })
     schoolList.value = [...resList, templateItem.value]
     let listRes = schoolList.value || [];
@@ -372,10 +415,13 @@ const getCompareData = () => {
     receiveList.forEach((item: any, index: number) => { // 学院最大数量循环
       listRes.forEach((item2: object, index2: number) => { // 学校循环
         let schoolObj: any = {} // 学校数据
-        let college = {} // 学院数据
+        let college: any = {} // 学院数据
         if (listRes[index2] && listRes[index2].collegeMajorList && listRes[index2].collegeMajorList[index]) {
           schoolObj = listRes[index2]
           college = { ...schoolObj.collegeMajorList[index], id: schoolObj.id }
+        }
+        if (index === 0) {
+          college.isActive = true
         }
         item.push(college)
       })
@@ -417,6 +463,7 @@ const getCompareData = () => {
       })
     })
     collegeYearList.value = newCyl
+    collegeFieldMaxFn(collegeList.value)
     console.log(newCyl, 'newCyl')
   });
 };
@@ -437,6 +484,29 @@ const topUpFn = (collegeIndex: number, index: number) => {
   clickItemList.splice(index, 1, firstItem)
   collegeList.value[0] = firstItemList
   collegeList.value[collegeIndex] = clickItemList
+  collegeFieldMaxFn(collegeList.value)
+}
+const collegeFieldMaxFn = (list: any) => {
+  let newList: any = []
+  list.forEach((item: any, index: number) => {
+    let examSubject = ''
+    let examBook = ''
+    if (item && item.length) {
+      item.forEach((item2: any, index2: number) => {
+        if (item2.enrollPlanVO && item2.enrollPlanVO.examSubject && (item2.enrollPlanVO.examSubject > examSubject)) {
+          examSubject = item2.enrollPlanVO.examSubject
+        }
+        if (item2.enrollPlanVO && item2.enrollPlanVO.examBook && (item2.enrollPlanVO.examBook > examBook)) {
+          examBook = item2.enrollPlanVO.examBook
+        }
+      })
+    }
+    newList.push({
+      examSubject: examSubject,
+      examBook: examBook
+    })
+  })
+  maxCollegeField.value = newList
 }
 // 返回上一页
 const goBackFn = () => {
