@@ -34,12 +34,15 @@
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">归属地区</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.localArea }}
+              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">
+                {{ item.provinceArea ? item.provinceArea + '区' : '' }}
               </view>
             </view>
             <view class="de-th position-box">
-              <view class="flex-left de-td width-200">院校水平</view>
-              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.level }}</view>
+              <view class="flex-left de-td width-200 height-138 height-auto-box">
+                院校水平</view>
+              <view class="de-td pd-right-2" v-for="(item, index) in schoolList" :key="index">{{ item.levelList }}
+              </view>
             </view>
             <view class="de-th position-box">
               <view class="flex-left de-td width-200">院校类型</view>
@@ -53,7 +56,8 @@
                   <view>{{ maxSpeciality.level3Code }}</view>
                 </view>
               </view>
-              <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
+              <view class="de-td pd-right-2 height-138 height-auto-box" v-for="(item, index) in schoolList"
+                :key="index">
                 <view>{{ item.level3Name }}</view>
                 <view>
                   <view v-if="item.level3Code">({{ item.level3Code }})</view>
@@ -68,10 +72,6 @@
             <view class="de-th position-box">
               <view class="flex-left de-td width-200 height-138 height-auto-box">
                 所有学院
-                <view class="height-auto-item" v-for="(item, index) in schoolList" :key="index">
-                  <view v-for="(code, codeIndex) in item.collegeMajorList" :key="codeIndex">{{ code.collegeName }}
-                  </view>
-                </view>
               </view>
               <view class="de-td pd-right-2 height-138" v-for="(item, index) in schoolList" :key="index">
                 <view v-for="(code, codeIndex) in item.collegeMajorList" :key="codeIndex">{{ code.collegeName }}</view>
@@ -187,23 +187,27 @@
               </view>
               <view class="de-th position-box">
                 <view class="flex-left de-td width-200">学习方式</view>
-                <view class="de-td pd-right-2" v-for="(value, index) in collegeItem" :key="index">{{
-                  value.collegeName }}</view>
+                <view class="de-td pd-right-2" v-for="(value, index) in collegeItem" :key="index">
+                  {{ value.enrollPlanVO ? value.enrollPlanVO.recruitTypeName : '' }}
+                </view>
               </view>
               <view class="de-th position-box">
                 <view class="flex-left de-td width-200 height-154">研究方向</view>
-                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">{{
-                  value.collegeName }}</view>
+                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">
+                  {{ value.enrollPlanVO ? value.enrollPlanVO.researchArea : '' }}
+                </view>
               </view>
               <view class="de-th position-box">
-                <view class="flex-left de-td width-200 height-154">考试科目</view>
-                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">{{
-                  value.collegeName }}</view>
+                <view class="flex-left de-td width-200 height-154 height-auto-box">考试科目</view>
+                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">
+                  <rich-text :nodes="value.enrollPlanVO ? value.enrollPlanVO.examSubject : ''" />
+                </view>
               </view>
               <view class="de-th position-box">
-                <view class="flex-left de-td width-200 height-154">参考书目</view>
-                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">{{
-                  value.collegeName }}</view>
+                <view class="flex-left de-td width-200 height-154 height-auto-box">参考书目</view>
+                <view class="de-td pd-right-2 height-154" v-for="(value, index) in collegeItem" :key="index">
+                  {{ value.enrollPlanVO ? value.enrollPlanVO.examBook : '' }}
+                </view>
               </view>
             </view>
           </view>
@@ -294,7 +298,8 @@ interface schoolItem {
   schoolName: string,
   logo: string,
   province: string,
-  localArea: string,
+  provinceArea: string,
+  levelList: string,
   level: string,
   level3Name: string,
   level3Code: string,
@@ -313,7 +318,8 @@ const templateItem = ref<schoolItem>({
   schoolName: '',
   logo: '',
   province: '',
-  localArea: '',
+  provinceArea: '',
+  levelList: '',
   level: '',
   level3Name: '',
   level3Code: '',
@@ -328,12 +334,23 @@ const getCompareData = () => {
       level3Code: resList[0] ? resList[0].level3Code : '',
     }
     resList.forEach((item: any, index: number) => {
+      const levelListItem = []
       if (item.level3Name && item.level3Name.length > maxSpeciality.value.level3Name.length) {
         maxSpeciality.value = {
           level3Name: item.level3Name || '',
           level3Code: item.level3Code || '',
         }
       }
+      if (item.is985 === 1) {
+        levelListItem.push('985')
+      }
+      if (item.is211 === 1) {
+        levelListItem.push('211')
+      }
+      if (item.isSyl === 1) {
+        levelListItem.push('双一流')
+      }
+      item.levelList = levelListItem.join(',')
     })
     schoolList.value = [...resList, templateItem.value]
     let listRes = schoolList.value || [];
@@ -364,6 +381,7 @@ const getCompareData = () => {
       })
     })
     collegeList.value = receiveList
+    console.log('collegeList.value', collegeList.value)
 
     let yearlist: any = [] // 所有年份的集合
     listRes.forEach((item: schoolItem, index: number) => {

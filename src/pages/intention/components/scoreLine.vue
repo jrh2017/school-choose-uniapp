@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:40:04
- * @LastEditTime : 2024-09-05 12:57:57
+ * @LastEditTime : 2024-09-11 14:30:59
  * @LastEditors  : jiangronghua
  * @Description  : 国家线
 -->
@@ -12,7 +12,7 @@
         复试线
       </view>
       <maskLayer :isShowMask="status !== 1">
-        <view class="table">
+        <view v-if="tableSchoolData.length" class="table">
           <view class="tr">
             <view class="th" style="width: 25%;">
               科目/年份
@@ -43,6 +43,7 @@
             </view>
           </view>
         </view>
+        <Empty v-else />
       </maskLayer>
     </view>
     <view class="ranking-table">
@@ -54,7 +55,7 @@
         <text>单科>100: 满分大于100的科目，即专业课一和专业课二</text>
       </view>
       <maskLayer :isShowMask="status !== 1">
-        <view class="table">
+        <view v-if="tableCountryData.length" class="table">
           <view class="tr">
             <view class="th" style="width: 35%;">
               科目
@@ -85,6 +86,7 @@
             </view>
           </view>
         </view>
+        <Empty v-else />
       </maskLayer>
     </view>
     <view class="ranking-table">
@@ -147,6 +149,7 @@ import {
   schoolLineCompore
 } from '@/api/collage';
 import maskLayer from '@/components/mask-layer/mask-layer.vue'
+import Empty from '@/components/empty/index.vue'
 import { useUserStore } from '@/store';
 const userStore = useUserStore();
 const { status } = storeToRefs(userStore)
@@ -168,10 +171,10 @@ const chartTotalScoreListData = reactive({
       name: '国家线',
       data: []
     },
-    {
-      name: '院校线',
-      data: []
-    }
+    // {
+    //   name: '院校线',
+    //   data: []
+    // }
   ],
 });
 
@@ -182,10 +185,10 @@ const chartPoliticsScoreListData = reactive({
       name: '国家线',
       data: []
     },
-    {
-      name: '院校线',
-      data: []
-    }
+    // {
+    //   name: '院校线',
+    //   data: []
+    // }
   ],
 });
 
@@ -196,10 +199,10 @@ const chartEnglishScoreListData = reactive({
       name: '国家线',
       data: []
     },
-    {
-      name: '院校线',
-      data: []
-    }
+    // {
+    //   name: '院校线',
+    //   data: []
+    // }
   ],
 });
 
@@ -210,10 +213,10 @@ const chartSpecialOneScoreListData = reactive({
       name: '国家线',
       data: []
     },
-    {
-      name: '院校线',
-      data: []
-    }
+    // {
+    //   name: '院校线',
+    //   data: []
+    // }
   ],
 });
 
@@ -224,10 +227,10 @@ const chartSpecialTwoScoreListData = reactive({
       name: '国家线',
       data: []
     },
-    {
-      name: '院校线',
-      data: []
-    }
+    // {
+    //   name: '院校线',
+    //   data: []
+    // }
   ],
 });
 
@@ -293,23 +296,23 @@ const getSchoolLineFn = () => {
   // 总成绩
   chartTotalScoreListData.categories = []
   chartTotalScoreListData.series[0].data = []
-  chartTotalScoreListData.series[1].data = []
+  // chartTotalScoreListData.series[1].data = []
   // 政治
   chartPoliticsScoreListData.categories = []
   chartPoliticsScoreListData.series[0].data = []
-  chartPoliticsScoreListData.series[1].data = []
+  // chartPoliticsScoreListData.series[1].data = []
   // 英语
   chartEnglishScoreListData.categories = []
   chartEnglishScoreListData.series[0].data = []
-  chartEnglishScoreListData.series[1].data = []
+  // chartEnglishScoreListData.series[1].data = []
   // 专业课一
   chartSpecialOneScoreListData.categories = []
   chartSpecialOneScoreListData.series[0].data = []
-  chartSpecialOneScoreListData.series[1].data = []
+  // chartSpecialOneScoreListData.series[1].data = []
   // 专业课二
   chartSpecialTwoScoreListData.categories = []
   chartSpecialTwoScoreListData.series[0].data = []
-  chartSpecialTwoScoreListData.series[1].data = []
+  // chartSpecialTwoScoreListData.series[1].data = []
 
   schoolLineCompore({
     level3Code: props.level3Code,
@@ -319,35 +322,35 @@ const getSchoolLineFn = () => {
     totalScoreListData?.forEach((item: any) => {
       chartTotalScoreListData.categories.push(item.year)
       chartTotalScoreListData.series[0].data.push(item.country)
-      chartTotalScoreListData.series[1].data.push(item.school)
+      // chartTotalScoreListData.series[1].data.push(item.school)
     })
 
     const politicsScoreListData = res.politicsScoreList.reverse()
     politicsScoreListData?.forEach((item: any) => {
       chartPoliticsScoreListData.categories.push(item.year)
       chartPoliticsScoreListData.series[0].data.push(item.country)
-      chartPoliticsScoreListData.series[1].data.push(item.school)
+      // chartPoliticsScoreListData.series[1].data.push(item.school)
     })
 
     const englishScoreListData = res.englishScoreList.reverse()
     englishScoreListData?.forEach((item: any) => {
       chartEnglishScoreListData.categories.push(item.year)
       chartEnglishScoreListData.series[0].data.push(item.country)
-      chartEnglishScoreListData.series[1].data.push(item.school)
+      // chartEnglishScoreListData.series[1].data.push(item.school)
     })
 
     const specialOneScoreListData = res.specialOneScoreList.reverse()
     specialOneScoreListData?.forEach((item: any) => {
       chartSpecialOneScoreListData.categories.push(item.year)
       chartSpecialOneScoreListData.series[0].data.push(item.country)
-      chartSpecialOneScoreListData.series[1].data.push(item.school)
+      // chartSpecialOneScoreListData.series[1].data.push(item.school)
     })
 
     const specialTwoScoreListData = res.specialTwoScoreList.reverse()
     specialTwoScoreListData?.forEach((item: any) => {
       chartSpecialTwoScoreListData.categories.push(item.year)
       chartSpecialTwoScoreListData.series[0].data.push(item.country)
-      chartSpecialTwoScoreListData.series[1].data.push(item.school)
+      // chartSpecialTwoScoreListData.series[1].data.push(item.school)
     })
   });
 };

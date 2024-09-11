@@ -1,14 +1,14 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:59:11
- * @LastEditTime : 2024-09-04 12:40:37
+ * @LastEditTime : 2024-09-11 13:38:46
  * @LastEditors  : jiangronghua
  * @Description  : 招生简章
 -->
 <template>
   <maskLayer :isShowMask="status !== 1">
     <view class="post-main">
-      <rich-text v-if="postMain.content" :nodes="postMain.content" />
+      <rich-text v-if="postMain.content" :nodes="postMain.content" class="text-main" />
     </view>
   </maskLayer>
 </template>
@@ -39,8 +39,12 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .post-main {
-  font-size: 28rpx;
+  font-size: 20rpx !important;
   color: rgba(0, 0, 0, 0.85);
   line-height: 44rpx;
+}
+
+.text-main {
+  font-size: 10rpx !important;
 }
 </style>

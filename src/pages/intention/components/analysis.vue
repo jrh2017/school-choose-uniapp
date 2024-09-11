@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 22:10:53
- * @LastEditTime : 2024-09-07 14:50:40
+ * @LastEditTime : 2024-09-11 15:10:11
  * @LastEditors  : jiangronghua
  * @Description  : 拟录取分析组件
 -->
@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { matriculationRecord, schoolScoreStatis, chatMatriculationRecord } from '@/api/collage';
+import { matriculationRecord, schoolScoreStatis, chatMatriculationRecord, getRecruitType } from '@/api/collage';
 import { groupBy } from 'lodash-es';
 import { useUserStore } from '@/store';
 const userStore = useUserStore();
@@ -141,7 +141,9 @@ const props = defineProps({
   },
 });
 const collegePickerRef = ref(null);
+const currentCollegeRecruitType = ref<number[]>([]) // 当前院校该专业的学习类型
 const recruitType = ref(1);
+const currentIndex = ref(0);
 const itemList = [{
   name: '全日制',
   recruitType: 1,
@@ -149,7 +151,6 @@ const itemList = [{
   name: '非全日制',
   recruitType: 2,
 }];
-const currentIndex = ref(0);
 const majorDatail = ref<any>(null)
 const chart = ref();
 const tableYearList = ref([]);
@@ -217,9 +218,16 @@ const collegeCancel = () => {
 };
 // 切换全日制和非全日制
 const recruitTypeChange = (index: number) => {
-  currentIndex.value = index;
-  recruitType.value = itemList[index].recruitType;
-  reloadPageData()
+  // 获取当前院校该专业的学习方式
+  const selectType = itemList[index].recruitType
+  // 判断selectType是否在当前院校该专业的学习方式中
+  if (currentCollegeRecruitType.value.includes(selectType)) {
+    currentIndex.value = index;
+    recruitType.value = itemList[index].recruitType;
+    reloadPageData()
+  } else {
+    uni.$u.toast(`该学院此专业不存在'${itemList[index].name}'学习方式`);
+  }
 };
 
 // 查录取与分数分布
@@ -234,6 +242,7 @@ const getSchoolScoreStatisFn = () => {
 
 // 一志愿录取名单
 const getMatriculationRecordFn = () => {
+  tableYearList.value = []
   matriculationRecord({
     level3Code: props.level3Code,
     schoolId: props.schoolId,
@@ -327,9 +336,26 @@ watch(
   }
 )
 
-const reloadPageData = () => {
+const reloadPageData = async () => {
+  // 获取该学院的学习方式
+  let res: number[] = await getRecruitType({
+    level3Code: props.level3Code,
+    schoolId: props.schoolId,
+    collegeId: collegeItem.value.collegeId,
+  }) as number[]
+  if (res && res.length) {
+    res = res.sort((a, b) => a - b)
+    const firstNode = res[0]
+    currentCollegeRecruitType.value = res
+    recruitType.value = firstNode
+    itemList.forEach((item, index) => {
+      if (item.recruitType === firstNode) {
+        currentIndex.value = index
+      }
+    })
+  }
+  currentCollegeRecruitType.value = res
   getChatMatriculationRecord()
-  // getSchoolScoreStatisFn()
   getMatriculationRecordFn()
 }
 

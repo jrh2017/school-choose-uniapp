@@ -75,7 +75,7 @@ const chartData = reactive({
 });
 const opts = reactive({
   color: ['#FF9D9D'],
-  padding: [15, 40, 20, 0],
+  padding: [15, 40, 20, 10],
   enableScroll: false,
   legend: {
     show: false,
@@ -98,7 +98,7 @@ const opts = reactive({
     data: [{
       title: '录取人数',
       calibration: false,
-      titleOffsetX: 5,
+      titleOffsetX: 20,
     }],
   },
   extra: {

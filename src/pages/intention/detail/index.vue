@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 17:56:35
- * @LastEditTime : 2024-09-05 13:24:03
+ * @LastEditTime : 2024-09-11 15:22:18
  * @LastEditors  : jiangronghua
  * @Description  : 意向院校详情页
 -->
@@ -21,12 +21,11 @@
           :schoolId="currentIntentionInfo.schoolId" />
       </template>
     </view>
-    <view v-else class="empty">
-      <up-empty mode="data" text="">
-        <button size="default" type="warn" class="btn-start" @click="show = true">
-          点击配置报告
-        </button>
-      </up-empty>
+    <view v-else class="empty mt-160rpx">
+      <Empty subText="请先配置报告" />
+      <button size="default" type="warn" class="btn-start" @click="show = true">
+        点击配置报告
+      </button>
     </view>
   </view>
   <up-modal :show="show" title="我的意向" :show-cancel-button="true" confirm-color="#FE6567" @cancel="show = false"
@@ -119,6 +118,7 @@
 import Major from '../components/major.vue';
 import School from '../components/school.vue';
 import { schoolMajorDetail } from '@/api/collage';
+import Empty from '@/components/empty/index.vue';
 import {
   intentionInformationListlevel1,
   intentionInformationListlevel2,
@@ -436,9 +436,11 @@ onLoad(() => {
 }
 
 .btn-start {
-  border-radius: 40rpx;
+  margin-top: 160rpx;
+  border-radius: 54rpx;
   color: #ffffff;
-  height: 80rpx;
+  width: 440rpx;
+  height: 108rpx;
   display: flex;
   align-items: center;
   justify-content: center;

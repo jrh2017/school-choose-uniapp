@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:32:44
- * @LastEditTime : 2024-09-01 16:35:33
+ * @LastEditTime : 2024-09-11 14:01:44
  * @LastEditors  : jiangronghua
  * @Description  : 意向排名表格
 -->
@@ -30,16 +30,16 @@
           {{ item.year }}
         </view>
         <view class="td">
-          {{ item.assessScore }}/{{ item.assessRanking }}
+          {{ item.assessScore || '-' }}/{{ item.assessRanking || '-' }}
         </view>
         <view class="td">
-          {{ item.maxScore }}/{{ item.maxRanking }}
+          {{ item.maxScore || '-' }}/{{ item.maxRanking || '-' }}
         </view>
         <view class="td">
-          {{ item.minScore }}/{{ item.minRanking }}
+          {{ item.minScore || '-' }}/{{ item.minRanking || '-' }}
         </view>
         <view class="td">
-          {{ item.adviceScore }}/{{ item.adviceRanking }}
+          {{ item.adviceScore || '-' }}/{{ item.adviceRanking || '-' }}
         </view>
       </view>
     </view>

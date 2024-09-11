@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-09-04 08:17:44
+ * @LastEditTime : 2024-09-11 11:02:14
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -78,6 +78,7 @@ const data = reactive({
     degreeType: '',
     isZihuaxian: 1,
     collected: 0,
+    subjectRanking: '',
   },
 });
 const { schoolInfo } = toRefs(data);

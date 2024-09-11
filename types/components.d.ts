@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AgreePrivacy: typeof import('./../src/components/agree-privacy/index.vue')['default']
+    Empty: typeof import('./../src/components/empty/index.vue')['default']
     FreeSchoolSelection: typeof import('./../src/components/free-school-selection/free-school-selection.vue')['default']
     MaskLayer: typeof import('./../src/components/mask-layer/mask-layer.vue')['default']
     MultiplePicker: typeof import('./../src/components/multiple-picker/multiple-picker.vue')['default']

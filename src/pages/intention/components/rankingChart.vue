@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:28:30
- * @LastEditTime : 2024-09-04 08:50:17
+ * @LastEditTime : 2024-09-11 11:20:36
  * @LastEditors  : jiangronghua
  * @Description  : 排名组件
 -->
@@ -31,7 +31,7 @@ const chartData = reactive({
 });
 const opts = reactive({
   color: ['#FF9D9D'],
-  padding: [15, 40, 20, 0],
+  padding: [15, 40, 20, 10],
   enableScroll: false,
   legend: {
     show: false,
@@ -54,7 +54,7 @@ const opts = reactive({
     data: [{
       title: '录取人数',
       calibration: false,
-      titleOffsetX: 5,
+      titleOffsetX: 20,
     }],
   },
   extra: {

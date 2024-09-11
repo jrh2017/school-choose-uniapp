@@ -2,10 +2,10 @@
   <up-popup :show="showPop" mode="center" :closeable="true" round="24rpx" @close="$emit('close')">
     <view class="popup-box">
       <view class="popup-title">
-        深度择校
+        免费择校咨询
       </view>
       <view class="popup-content">
-        <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/qrcode.png" mode="aspectFit" width="436rpx"
+        <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/qrcode.jpg" mode="aspectFit" width="436rpx"
           height="436rpx" />
         <text class="text">
           长按识别二维码

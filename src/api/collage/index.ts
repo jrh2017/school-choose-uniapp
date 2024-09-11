@@ -1,8 +1,8 @@
 /*
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-29 16:40:26
- * @LastEditTime : 2024-09-06 15:23:14
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-09-11 14:46:32
+ * @LastEditors  : jiangronghua
  * @Description  : 用户相关请求
  */
 import request from '@/utils/cloudRequest/request';
@@ -30,6 +30,7 @@ enum URL {
   enrollPlan = '/school-major/list-enroll-plan', // 考试科目 / 院校专业基础信息
   schoolRanking = '/school-ranking/list-all',
   schoolLineCompore = '/school-major/list-score-line-compare',
+  getRecruitType = '/school-major/get-school-college-recruit-type',
   schoolReportAnalytics = '/select-school-report/get-school-report-analytics' // 推荐考研院校分析
 }
 
@@ -56,3 +57,4 @@ export const schoolRanking = () => request({ url: URL.schoolRanking, method: 'GE
 export const chatMatriculationRecord = (params: any) => request({ url: URL.chatMatriculationRecord, method: 'GET', params });
 export const schoolLineCompore = (params: any) => request({ url: URL.schoolLineCompore, method: 'GET', params });
 export const schoolReportAnalytics = (params: any) => request({ url: URL.schoolReportAnalytics, method: 'GET', params });
+export const getRecruitType = (params: any) => request({ url: URL.getRecruitType, method: 'GET', params });

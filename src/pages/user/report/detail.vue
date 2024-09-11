@@ -1,8 +1,8 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-30 17:24:35
- * @LastEditTime : 2024-09-06 17:53:01
- * @LastEditors  : chenyuchao
+ * @LastEditTime : 2024-09-11 11:12:04
+ * @LastEditors  : jiangronghua
  * @Description  :
 -->
 <template>
@@ -72,7 +72,7 @@
               </view>
             </view>
             <view class="module-2-list">
-              <view class="module-2-item" v-for="(item, index) in schoolList" :key="index">
+              <view class="module-2-item" v-for="(item, index) in schoolList" :key="index" @click="toSchool(item)">
                 <image class="bg-img"
                   :src="item.selectType === 1 ? minimumGuarantee : item.selectType === 2 ? safe : sprint"
                   mode="scaleToFill" />
@@ -88,8 +88,8 @@
                   </view>
                 </view>
                 <view class="item-right">
-                  <up-image class="edit-icon" :src="item.collected ? star : unstar" width="40rpx" height="40rpx"
-                    @click="changeCollecte(item)" />
+                  <up-image class="edit-icon" :src="item.collected === 1 ? star : unstar" width="40rpx" height="40rpx"
+                    @tap.stop="changeCollecte(item)" />
                 </view>
               </view>
             </view>
@@ -125,10 +125,6 @@
                       <view class="introduce-label">参考书目：</view>
                       <view class="introduce-value">
                         <rich-text :nodes="college.examBook" />
-                        <!-- <view class="introduce-value-item">(101)思想政治理论</view>
-                        <view class="introduce-value-item">(201)英语 (一)</view>
-                        <view class="introduce-value-item">(398)法律硕士专业基础 (非法学)</view>
-                        <view class="introduce-value-item">(498)法律硕士综合 (非法学)</view> -->
                       </view>
                     </view>
                   </view>
@@ -250,15 +246,9 @@
   </view>
 </template>
 <script setup lang="ts">
-import { useShare } from '@/hooks';
 import { reportDetail } from '@/api/choice';
 import { majorCollegeSave } from '@/api/userinfo';
 import {
-  enrollPlan,
-  interviewLine,
-  nationalLine,
-  schoolScoreStatis,
-  matriculationRecord,
   schoolReportAnalytics
 } from '@/api/collage';
 interface volunteer {
@@ -303,7 +293,6 @@ const minimumGuarantee = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/h
 const safe = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/safe.png'); // 保底
 const sprint = ref('https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/sprint.png'); // 冲刺
 const schoolList = ref<Array<schoolItem>>([]);
-const tableCountryData = ref([{}, {}, {}, {}, {}])
 const targetVolunteer = ref<volunteer>({
   level3Name: '',
   level3Code: '',
@@ -339,6 +328,14 @@ const levelList = ref([
   }
 ])
 const graduateSchoolsList = ref<Array<courtyardItem>>([]) // 推荐考研院校
+/**
+ * 点击跳转到院校详情页面
+ */
+const toSchool = (school: any) => {
+  uni.navigateTo({
+    url: `/pages/intention/collage/detail?level3Code=${school.level3Code}&schoolId=${school.schoolId}`,
+  });
+}
 // 查询择校详情
 const getReoprtDetail = async () => {
   const res: any = await reportDetail({ id: reportId.value });
@@ -379,6 +376,7 @@ const getReoprtDetail = async () => {
  */
 const changeCollecte = (school: any) => {
   const action = school.collected === 1 ? 2 : 1;
+  console.log(action, '切换收藏状态', action);
   const params = {
     action,
     schoolId: school.schoolId,
@@ -386,7 +384,9 @@ const changeCollecte = (school: any) => {
   };
   majorCollegeSave(params).then(() => {
     school.collected = action;
+    console.log()
   });
+  console.log(school, '切换收藏状态---->');
 };
 // 推荐考研院校分析
 const schoolReportAnalyticsFn = () => {
@@ -444,93 +444,6 @@ const schoolReportAnalyticsFn = () => {
     console.log(arr, '推荐考研院校分析')
   })
 }
-// 学校专业基本信息
-const getCurveFn = (schoolId: any, level3Code: any) => {
-  enrollPlan({
-    level3Code: level3Code,
-    schoolId: schoolId,
-  }).then((res: any) => {
-    console.log(res, '学校专业基本信息');
-    schoolList.value.forEach((item: any) => {
-      if (item.schoolId === schoolId && item.level3Code === level3Code) {
-        item.enrollPlan = res || []
-      }
-    })
-    // const { collegeId, recruitType } = res
-    // getMatriculationRecordFn(schoolId, level3Code, collegeId, recruitType)
-  });
-  interviewLine({ // 复试线
-    level3Code: level3Code,
-    schoolId: schoolId,
-  }).then((res: any) => { // 复试线
-    const list: any = [{ name: '初试总成绩' }, { name: '政治' }, { name: '英语' }, { name: '专业课一' }, { name: '专业课二' }];
-    res?.forEach((item: any) => {
-      list[0][item.year] = item.total;
-      list[1][item.year] = item.politics;
-      list[2][item.year] = item.english;
-      list[3][item.year] = item.specialOne;
-      list[4][item.year] = item.specialTwo;
-    });
-    schoolList.value.forEach((item: any) => {
-      if (item.schoolId === schoolId && item.level3Code === level3Code) {
-        item.tableSchoolData = list
-      }
-    })
-  });
-  nationalLine({ // 国家线
-    level3Code: level3Code,
-  }).then((res: any) => { // 国家线
-    const list: any = [{ name: '初试总成绩(A区)' }, { name: '初试总成绩(B区)' }, { name: '单科=100(A区)' }, { name: '单科=100(B区)' }, { name: '单科>100(A区)' }, { name: '单科>100(B区)' }];
-    res?.forEach((item: any) => {
-      list[0][item.year] = item.scoreTotalA;
-      list[1][item.year] = item.scoreTotalB;
-      list[2][item.year] = item.scoreSingle1A;
-      list[3][item.year] = item.scoreSingle1B;
-      list[4][item.year] = item.scoreSingle2A;
-      list[5][item.year] = item.scoreSingle2B;
-    });
-    schoolList.value.forEach((item: any) => {
-      if (item.schoolId === schoolId && item.level3Code === level3Code) {
-        item.tableCountryData = list
-      }
-    })
-  });
-  schoolScoreStatis({ // (4) 一志愿录取信息
-    level3Code: level3Code,
-    schoolId: schoolId,
-  }).then((res: any) => {
-    console.log(res, '学校学生成绩统计');
-    const list: any = [{ name: '一志愿拟录取人数' }, { name: '录取最高分' }, { name: '录取中位分' }, { name: '录取最低分' }, { name: '录取建议分' }];
-    let scoreStatisTh: any = []
-    if (res && res.length) {
-      res.forEach((item: any) => {
-        scoreStatisTh.push(item.year)
-        list[0][item.year] = item.people
-        list[1][item.year] = item.maxScore
-        list[2][item.year] = item.middleScore
-        list[3][item.year] = item.minScore
-        list[4][item.year] = item.adviceScore
-      })
-    }
-    schoolList.value.forEach((item: any) => {
-      if (item.schoolId === schoolId && item.level3Code === level3Code) {
-        item.scoreStatisTh = scoreStatisTh
-        item.scoreStatisList = list
-      }
-    })
-  });
-};
-// (5) 拟录取考试名单
-const getMatriculationRecordFn = (schoolId: any, level3Code: any, collegeId: any, recruitType: any) => {
-  matriculationRecord({
-    level3Code: level3Code,
-    schoolId: schoolId,
-    collegeId: collegeId,
-    recruitType: recruitType,
-  }).then((res: any) => {
-    console.log(res, '(5) 拟录取考试名单');
-  });
-};
 onShareAppMessage(() => {
   return {
     title: '个人择校报告',
@@ -542,12 +455,6 @@ onLoad((options: any) => {
   reportId.value = options!.id;
   getReoprtDetail();
   schoolReportAnalyticsFn()
-  // useShare({
-  //   title: '个人择校报告',
-  //   path: `/pages/user/report/detail?id=${reportId.value}`,
-  //   query: `id=${reportId.value}`,
-  //   imageUrl: '',
-  // }).onShareAppMessage()
 })
 </script>
 <style scoped lang="scss">
