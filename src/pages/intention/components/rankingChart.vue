@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 19:28:30
- * @LastEditTime : 2024-09-11 11:20:36
+ * @LastEditTime : 2024-09-12 12:57:28
  * @LastEditors  : jiangronghua
  * @Description  : 排名组件
 -->
@@ -34,7 +34,7 @@ const opts = reactive({
   padding: [15, 40, 20, 10],
   enableScroll: false,
   legend: {
-    show: false,
+    show: true,
   },
   dataLabel: false,
   dataPointShape: false,

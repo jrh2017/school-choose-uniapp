@@ -20,7 +20,8 @@
         <view class="title mb-10rpx" @click="toSchoolLibrary">
           24级专业录取排名 <up-icon name="arrow-right" size="10" style="margin-left: 40rpx;" />
         </view>
-        <qiun-data-charts :reload="reload" :canvas2d="true" type="area" :opts="opts" :chart-data="chart" />
+        <qiun-data-charts :reload="reload" canvasId="homeChart" :canvas2d="true" type="area" :opts="opts"
+          :chart-data="chart" />
       </view>
       <view class="w-100%">
         <QuickStart />
@@ -64,6 +65,12 @@ const chart = ref();
 const imgShow = ref(false); // 是否显示免费学校选择图片
 const show = ref(false); // 是否显示二维码弹窗
 const reload = ref(false); // 图表是否需要重新加载
+const intentionInformationRecord = ref({
+  adviceRanking: 0,
+  adviceScore: 0,
+  assessRanking: 0,
+  assessScore: 0,
+}); // 图表数据
 const chartData = reactive({
   categories: [],
   series: [
@@ -122,6 +129,7 @@ const getChatData = () => {
   })
   chartIntention().then((res: any) => {
     const chartBase = res.chartBase.reverse()
+    intentionInformationRecord.value = res.intentionInformationRecord;
     chartData.categories = []
     chartData.series[0].data = []
     chartBase?.forEach((item: any) => {
@@ -147,6 +155,19 @@ const toSchoolRank = () => {
   });
 };
 
+onShareAppMessage(() => {
+  return {
+    title: '研攀登择校',
+    path: '/pages/tab/home/index',
+    imageUrl: '',
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: '研攀登择校'
+  };
+});
 
 const toConfigPage = () => {
   uni.navigateTo({

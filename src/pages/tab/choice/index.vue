@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-09-05 14:56:16
+ * @LastEditTime : 2024-09-18 16:04:49
  * @LastEditors  : jiangronghua
  * @Description  : 择校页面
 -->
@@ -9,7 +9,7 @@
   <view class="container">
     <up-navbar :placeholder="true" bg-color="#F8EFF2" title="择校设置" leftIcon="" />
     <view class="content">
-      <view class="top">
+      <view class="top mb-20rpx">
         <view class="line-01">
           你的择校报告
         </view>
@@ -33,6 +33,10 @@
         <button size="default" type="default" class="create-btn" @click="toAddChoice">
           无限次生成
         </button>
+      </view>
+      <view class="image-box mb-100rpx h-2718rpx">
+        <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/infomation.png" mode="widthFix"
+          width="686rpx" height="2718rpx" />
       </view>
       <view class="bottom-box">
         <button size="default" type="warn" class="btn-start" @click="show = true">
@@ -149,10 +153,13 @@ onShow(() => {
   }
 
   .bottom-box {
-    padding: 24rpx 64rpx;
+    padding: 24rpx 54rpx;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0rpx 0rpx 12rpx 8rpx rgba(0, 0, 0, 0.1);
 
     .btn-start {
       border-radius: 40rpx;

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-26 17:59:11
- * @LastEditTime : 2024-09-11 13:38:46
+ * @LastEditTime : 2024-09-12 13:30:35
  * @LastEditors  : jiangronghua
  * @Description  : 招生简章
 -->
@@ -45,6 +45,6 @@ onMounted(() => {
 }
 
 .text-main {
-  font-size: 10rpx !important;
+  font-size: 28rpx !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:42:19
- * @LastEditTime : 2024-09-06 17:30:05
+ * @LastEditTime : 2024-09-12 13:01:40
  * @LastEditors  : jiangronghua
  * @Description  : 专业详情主页
 -->

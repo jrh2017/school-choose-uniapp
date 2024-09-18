@@ -120,7 +120,7 @@ const toCode = () => {
 
 const toShare = () => {
   const linkUrl =
-    "https://mp.weixin.qq.com/s?__biz=MzkyODYwMzQ3NQ==&mid=2247483659&idx=1&sn=77afd5cdcc89efe45eef8657c99d22ee&chksm=c2170d37f5608421fa03b7faba0d66af1bb3d8e055ce088667de7f0f4eb348a61285ab200ab3#rd";
+    "https://mp.weixin.qq.com/s?__biz=MzkyODYwMzQ3NQ==&mid=2247486930&idx=1&sn=49d5ac579de9d9c01dcd730d0bd7fc05&chksm=c21701eef56088f8aded26fcb7e76e79a6d3842cbd62d1c91f6b852145fd69af6bfff1758411#rd";
   const params = encodeURIComponent(linkUrl);
   wx.navigateTo({
     url: `/pages/common/webview/index?url=${params}`,

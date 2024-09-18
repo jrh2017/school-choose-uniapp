@@ -1,13 +1,13 @@
 <!--
  * @Author       : chenyuchao c375880854@163.com
  * @Date         : 2024-08-28 17:58:04
- * @LastEditTime : 2024-09-05 13:33:23
+ * @LastEditTime : 2024-09-12 13:11:02
  * @LastEditors  : jiangronghua
  * @Description  : 蒙层组件
  * @Remark       :
 -->
 <template>
-  <view class="mask-layer">
+  <view class="mask-layer" :class="{ 'layer-position': isShowMask }">
     <view class="content">
       <slot></slot>
     </view>
@@ -42,8 +42,11 @@ const activationFn = () => {
 }
 </script>
 <style lang="scss" scoped>
-.mask-layer {
+.layer-position {
   position: relative;
+}
+
+.mask-layer {
 
   .mask-layer-bg {
     position: absolute;

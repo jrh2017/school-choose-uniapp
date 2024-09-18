@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 10:40:19
- * @LastEditTime : 2024-09-05 13:07:59
+ * @LastEditTime : 2024-09-12 15:34:36
  * @LastEditors  : jiangronghua
  * @Description  : 关注页面
 -->
@@ -31,10 +31,24 @@
       </view>
     </view>
     <view class="footer">
-      <button size="small" type="default" class="btn-buy">没有激活码？我要购买</button>
+      <button size="small" type="default" class="btn-buy" @click="showPop = true">没有激活码？我要购买</button>
       <up-safe-bottom />
     </view>
   </view>
+  <up-popup :show="showPop" mode="center" :closeable="true" round="24rpx" @close="showPop = false">
+    <view class="popup-box">
+      <view class="popup-title">
+        长按保存图片，微信扫码购买
+      </view>
+      <view class="popup-content">
+        <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/buy-qrcode.jpg" mode="aspectFit"
+          width="520rpx" height="520rpx" />
+        <text class="text">
+          长按识别二维码
+        </text>
+      </view>
+    </view>
+  </up-popup>
 </template>
 
 <script lang="ts" setup>
@@ -45,6 +59,7 @@ import { useUserStore } from '@/store';
 const userStore = useUserStore();
 const activeList = ref([]) // 激活码列表
 const code = ref('') // 激活码输入框内容
+const showPop = ref(false) // 免费咨询弹窗
 /**
  * 获取激活码
  */
@@ -188,5 +203,37 @@ onLoad(() => {
   bottom: 0;
   left: 0;
   width: 100%;
+}
+
+.popup-box {
+  width: 686rpx;
+  height: 700rpx;
+  border-radius: 24rpx;
+
+  .popup-title {
+    height: 112rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 32rpx;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 48rpx;
+  }
+
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24rpx;
+
+    .text {
+      margin-top: 24rpx;
+      font-size: 28rpx;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 36rpx;
+    }
+  }
 }
 </style>

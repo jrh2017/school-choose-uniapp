@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-30 17:24:35
- * @LastEditTime : 2024-09-11 11:12:04
+ * @LastEditTime : 2024-09-12 12:50:16
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -11,8 +11,8 @@
     <view class="report-detail">
       <view class="report-header">
         <view class="row-1 blod-box">
-          <view>个人择校报告</view>
-          <view>AI大数据</view>
+          <!-- <view>个人择校报告</view> -->
+          <view>专属择校报告</view>
         </view>
         <view class="row-1">
           <up-icon name="calendar" :color="'#FFFFFF'" size="28"></up-icon>
@@ -115,13 +115,13 @@
                         <view class="introduce-value-item">{{ college.recruitTypeName }}</view>
                       </view>
                     </view>
-                    <view class="introduce-row">
+                    <view v-if="college.examSubject" class="introduce-row">
                       <view class="introduce-label">考试科目：</view>
                       <view class="introduce-value">
                         <rich-text :nodes="college.examSubject" />
                       </view>
                     </view>
-                    <view class="introduce-row">
+                    <view v-if="college.examBook" class="introduce-row">
                       <view class="introduce-label">参考书目：</view>
                       <view class="introduce-value">
                         <rich-text :nodes="college.examBook" />
@@ -210,7 +210,7 @@
                 <view class="school-module-title">(5) 拟录取考试名单</view>
                 <view class="year-item" v-for="(admissionItem, admissionIndex) in item.admissionInformation"
                   :key="admissionIndex">
-                  <view class="year-desc">{{ admissionItem[0].year }}年（共{{ item.admissionInformation.length }}人）</view>
+                  <view class="year-desc">{{ admissionItem[0].year }}年（共{{ admissionItem.length }}人）</view>
                   <view class="table">
                     <view class="tr">
                       <view class="th" style="width: 35%;">

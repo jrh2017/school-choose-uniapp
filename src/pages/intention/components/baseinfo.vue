@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-20 18:35:05
- * @LastEditTime : 2024-09-04 08:32:31
+ * @LastEditTime : 2024-09-11 15:56:37
  * @LastEditors  : jiangronghua
  * @Description  :
 -->
@@ -14,7 +14,7 @@
         <view class="school-name">
           <text>{{ majorDetail.schoolName }}</text>
           <view class="w-144rpx">
-            <up-button :customStyle="customStyle" shape="circle" type="error" text="更改意向" :disabled="disabeledBtn"
+            <up-button :customStyle="disabeledBtn ? customStyle2 : customStyle" shape="circle" type="error" text="更改意向"
               @click="showChangeIntentionModal" />
           </view>
         </view>
@@ -125,11 +125,21 @@ const customStyle = {
   fontSize: '14rpx',
   border: 'none',
 };
+const customStyle2 = {
+  height: '44rpx',
+  fontSize: '14rpx',
+  border: 'none',
+  opacity: 0.5,
+};
 const disabeledBtn = ref(false);
 
 const emit = defineEmits(['change']);
 
 const showChangeIntentionModal = () => {
+  if (disabeledBtn.value) {
+    uni.$u.toast('每天只能修改一次');
+    return
+  }
   emit('change', true);
 }
 
