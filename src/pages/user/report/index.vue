@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-08-27 15:28:59
- * @LastEditTime : 2024-09-06 17:12:30
+ * @LastEditTime : 2024-09-20 11:32:19
  * @LastEditors  : jiangronghua
  * @Description  : 我的报告列表页面
 -->
@@ -134,7 +134,7 @@ function queryList(pageNo: number, pageSize: number) {
     if (listReporting.length > 0) {
       timeout = setTimeout(() => {
         pagingRef.value.reload();
-      }, 5000);
+      }, 20000);
     }
     pagingRef.value?.complete(list);
   }).catch(() => {

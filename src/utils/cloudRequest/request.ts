@@ -32,6 +32,7 @@ function request({ url, method, params, data, headers, contenType, hiddenMsg }: 
       path: url,
       method,
       data,
+      timeout: 60000,
       header: {
         'X-WX-SERVICE': 'ypd',
         'content-type': contenType || 'application/json',

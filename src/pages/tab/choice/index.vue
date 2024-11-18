@@ -1,7 +1,7 @@
 <!--
  * @Author       : jiangronghua 613870505@qq.com
  * @Date         : 2024-07-25 13:36:30
- * @LastEditTime : 2024-09-18 16:04:49
+ * @LastEditTime : 2024-09-20 11:20:46
  * @LastEditors  : jiangronghua
  * @Description  : 择校页面
 -->
@@ -38,7 +38,7 @@
         <up-image src="https://ypdsc.oss-cn-shanghai.aliyuncs.com/zxapp/home/infomation.png" mode="widthFix"
           width="686rpx" height="2718rpx" />
       </view>
-      <view class="bottom-box">
+      <view v-if="showBtn" class="bottom-box">
         <button size="default" type="warn" class="btn-start" @click="show = true">
           点击添加导师，尊享深度择校！(上岸快人一步)
         </button>
@@ -54,6 +54,17 @@ import { getToken } from '@/utils/auth';
 import FreeSchoolPop from '@/components/free-school-selection/free-school-selection.vue'
 
 const show = ref(false);
+const showBtn = ref(false);
+
+onPageScroll((e) => {
+  console.log(e.scrollTop);
+  if (e.scrollTop > 100) {
+    showBtn.value = true;
+  } else {
+    showBtn.value = false;
+  }
+  console.log(showBtn.value);
+})
 
 const toAddChoice = () => {
   uni.navigateTo({ url: '/pages/choice/index' });

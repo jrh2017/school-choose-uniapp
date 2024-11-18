@@ -35,5 +35,10 @@
     "editor.defaultFormatter": "Vue.volar"
   },
   "eslint.enable": false,
-  "eslint.codeActionsOnSave.rules": null
+  "eslint.codeActionsOnSave.rules": null,
+  "i18n-ally.localesPaths": [
+    "src/wxcomponents/tdesign/date-time-picker/locale",
+    "src/uni_modules/th-table/components/uni-table/i18n",
+    "src/wxcomponents/tdesign/miniprogram_npm/dayjs/locale"
+  ]
 }
